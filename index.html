@@ -1,435 +1,472 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GGPS Jheran Wali — Smart Face Attendance System</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-  *{box-sizing:border-box}
-  body{font-family:'Inter',sans-serif;background:#f1f5f9;margin:0;color:#1e293b}
-  .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-  .lbl{display:block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#475569;margin-bottom:6px}
-  .inp{width:100%;border:1.5px solid #cbd5e1;border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;background:#fff;transition:.15s}
-  .inp:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,.15)}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:13px;border:none;border-radius:10px;padding:11px 18px;cursor:pointer;transition:.15s;font-family:inherit}
-  .btn:active{transform:scale(.98)}
-  .btn-primary{background:linear-gradient(135deg,#059669,#047857);color:#fff;box-shadow:0 2px 8px rgba(5,150,105,.35)}
-  .btn-primary:hover{filter:brightness(1.08)}
-  .btn-gold{background:linear-gradient(135deg,#d4af37,#b8962e);color:#fff}
-  .btn-danger{background:#fee2e2;color:#b91c1c}
-  .btn-ghost{background:#f1f5f9;color:#334155}
-  .btn-wa{background:#25D366;color:#fff}
-  .tab-btn{display:flex;align-items:center;gap:6px;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700;color:#64748b;cursor:pointer;border:none;background:transparent;font-family:inherit;transition:.15s;white-space:nowrap}
-  .tab-btn:hover{background:#f1f5f9;color:#0f172a}
-  .tab-btn.active{background:#064e3b;color:#fff;box-shadow:0 2px 8px rgba(6,78,59,.3)}
-  .stat-card{border-radius:14px;padding:16px;border:1px solid #e2e8f0;background:#fff}
-  .badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;padding:3px 10px;border-radius:99px}
-  .scan-line{position:absolute;width:100%;height:2px;background:linear-gradient(90deg,transparent,#34d399,transparent);box-shadow:0 0 16px #34d399;animation:scan 2.2s linear infinite}
-  @keyframes scan{0%{top:2%}50%{top:96%}100%{top:2%}}
-  .corner{position:absolute;width:26px;height:26px;border:3px solid #34d399;z-index:5}
-  .c-tl{top:10px;left:10px;border-right:0;border-bottom:0}.c-tr{top:10px;right:10px;border-left:0;border-bottom:0}
-  .c-bl{bottom:10px;left:10px;border-right:0;border-top:0}.c-br{bottom:10px;right:10px;border-left:0;border-top:0}
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:12px 24px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.35);z-index:9999;animation:up .3s ease;max-width:92%;text-align:center}
-  @keyframes up{from{opacity:0;transform:translateX(-50%) translateY(60px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-  .model-chip{font-size:10px;font-weight:700;padding:4px 10px;border-radius:99px;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
-  .m-load{background:#fef3c7;color:#92400e}.m-ok{background:#d1fae5;color:#065f46}.m-err{background:#fee2e2;color:#991b1b}
-  .sample-thumb{width:56px;height:56px;border-radius:10px;object-fit:cover;border:2px solid #d4af37}
-  .ok-t{color:#059669}.no-t{color:#dc2626}
-  table.reg{width:100%;border-collapse:collapse;font-size:12px}
-  table.reg th{background:#064e3b;color:#fff;padding:8px;text-align:left;font-weight:700}
-  table.reg td{border-bottom:1px solid #e2e8f0;padding:8px}
-  table.reg tr:nth-child(even) td{background:#f8fafc}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GGPS Jheran Wali - Attendance System</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SheetJS for Excel Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- jsPDF for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+    </style>
 </head>
-<body>
+<body class="bg-slate-50 min-h-screen text-slate-800">
 
-<input type="file" id="logo-input" accept="image/*" class="hidden" onchange="uploadLogo(this)">
-
-<!-- ═══════════ LOGIN ═══════════ -->
-<div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="background:linear-gradient(135deg,#022c22 0%,#064e3b 55%,#065f46 100%)">
-  <div class="w-full max-w-md">
-    <div class="card p-8 text-center" style="border-top:5px solid #d4af37">
-      <div id="logo-login" class="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden shadow-lg" style="border:4px solid #d4af37"></div>
-      <h1 class="text-xl font-extrabold text-slate-900">GGPS Jheran Wali</h1>
-      <p class="text-emerald-800 text-xs font-bold mt-1">Government Girls Primary School Jheran Wali</p>
-      <p class="text-[10px] text-amber-700 mt-1 font-extrabold tracking-wider">SMART FACE ATTENDANCE SYSTEM</p>
-      <div class="mt-6 text-left">
-        <label class="lbl">Password (پاس ورڈ)</label>
-        <input type="password" id="login-password" class="inp" placeholder="Enter password...">
-      </div>
-      <button onclick="verifyPassword()" class="btn btn-primary w-full mt-4">🔓 Sign In (لاگ ان کریں)</button>
-      <button onclick="showForgotBox()" class="text-[11px] font-bold text-emerald-700 mt-3 hover:underline">Forgot Password? Reset via EMIS Code</button>
-      <div id="forgot-form-box" class="hidden mt-4 text-left bg-slate-50 rounded-xl p-4 border border-slate-200">
-        <label class="lbl">EMIS Recovery Code</label>
-        <input id="recovery-emis" class="inp mb-3" placeholder="34210690">
-        <label class="lbl">New Password</label>
-        <input type="password" id="new-reset-password" class="inp mb-3">
-        <button onclick="resetPasswordViaEMIS()" class="btn btn-danger w-full">🔄 Reset Password</button>
-        <button onclick="hideForgotBox()" class="btn btn-ghost w-full mt-2">← Back</button>
-      </div>
-      <p class="text-[10px] text-slate-400 mt-4">Default Password: <b>1234</b> • EMIS: 34210690</p>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ MAIN APP ═══════════ -->
-<div id="main-dashboard" class="hidden">
-
-  <!-- Professional Styled Header -->
-  <header class="bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 text-white shadow-md sticky top-0 z-40 border-b-2 border-amber-500">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-      
-      <!-- Logo + School Title & EMIS Unified Section -->
-      <div class="flex items-center gap-3.5">
-        <div id="logo-main" class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 shadow-md bg-white" style="border:2.5px solid #d4af37"></div>
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-sm sm:text-base font-extrabold tracking-wide text-white">GGPS Jheran Wali</h1>
-            <span class="bg-amber-500/20 border border-amber-500 text-amber-300 text-[9px] font-extrabold px-2 py-0.5 rounded-full">EMIS: 34210690</span>
-          </div>
-          <p class="text-[10px] text-emerald-200 font-medium mt-0.5">Smart Face Attendance & Management System</p>
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 border border-slate-100">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl font-bold">🏫</div>
+                <h2 class="text-2xl font-bold text-slate-900">GGPS Jheran Wali</h2>
+                <p class="text-sm text-slate-500 mt-1">Smart Attendance & Management System</p>
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="Enter password (e.g. 1234)" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all">
+                </div>
+                <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-lg shadow-emerald-600/20 transition-all">Login to System</button>
+            </form>
         </div>
-      </div>
-
-      <!-- Action Buttons & AI Status -->
-      <div class="flex items-center gap-2">
-        <div id="modelStatus" class="model-chip m-load hidden sm:inline-flex" onclick="loadFaceModels()">⏳ Loading AI…</div>
-        <button onclick="document.getElementById('logo-input').click()" class="btn btn-gold text-xs py-1.5 px-3">🏫 Logo</button>
-        <button onclick="logout()" class="btn btn-danger text-xs py-1.5 px-3">🔒 Lock</button>
-      </div>
     </div>
 
-    <!-- Mobile AI status row -->
-    <div class="px-4 pb-2 sm:hidden flex justify-end bg-emerald-950/80 border-t border-emerald-900/50">
-      <div id="modelStatusMobile" class="model-chip m-load text-[10px] mt-1" onclick="loadFaceModels()">⏳ Loading AI Models...</div>
+    <!-- Main Application Layout -->
+    <div id="appContainer" class="hidden">
+        <!-- Header -->
+        <header class="bg-emerald-800 text-white shadow-md">
+            <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-3">
+                    <img id="headerLogo" src="" alt="Logo" class="w-12 h-12 rounded-full object-cover border-2 border-white/30 hidden">
+                    <div id="headerLogoFallback" class="w-12 h-12 rounded-full bg-emerald-700 flex items-center justify-center text-xl font-bold border-2 border-white/30">🏫</div>
+                    <div>
+                        <h1 class="text-xl font-bold">GGPS JHERAN WALI</h1>
+                        <p class="text-xs text-emerald-200">EMIS: 32342342 | District: Rahim Yar Khan</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="triggerLogoUpload()" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-lg shadow transition-all">🏫 Logo</button>
+                    <button onclick="exportExcel()" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-semibold rounded-lg shadow transition-all">📊 Excel Report</button>
+                    <button onclick="exportPDF()" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-semibold rounded-lg shadow transition-all">📄 PDF Report</button>
+                    <button onclick="logout()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-lg shadow transition-all">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <input type="file" id="logoInput" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                    <p class="text-xs font-semibold text-slate-400 uppercase">Total Students</p>
+                    <h3 id="statTotal" class="text-2xl font-bold text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="bg-emerald-50/50 p-4 rounded-2xl shadow-sm border border-emerald-100">
+                    <p class="text-xs font-semibold text-emerald-600 uppercase">Present</p>
+                    <h3 id="statPresent" class="text-2xl font-bold text-emerald-700 mt-1">0</h3>
+                </div>
+                <div class="bg-rose-50/50 p-4 rounded-2xl shadow-sm border border-rose-100">
+                    <p class="text-xs font-semibold text-rose-600 uppercase">Absent</p>
+                    <h3 id="statAbsent" class="text-2xl font-bold text-rose-700 mt-1">0</h3>
+                </div>
+                <div class="bg-amber-50/50 p-4 rounded-2xl shadow-sm border border-amber-100">
+                    <p class="text-xs font-semibold text-amber-600 uppercase">On Leave</p>
+                    <h3 id="statLeave" class="text-2xl font-bold text-amber-700 mt-1">0</h3>
+                </div>
+                <div class="bg-indigo-50/50 p-4 rounded-2xl shadow-sm border border-indigo-100 col-span-2 md:col-span-1">
+                    <p class="text-xs font-semibold text-indigo-600 uppercase">Attendance Rate</p>
+                    <h3 id="statRate" class="text-2xl font-bold text-indigo-700 mt-1">0%</h3>
+                </div>
+            </div>
+
+            <!-- Add Student Section -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2"><span>➕</span> Add New Student</h3>
+                <form id="addStudentForm" onsubmit="addStudent(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <input type="text" id="studentName" required placeholder="Student Name" class="px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    <input type="text" id="fatherName" required placeholder="Father Name" class="px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    <select id="studentClass" required class="px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                        <option value="">Select Class</option>
+                        <option value="Nursery (A)">Nursery (A)</option>
+                        <option value="Nursery (B) Girls">Nursery (B) Girls</option>
+                        <option value="Prep (A)">Prep (A)</option>
+                        <option value="Prep (B) Girls">Prep (B) Girls</option>
+                        <option value="One (A)">One (A)</option>
+                        <option value="One (B) Girls">One (B) Girls</option>
+                        <option value="Two (A)">Two (A)</option>
+                        <option value="Two (B) Girls">Two (B) Girls</option>
+                        <option value="Three (A)">Three (A)</option>
+                        <option value="Three (B) Girls">Three (B) Girls</option>
+                        <option value="Four (A)">Four (A)</option>
+                        <option value="Four (B) Girls">Four (B) Girls</option>
+                        <option value="Five (A)">Five (A)</option>
+                        <option value="Five (B) Girls">Five (B) Girls</option>
+                    </select>
+                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow transition-all py-2.5">Add Student</button>
+                </form>
+            </div>
+
+            <!-- Students Attendance Register -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2"><span>👥</span> Students Attendance Register</h3>
+                    <span id="currentDateBadge" class="text-xs bg-slate-100 px-3 py-1 rounded-full font-medium text-slate-600"></span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-emerald-800 text-white text-xs uppercase tracking-wider">
+                                <th class="p-4">#</th>
+                                <th class="p-4">Student Name</th>
+                                <th class="p-4">Father Name</th>
+                                <th class="p-4">Class</th>
+                                <th class="p-4">Time</th>
+                                <th class="p-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody" class="divide-y divide-slate-100 text-sm">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Teachers Staff Register -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-6 border-b border-slate-100">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2"><span>👩‍🏫</span> Teachers Staff Register</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-emerald-800 text-white text-xs uppercase tracking-wider">
+                                <th class="p-4">Sr.No</th>
+                                <th class="p-4">Teacher Name</th>
+                                <th class="p-4">Designation</th>
+                                <th class="p-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teacherTableBody" class="divide-y divide-slate-100 text-sm">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <!-- Navigation Tabs Bar -->
-    <div class="bg-white border-t border-slate-200 px-4 py-1.5 shadow-sm">
-      <div class="max-w-6xl mx-auto flex gap-1 overflow-x-auto">
-        <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active">📊 Dashboard</button>
-        <button onclick="switchTab('students')" id="tab-students" class="tab-btn">👥 Students</button>
-        <button onclick="switchTab('attendance')" id="tab-attendance" class="tab-btn">📷 Attendance</button>
-        <button onclick="switchTab('teachers')" id="tab-teachers" class="tab-btn">👩‍🏫 Teachers</button>
-        <button onclick="switchTab('reports')" id="tab-reports" class="tab-btn">📑 Reports</button>
-        <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn">⚙️ Settings</button>
-      </div>
-    </div>
-  </header>
+    <script>
+        let schoolLogo = localStorage.getItem('ggps_logo') || '';
+        
+        let students = JSON.parse(localStorage.getItem('ggps_students')) || [
+            { id: 1, name: "Shabbir", father: "Nazir", class: "Four (A)", status: "Present", time: "10:42" }
+        ];
 
-  <main class="max-w-6xl mx-auto px-4 py-6 space-y-6">
+        let teachers = JSON.parse(localStorage.getItem('ggps_teachers')) || [
+            { id: 1, name: "Miss Shams", designation: "Head Teacher", status: "Present" },
+            { id: 2, name: "Miss Farhat", designation: "Senior Teacher", status: "Present" },
+            { id: 3, name: "Miss Sumaira", designation: "Teacher (چرا)", status: "Present" },
+            { id: 4, name: "Miss Malika", designation: "Teacher (چرا)", status: "Present" },
+            { id: 5, name: "Miss Swera", designation: "Teacher (چرا)", status: "Present" }
+        ];
 
-    <!-- ── DASHBOARD ── -->
-    <section id="content-dashboard">
-      <div class="bg-gradient-to-r from-emerald-800 to-teal-900 rounded-2xl p-4 sm:p-5 text-white shadow-md mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 class="text-base font-extrabold">خوش آمدید — گورنمنٹ گرلز پرائمری سکول جھیورانوالی</h2>
-          <p class="text-xs text-emerald-200 mt-1">آج کی تاریخ: <span id="current-date" class="font-bold"></span> • وقت: <span id="current-time" class="font-bold text-amber-300"></span></p>
-        </div>
-        <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1.5 rounded-xl shadow">Active Session 2026</span>
-      </div>
+        window.onload = function() {
+            if (localStorage.getItem('ggps_logged_in') === 'true') {
+                document.getElementById('loginModal').classList.add('hidden');
+                document.getElementById('appContainer').classList.remove('hidden');
+                initApp();
+            }
+            document.getElementById('currentDateBadge').innerText = new Date().toLocaleDateString();
+        };
 
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <div class="stat-card"><p class="lbl">Total Students (کل طلبہ)</p><p id="stat-total" class="text-3xl font-extrabold text-slate-900">0</p></div>
-        <div class="stat-card" style="background:#ecfdf5;border-color:#a7f3d0"><p class="lbl" style="color:#047857">Present Today (آج حاضر)</p><p id="stat-present" class="text-3xl font-extrabold text-emerald-700">0</p></div>
-        <div class="stat-card" style="background:#fef2f2;border-color:#fecaca"><p class="lbl" style="color:#b91c1c">Absent Today (آج غیر حاضر)</p><p id="stat-absent" class="text-3xl font-extrabold text-red-600">0</p></div>
-        <div class="stat-card" style="background:#fffbeb;border-color:#fde68a"><p class="lbl" style="color:#92400e">Attendance Rate (شرح)</p><p id="stat-rate" class="text-3xl font-extrabold text-amber-600">0%</p></div>
-        <div class="stat-card"><p class="lbl">Teachers Present (اساتذہ حاضر)</p><p id="stat-teachers" class="text-3xl font-extrabold text-slate-900">0/0</p></div>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
-        <button onclick="switchTab('attendance');setTimeout(startFaceAttendance,300)" class="btn btn-primary w-full py-4">📷 Start Face Scan Attendance</button>
-        <button onclick="switchTab('attendance');startAbsentQueue()" class="btn btn-wa w-full py-4">📤 Send Absent Alerts via WhatsApp</button>
-        <button onclick="switchTab('reports')" class="btn btn-ghost w-full py-4">📑 View Daily Reports & Registers</button>
-      </div>
-    </section>
+        function handleLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('loginPassword').value;
+            if (pass === '1234' || pass === 'admin') {
+                localStorage.setItem('ggps_logged_in', 'true');
+                document.getElementById('loginModal').classList.add('hidden');
+                document.getElementById('appContainer').classList.remove('hidden');
+                initApp();
+            } else {
+                alert('Incorrect Password! Try 1234');
+            }
+        }
 
-    <!-- ── STUDENTS ── -->
-    <section id="content-students" class="hidden space-y-4">
-      <div class="card p-5" style="border-top:4px solid #059669">
-        <h2 class="text-sm font-extrabold text-slate-900 mb-1">➕ Register New Student</h2>
-        <p class="text-xs text-slate-500 mb-4">نیا طالب علم درج کریں</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-          <div><label class="lbl">Student Name</label><input id="student-name" class="inp" placeholder="e.g. Ayesha Bibi"></div>
-          <div><label class="lbl">Father Name</label><input id="father-name" class="inp" placeholder="e.g. Muhammad Ahmad"></div>
-          <div><label class="lbl">Parent WhatsApp</label><input id="parent-phone" type="tel" class="inp" placeholder="03001234567"></div>
-          <div><label class="lbl">Class</label><select id="student-class" class="inp"><option>Nursery</option><option>Prep</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
-          <div><label class="lbl">Gender</label><select id="student-gender" class="inp"><option value="girl">Girl (لڑکی)</option><option value="boy">Boy (لڑکا)</option></select></div>
-        </div>
-        <button onclick="addNewStudent()" class="btn btn-primary w-full mt-4">💾 Save Student (محفوظ کریں)</button>
-      </div>
-      <div class="card p-5">
-        <h2 class="text-sm font-extrabold text-slate-900 mb-1">📚 Enrolled Students (<span id="total-students">0</span>)</h2>
-        <p class="text-xs text-slate-500 mb-4">رجسٹرڈ طلبہ کی فہرست اور فیس انرولمنٹ</p>
-        <div id="students-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
-      </div>
-    </section>
+        function logout() {
+            localStorage.setItem('ggps_logged_in', 'false');
+            location.reload();
+        }
 
-    <!-- ── ATTENDANCE ── -->
-    <section id="content-attendance" class="hidden space-y-4">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div class="card p-5" style="border-top:4px solid #2563eb">
-          <h2 class="text-sm font-extrabold text-slate-900 mb-1">📷 Face Recognition Attendance</h2>
-          <p class="text-xs text-slate-500 mb-4">چہرہ دکھا کر خودکار حاضری لگائیں</p>
-          <div class="relative bg-slate-900 rounded-xl overflow-hidden shadow-inner" style="aspect-ratio:4/3">
-            <video id="attendance-video" autoplay muted playsinline class="w-full h-full object-cover"></video>
-            <canvas id="attendance-canvas" class="absolute inset-0 w-full h-full"></canvas>
-            <div id="scan-overlay" class="hidden"><div class="scan-line"></div><div class="corner c-tl"></div><div class="corner c-tr"></div><div class="corner c-bl"></div><div class="corner c-br"></div></div>
-            <div id="camera-placeholder" class="absolute inset-0 flex items-center justify-center text-white"><div class="text-center"><div class="text-5xl mb-2">📷</div><p class="text-xs font-bold">Camera is Off (کیمرہ بند ہے)</p></div></div>
-          </div>
-          <div class="flex gap-2 mt-4">
-            <button onclick="startFaceAttendance()" id="start-camera-btn" class="btn btn-primary flex-1">▶ Start Camera (شروع کریں)</button>
-            <button onclick="stopFaceAttendance()" id="stop-camera-btn" class="btn btn-danger flex-1 hidden">⏹ Stop Camera (بند کریں)</button>
-          </div>
-          <p id="att-live-status" class="text-[11px] font-bold text-slate-500 mt-3">💡 Attendance marks automatically when face matches.</p>
-        </div>
-        <div class="card p-5" style="border-top:4px solid #d97706">
-          <h2 class="text-sm font-extrabold text-slate-900 mb-1">📅 Today's Attendance Register</h2>
-          <p class="text-xs text-slate-500 mb-4">آج کی حاضری کا ریکارڈ</p>
-          <div id="today-attendance" class="space-y-3 max-h-[420px] overflow-y-auto"></div>
-        </div>
-      </div>
-      <div class="card p-5" style="border-top:4px solid #25D366">
-        <h2 class="text-sm font-extrabold text-slate-900 mb-1">📱 Parent WhatsApp Notifications</h2>
-        <p class="text-xs text-slate-500 mb-4">والدین کو غیر حاضری اور روزانہ کارکردگی کا پیغام بھیجیں</p>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <button onclick="startAbsentQueue()" class="btn btn-wa w-full py-3">📤 Send Absent Alerts (ایک ایک کر کے)</button>
-          <button onclick="sendWhatsAppToAll()" class="btn btn-primary w-full py-3">📊 Send Full Day Report to All</button>
-        </div>
-      </div>
-    </section>
+        function initApp() {
+            renderLogo();
+            renderStudents();
+            renderTeachers();
+            updateStats();
+        }
 
-    <!-- ── TEACHERS ── -->
-    <section id="content-teachers" class="hidden space-y-4">
-      <div class="card p-5" style="border-top:4px solid #7c3aed">
-        <h2 class="text-sm font-extrabold text-slate-900 mb-1">➕ Register New Teacher</h2>
-        <p class="text-xs text-slate-500 mb-4">اساتذہ کا نام اور عہدہ درج کریں</p>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div><label class="lbl">Teacher Name</label><input id="teacher-name" class="inp" placeholder="e.g. Miss Farzana Kousar"></div>
-          <div><label class="lbl">Designation</label>
-            <select id="teacher-desig" class="inp">
-              <option>Head Teacher (ہیڈ ٹیچر)</option>
-              <option>Senior Teacher (سینئر ٹیچر)</option>
-              <option>Teacher (ٹیچر)</option>
-              <option>CTI (سی ٹی آئی)</option>
-              <option>Other (دیگر)</option>
-            </select>
-          </div>
-          <div class="flex items-end"><button onclick="addTeacher()" class="btn btn-primary w-full">💾 Save Teacher (محفوظ کریں)</button></div>
-        </div>
-      </div>
-      <div class="card p-5">
-        <h2 class="text-sm font-extrabold text-slate-900 mb-1">👩‍🏫 Teaching Staff List (<span id="total-teachers">0</span>)</h2>
-        <p class="text-xs text-slate-500 mb-4">اساتذہ کی حاضر/غیر حاضر حاضری اور انتظام</p>
-        <div id="teachers-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
-      </div>
-    </section>
+        function renderLogo() {
+            if (schoolLogo) {
+                document.getElementById('headerLogo').src = schoolLogo;
+                document.getElementById('headerLogo').classList.remove('hidden');
+                document.getElementById('headerLogoFallback').classList.add('hidden');
+            }
+        }
 
-    <!-- ── REPORTS ── -->
-    <section id="content-reports" class="hidden space-y-4">
-      <div class="card p-5" style="border-top:4px solid #dc2626">
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-          <div>
-            <h2 class="text-sm font-extrabold text-slate-900">📑 Daily Register & Reports</h2>
-            <p class="text-xs text-slate-500">روزانہ اسکول رجسٹر اور رپورٹس</p>
-          </div>
-          <div class="flex gap-2">
-            <button onclick="generatePDFReport()" class="btn btn-danger">📄 Export PDF</button>
-            <button onclick="exportToExcel()" class="btn btn-primary">📊 Export Excel</button>
-          </div>
-        </div>
-        <div id="report-content">
-          <div id="report-stats" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4"></div>
-          <div id="report-table" class="overflow-x-auto"></div>
-          <div id="report-teachers" class="overflow-x-auto mt-4"></div>
-        </div>
-      </div>
-    </section>
+        function triggerLogoUpload() {
+            document.getElementById('logoInput').click();
+        }
 
-    <!-- ── SETTINGS ── -->
-    <section id="content-settings" class="hidden">
-      <div class="card p-6 max-w-md mx-auto" style="border-top:4px solid #d4af37">
-        <h2 class="text-sm font-extrabold text-slate-900 mb-1 text-center">🔐 Change System Password</h2>
-        <p class="text-xs text-slate-500 text-center mb-4">پاس ورڈ تبدیل کریں</p>
-        <label class="lbl">Old Password</label><input type="password" id="old-password" class="inp mb-3">
-        <label class="lbl">New Password</label><input type="password" id="new-password" class="inp mb-3">
-        <label class="lbl">Confirm New Password</label><input type="password" id="confirm-password" class="inp mb-4">
-        <button onclick="changePassword()" class="btn btn-gold w-full">🔄 Update Password (تبدیل کریں)</button>
-      </div>
-    </section>
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    schoolLogo = e.target.result;
+                    localStorage.setItem('ggps_logo', schoolLogo);
+                    renderLogo();
+                    alert('Logo updated successfully!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
 
-    <footer class="text-center text-[10px] text-slate-400 font-semibold pb-6">© 2026 GGPS Jheran Wali — Smart Face Attendance System • EMIS: 34210690</footer>
-  </main>
-</div>
+        function addStudent(e) {
+            e.preventDefault();
+            const name = document.getElementById('studentName').value;
+            const father = document.getElementById('fatherName').value;
+            const cls = document.getElementById('studentClass').value;
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
 
-<!-- ═══════════ FACE CAPTURE MODAL ═══════════ -->
-<div id="face-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-2xl p-5 max-w-md w-full shadow-2xl">
-    <h3 class="text-sm font-extrabold text-slate-900 text-center mb-1">📸 Face Enrollment: <span id="face-modal-name" class="text-emerald-700"></span></h3>
-    <p class="text-xs text-slate-500 text-center mb-3">طالب علم کا چہرہ رجسٹر کریں</p>
-    <div class="relative bg-slate-900 rounded-xl overflow-hidden mb-3" style="aspect-ratio:4/3">
-      <video id="face-video" autoplay muted playsinline class="w-full h-full object-cover"></video>
-      <canvas id="face-canvas" class="absolute inset-0 w-full h-full"></canvas>
-    </div>
-    <p id="face-modal-status" class="text-xs font-bold text-center text-slate-500 mb-3">Starting camera...</p>
-    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-center mb-3">
-      <p class="text-[11px] font-bold text-emerald-800">Auto-Capture: 3 photos will be taken automatically</p>
-      <p id="auto-count" class="text-xl font-extrabold text-emerald-700">0 / 3</p>
-    </div>
-    <div id="face-samples-row" class="flex gap-2 justify-center mb-3"></div>
-    <div class="flex gap-2 mb-2">
-      <button onclick="doCapture(false)" class="btn btn-gold flex-1">📸 Manual Capture</button>
-      <button onclick="closeFaceModal()" class="btn btn-ghost flex-1">✖ Close</button>
-    </div>
-    <button onclick="saveFaceSamples()" class="btn btn-primary w-full">💾 Save Face Samples (محفوظ کریں)</button>
-  </div>
-</div>
+            students.push({
+                id: Date.now(),
+                name: name,
+                father: father,
+                class: cls,
+                status: 'Present',
+                time: timeStr
+            });
 
-<!-- ═══════════ WHATSAPP QUEUE MODAL ═══════════ -->
-<div id="wa-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-2xl p-6 max-w-md w-full text-center shadow-2xl">
-    <h3 class="text-sm font-extrabold text-slate-900 mb-1">📤 Absence Alerts via WhatsApp</h3>
-    <p id="wa-progress" class="text-xs font-bold text-slate-500 mb-4"></p>
-    <div id="wa-current" class="bg-red-50 border border-red-200 rounded-xl p-4 mb-4 text-left">
-      <p class="font-extrabold text-slate-900 text-sm" id="wa-student"></p>
-      <p class="text-[11px] text-slate-600 mt-1" id="wa-parent"></p>
-      <p class="text-[11px] text-slate-500 mt-2 whitespace-pre-line border-t border-red-100 pt-2" id="wa-preview"></p>
-    </div>
-    <button onclick="sendNextAbsent()" id="wa-send-btn" class="btn btn-wa w-full mb-2">📱 Open WhatsApp & Send</button>
-    <button onclick="closeWaModal()" class="btn btn-ghost w-full">✖ Close Modal</button>
-  </div>
-</div>
+            localStorage.setItem('ggps_students', JSON.stringify(students));
+            document.getElementById('addStudentForm').reset();
+            renderStudents();
+            updateStats();
+        }
 
-<script>
-let appState={students:[],teachers:[],attendance:{},password:"1234",modelsLoaded:false,cameraStream:null,faceDetectionInterval:null};
-const SCHOOL_EMIS="34210690",THRESHOLD=0.5,SCHOOL_EN="GGPS Jheran Wali",SCHOOL_UR="گورنمنٹ گرلز پرائمری سکول جھیورانوالی";
-let attCooldown={};
-const LOGO_SVG='<svg viewBox="0 0 96 96" class="w-full h-full"><circle cx="48" cy="48" r="46" fill="#065f46"/><circle cx="48" cy="48" r="46" fill="none" stroke="#d4af37" stroke-width="3"/><circle cx="48" cy="48" r="38" fill="none" stroke="#d4af37" stroke-width="2"/><path d="M48 30c-8-5-18-5-24-1v24c6-4 16-4 24 1 8-5 18-5 24-1V29c-6-4-16-4-24 1z" fill="#10b981" stroke="#d4af37" stroke-width="2"/><line x1="48" y1="30" x2="48" y2="54" stroke="#d4af37" stroke-width="2"/><text x="48" y="74" text-anchor="middle" font-family="Arial" font-weight="900" font-size="15" fill="#d4af37">GGPS</text><path d="M58 14a8 8 0 1 0 6 14 10 10 0 1 1-6-14z" fill="#d4af37"/><circle cx="63" cy="20" r="2" fill="#d4af37"/></svg>';
+        // Cycle Status: Present -> Absent -> On Leave -> Present
+        function toggleStudentStatus(id) {
+            const st = students.find(s => s.id === id);
+            if (st) {
+                if (st.status === 'Present') st.status = 'Absent';
+                else if (st.status === 'Absent') st.status = 'On Leave';
+                else st.status = 'Present';
 
-function saveState(){localStorage.setItem('ggps_students',JSON.stringify(appState.students));localStorage.setItem('ggps_teachers',JSON.stringify(appState.teachers));localStorage.setItem('ggps_attendance',JSON.stringify(appState.attendance));localStorage.setItem('ggps_password',appState.password);}
-function loadState(){try{const s=localStorage.getItem('ggps_students');if(s)appState.students=JSON.parse(s);const t=localStorage.getItem('ggps_teachers');if(t)appState.teachers=JSON.parse(t);const a=localStorage.getItem('ggps_attendance');if(a)appState.attendance=JSON.parse(a);const p=localStorage.getItem('ggps_password');if(p)appState.password=p;}catch(e){}}
-function todayKey(){return new Date().toISOString().split('T')[0];}
-function normalizePhone(v){let d=(v||'').replace(/\D/g,'');if(d.startsWith('0'))d='92'+d.slice(1);return d;}
-function showToast(m,e){const t=document.createElement('div');t.className='toast';t.innerHTML=m;if(e)t.style.background='#991b1b';document.body.appendChild(t);setTimeout(()=>t.remove(),3200);}
-function beep(f=880,d=.15){try{const A=new (window.AudioContext||window.webkitAudioContext)();const o=A.createOscillator(),g=A.createGain();o.frequency.value=f;o.connect(g);g.connect(A.destination);g.gain.setValueAtTime(.12,A.currentTime);g.gain.exponentialRampToValueAtTime(.0001,A.currentTime+d);o.start();o.stop(A.currentTime+d);}catch(e){}}
+                localStorage.setItem('ggps_students', JSON.stringify(students));
+                renderStudents();
+                updateStats();
+            }
+        }
 
-/* LOGO */
-function applyLogo(){const l=localStorage.getItem('ggps_logo');const h=l?'<img src="'+l+'" class="w-full h-full object-cover">':LOGO_SVG;document.getElementById('logo-main').innerHTML=h;document.getElementById('logo-login').innerHTML=h;}
-function uploadLogo(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const S=200,c=document.createElement('canvas');c.width=S;c.height=S;const m=Math.min(img.width,img.height);c.getContext('2d').drawImage(img,(img.width-m)/2,(img.height-m)/2,m,m,0,0,S,S);localStorage.setItem('ggps_logo',c.toDataURL('image/png'));applyLogo();showToast('✓ School logo updated successfully!');};img.src=r.result;};r.readAsDataURL(f);}
+        function toggleTeacherStatus(id) {
+            const t = teachers.find(tr => tr.id === id);
+            if (t) {
+                if (t.status === 'Present') t.status = 'Absent';
+                else if (t.status === 'Absent') t.status = 'On Leave';
+                else t.status = 'Present';
 
-/* LOGIN */
-function verifyPassword(){if(document.getElementById('login-password').value===appState.password){document.getElementById('login-screen').classList.add('hidden');document.getElementById('main-dashboard').classList.remove('hidden');showToast('✓ Welcome to Dashboard!');renderDashboard();}else showToast('✗ Incorrect password entered',1);}
-function logout(){stopFaceAttendance();document.getElementById('main-dashboard').classList.add('hidden');document.getElementById('login-screen').classList.remove('hidden');document.getElementById('login-password').value='';}
-function showForgotBox(){document.getElementById('forgot-form-box').classList.remove('hidden');}
-function hideForgotBox(){document.getElementById('forgot-form-box').classList.add('hidden');}
-function resetPasswordViaEMIS(){if(document.getElementById('recovery-emis').value.trim()!==SCHOOL_EMIS)return showToast('✗ Wrong EMIS code',1);const n=document.getElementById('new-reset-password').value.trim();if(n.length<3)return showToast('✗ Min 3 characters required',1);appState.password=n;saveState();showToast('✓ Password reset successfully!');hideForgotBox();}
-function changePassword(){const o=document.getElementById('old-password').value,n=document.getElementById('new-password').value,c=document.getElementById('confirm-password').value;if(o!==appState.password)return showToast('✗ Old password is incorrect',1);if(!n||n!==c)return showToast('✗ Passwords do not match',1);appState.password=n;saveState();showToast('✓ Password updated successfully!');}
-document.addEventListener('keypress',e=>{if(e.key==='Enter'&&!document.getElementById('login-screen').classList.contains('hidden'))verifyPassword();});
+                localStorage.setItem('ggps_teachers', JSON.stringify(teachers));
+                renderTeachers();
+            }
+        }
 
-/* CLOCK */
-function updateDateTime(){const n=new Date();document.getElementById('current-date').textContent=n.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});document.getElementById('current-time').textContent=n.toLocaleTimeString('en-GB');}
-setInterval(updateDateTime,1000);
+        function renderStudents() {
+            const tbody = document.getElementById('studentTableBody');
+            tbody.innerHTML = '';
+            students.forEach((s, index) => {
+                let badgeClass = 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200';
+                let label = '✓ Present';
+                if (s.status === 'Absent') {
+                    badgeClass = 'bg-rose-100 text-rose-700 hover:bg-rose-200';
+                    label = '✗ Absent';
+                } else if (s.status === 'On Leave') {
+                    badgeClass = 'bg-amber-100 text-amber-700 hover:bg-amber-200';
+                    label = '⏳ On Leave';
+                }
 
-/* TABS */
-function switchTab(n){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('content-'+n).classList.remove('hidden');document.getElementById('tab-'+n).classList.add('active');
-if(n==='dashboard')renderDashboard();if(n==='students')renderStudents();if(n==='attendance')renderTodayAttendance();if(n==='teachers')renderTeachers();if(n==='reports')renderReports();}
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition-all">
+                        <td class="p-4 font-medium text-slate-500">${index + 1}</td>
+                        <td class="p-4 font-semibold text-slate-900">${s.name}</td>
+                        <td class="p-4 text-slate-600">${s.father}</td>
+                        <td class="p-4 text-slate-600">${s.class}</td>
+                        <td class="p-4 text-slate-500 text-xs">${s.time || '-'}</td>
+                        <td class="p-4">
+                            <button onclick="toggleStudentStatus(${s.id})" class="px-3 py-1 rounded-full text-xs font-semibold ${badgeClass} transition-all">
+                                ${label}
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
 
-/* AI MODELS STATUS CHIPS UPDATER */
-function updateModelChips(text, cls) {
-  ['modelStatus', 'modelStatusMobile'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) {
-      el.textContent = text;
-      el.className = 'model-chip ' + cls;
-      if(id === 'modelStatusMobile' && cls === 'm-ok') el.classList.add('hidden');
-    }
-  });
-}
+        function renderTeachers() {
+            const tbody = document.getElementById('teacherTableBody');
+            tbody.innerHTML = '';
+            teachers.forEach((t, index) => {
+                let badgeClass = 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200';
+                let label = '✓ Present';
+                if (t.status === 'Absent') {
+                    badgeClass = 'bg-rose-100 text-rose-700 hover:bg-rose-200';
+                    label = '✗ Absent';
+                } else if (t.status === 'On Leave') {
+                    badgeClass = 'bg-amber-100 text-amber-700 hover:bg-amber-200';
+                    label = '⏳ On Leave';
+                }
 
-const MODEL_URLS=['https://justadudewhohacks.github.io/face-api.js/models','https://raw.githubusercontent.com/justadudewhohacks/face-api.js/master/weights','https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js/models'];
-function withTimeout(p,ms){return Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(new Error('t')),ms))]);}
-async function loadFaceModels(){if(typeof faceapi==='undefined'){updateModelChips('✗ Library Failed', 'm-err');return;}if(appState.modelsLoaded)return;let a=1;while(!appState.modelsLoaded){for(const u of MODEL_URLS){updateModelChips('⏳ Loading AI ('+a+')', 'm-load');try{await withTimeout(faceapi.nets.tinyFaceDetector.loadFromUri(u),180000);await withTimeout(faceapi.nets.faceLandmark68Net.loadFromUri(u),180000);await withTimeout(faceapi.nets.faceRecognitionNet.loadFromUri(u),600000);appState.modelsLoaded=true;updateModelChips('✓ AI Ready', 'm-ok');showToast('✓ AI Models Loaded Successfully!');return;}catch(e){}a++;}}}
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition-all">
+                        <td class="p-4 font-medium text-slate-500">${index + 1}</td>
+                        <td class="p-4 font-semibold text-slate-900">${t.name}</td>
+                        <td class="p-4 text-slate-600">${t.designation}</td>
+                        <td class="p-4">
+                            <button onclick="toggleTeacherStatus(${t.id})" class="px-3 py-1 rounded-full text-xs font-semibold ${badgeClass} transition-all">
+                                ${label}
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
 
-/* STUDENTS */
-function addNewStudent(){const n=document.getElementById('student-name').value.trim(),f=document.getElementById('father-name').value.trim();if(!n||!f)return showToast('✗ Name & Father Name are required',1);
-appState.students.push({id:Date.now().toString(),name:n,father:f,phone:normalizePhone(document.getElementById('parent-phone').value),class:document.getElementById('student-class').value,gender:document.getElementById('student-gender').value,faceSamples:[],createdAt:new Date().toISOString()});saveState();
-['student-name','father-name','parent-phone'].forEach(i=>document.getElementById(i).value='');showToast('✓ '+n+' saved! Now enroll face 📸');renderStudents();renderDashboard();}
-function renderStudents(){const c=document.getElementById('students-list');document.getElementById('total-students').textContent=appState.students.length;
-if(!appState.students.length){c.innerHTML='<div class="col-span-full text-center py-10 text-slate-400 text-sm font-bold">No students registered yet.</div>';return;}
-c.innerHTML=appState.students.map(s=>`<div class="card p-4"><div class="flex items-center gap-3"><div class="w-11 h-11 rounded-full flex items-center justify-center text-xl" style="background:${s.gender==='girl'?'#fce7f3':'#dbeafe'}">${s.gender==='girl'?'👧':'👦'}</div><div class="flex-1 min-w-0"><p class="font-extrabold text-slate-900 text-sm truncate">${s.name}</p><p class="text-[10px] text-slate-500 font-semibold">S/O ${s.father} • Class ${s.class}</p>${(s.faceSamples||[]).length?'<span class="badge" style="background:#d1fae5;color:#065f46">✓ Face Enrolled</span>':'<span class="badge" style="background:#fef3c7;color:#92400e">⚠ Face Pending</span>'}</div></div><div class="flex gap-2 mt-3"><button onclick="openFaceModal('${s.id}')" class="btn btn-primary flex-1" style="padding:8px;font-size:11px">📸 Enroll Face</button><button onclick="deleteStudent('${s.id}')" class="btn btn-danger" style="padding:8px 10px;font-size:11px" title="Delete">🗑</button></div></div>`).join('');}
-function deleteStudent(id){if(!confirm('Are you sure you want to delete this student?'))return;appState.students=appState.students.filter(s=>s.id!==id);saveState();renderStudents();renderDashboard();showToast('✓ Student deleted successfully');}
+        function updateStats() {
+            const total = students.length;
+            const present = students.filter(s => s.status === 'Present').length;
+            const absent = students.filter(s => s.status === 'Absent').length;
+            const leave = students.filter(s => s.status === 'On Leave').length;
+            const rate = total > 0 ? Math.round((present / total) * 100) : 0;
 
-/* TEACHERS */
-function addTeacher(){const n=document.getElementById('teacher-name').value.trim();if(!n)return showToast('✗ Teacher name is required',1);
-const d=document.getElementById('teacher-desig').value;
-appState.teachers.push({id:Date.now().toString(),name:n,designation:d,present:true});saveState();
-document.getElementById('teacher-name').value='';renderTeachers();renderDashboard();
-showToast('✓ '+n+' registered successfully!');}
-function toggleTeacher(id){const t=appState.teachers.find(x=>x.id===id);t.present=!t.present;saveState();renderTeachers();renderDashboard();}
-function removeTeacher(id){if(!confirm('Are you sure you want to remove this teacher?'))return;appState.teachers=appState.teachers.filter(t=>t.id!==id);saveState();renderTeachers();renderDashboard();showToast('✓ Teacher removed successfully');}
-function renderTeachers(){const c=document.getElementById('teachers-list');document.getElementById('total-teachers').textContent=appState.teachers.length;
-if(!appState.teachers.length){c.innerHTML='<div class="col-span-full text-center py-10 text-slate-400 text-sm font-bold">No teachers registered yet.</div>';return;}
-c.innerHTML=appState.teachers.map(t=>`<div class="card p-4" style="border-top:3px solid ${t.present?'#10b981':'#ef4444'}"><p class="font-extrabold text-slate-900 text-sm">${t.name}</p><p class="text-[10px] font-bold text-purple-700 bg-purple-50 rounded-full px-2 py-0.5 inline-block mt-1">${t.designation||'Teacher'}</p><div class="flex gap-2 mt-3"><button onclick="toggleTeacher('${t.id}')" class="btn flex-1 ${t.present?'btn-primary':'btn-danger'}" style="padding:8px;font-size:11px">${t.present?'✓ Present (حاضر)':'✗ Absent (غیر حاضر)'}</button><button onclick="removeTeacher('${t.id}')" class="btn btn-danger" style="padding:8px 10px;font-size:11px" title="Delete">🗑</button></div></div>`).join('');}
+            document.getElementById('statTotal').innerText = total;
+            document.getElementById('statPresent').innerText = present;
+            document.getElementById('statAbsent').innerText = absent;
+            document.getElementById('statLeave').innerText = leave;
+            document.getElementById('statRate').innerText = rate + '%';
+        }
 
-/* FACE CAPTURE */
-let faceModalStudentId=null,faceStream=null,faceSamples=[],faceBusy=false,faceLoopOn=false,lastAuto=0;
-async function openFaceModal(id){if(!appState.modelsLoaded)return showToast('⏳ AI Models still loading...',1);faceModalStudentId=id;faceSamples=[];lastAuto=0;
-document.getElementById('face-modal-name').textContent=appState.students.find(s=>s.id===id).name;document.getElementById('face-samples-row').innerHTML='';document.getElementById('auto-count').textContent='0 / 3';
-document.getElementById('face-modal').classList.remove('hidden');document.getElementById('face-modal').classList.add('flex');
-try{faceStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640}}});const v=document.getElementById('face-video');v.srcObject=faceStream;v.muted=true;try{await v.play();}catch(e){}faceLoopOn=true;faceLoop();}catch(e){showToast('✗ Camera access denied or failed',1);closeFaceModal();}}
-async function faceLoop(){if(!faceLoopOn)return;if(!faceBusy){faceBusy=true;const v=document.getElementById('face-video'),st=document.getElementById('face-modal-status');try{if(v.readyState>=2){const d=await faceapi.detectSingleFace(v,new faceapi.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:0.4}));const cv=document.getElementById('face-canvas');if(v.videoWidth&&cv.width!==v.videoWidth){cv.width=v.videoWidth;cv.height=v.videoHeight;}const x=cv.getContext('2d');x.clearRect(0,0,cv.width,cv.height);
-if(d){const b=d.box;x.strokeStyle='#34d399';x.lineWidth=4;x.strokeRect(b.x,b.y,b.width,b.height);st.innerHTML='<span class="ok-t">✓ Face Detected</span>';if(faceSamples.length<3&&Date.now()-lastAuto>1800){lastAuto=Date.now();await doCapture(true);}}else st.innerHTML='<span class="no-t">Position your face in camera</span>';}}catch(e){}faceBusy=false;}setTimeout(faceLoop,350);}
-async function doCapture(auto){const v=document.getElementById('face-video');try{const d=await faceapi.detectSingleFace(v,new faceapi.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:0.4})).withFaceLandmarks().withFaceDescriptor();if(!d){if(!auto)showToast('✗ No face detected',1);return;}const b=d.detection.box;const t=document.createElement('canvas');t.width=80;t.height=80;t.getContext('2d').drawImage(v,Math.max(0,b.x),Math.max(0,b.y),b.width,b.height,0,0,80,80);faceSamples.push({d:Array.from(d.descriptor),t:t.toDataURL('image/jpeg',.7)});document.getElementById('face-samples-row').innerHTML=faceSamples.map(x=>`<img src="${x.t}" class="sample-thumb">`).join('');document.getElementById('auto-count').textContent=faceSamples.length+' / 3';beep(740,.1);if(faceSamples.length===3)showToast('✓ 3/3 Captured successfully!');}catch(e){if(!auto)showToast('✗ Capture failed',1);}}
-function saveFaceSamples(){if(!faceSamples.length)return showToast('✗ Please capture at least 1 photo',1);const s=appState.students.find(x=>x.id===faceModalStudentId);s.faceSamples=faceSamples;saveState();renderStudents();closeFaceModal();showToast('✓ Face enrolled for '+s.name);}
-function closeFaceModal(){faceLoopOn=false;if(faceStream){faceStream.getTracks().forEach(t=>t.stop());faceStream=null;}document.getElementById('face-video').srcObject=null;document.getElementById('face-modal').classList.add('hidden');document.getElementById('face-modal').classList.remove('flex');}
+        // Excel Export with Leave status
+        function exportExcel() {
+            const wb = XLSX.utils.book_new();
 
-/* ATTENDANCE */
-async function startFaceAttendance(){if(!appState.modelsLoaded)return showToast('⏳ AI Models still loading...',1);if(!appState.students.length)return showToast('✗ Please register students first',1);
-try{const v=document.getElementById('attendance-video');appState.cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640}}});v.srcObject=appState.cameraStream;v.muted=true;try{await v.play();}catch(e){}const cv=document.getElementById('attendance-canvas');v.onloadedmetadata=()=>{cv.width=v.videoWidth;cv.height=v.videoHeight;};
-document.getElementById('camera-placeholder').classList.add('hidden');document.getElementById('scan-overlay').classList.remove('hidden');document.getElementById('start-camera-btn').classList.add('hidden');document.getElementById('stop-camera-btn').classList.remove('hidden');startFaceDetection();showToast('✓ Camera started successfully');}catch(e){showToast('✗ Camera access denied or failed',1);}}
-function stopFaceAttendance(){if(appState.cameraStream){appState.cameraStream.getTracks().forEach(t=>t.stop());appState.cameraStream=null;}if(appState.faceDetectionInterval){clearInterval(appState.faceDetectionInterval);appState.faceDetectionInterval=null;}const p=document.getElementById('camera-placeholder');if(p){p.classList.remove('hidden');document.getElementById('scan-overlay').classList.add('hidden');document.getElementById('start-camera-btn').classList.remove('hidden');document.getElementById('stop-camera-btn').classList.add('hidden');}}
-function findMatch(desc){let b=null;for(const s of appState.students)for(const sm of(s.faceSamples||[])){const d=faceapi.euclideanDistance(desc,sm.d);if(!b||d<b.d)b={d,student:s};}return(b&&b.d<=THRESHOLD)?b:null;}
-function markPresent(st){const t=todayKey();if(!appState.attendance[t])appState.attendance[t]={};if(appState.attendance[t][st.id])return false;appState.attendance[t][st.id]={time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),ts:Date.now()};saveState();renderTodayAttendance();renderDashboard();return true;}
-function startFaceDetection(){const v=document.getElementById('attendance-video'),cv=document.getElementById('attendance-canvas'),x=cv.getContext('2d'),live=document.getElementById('att-live-status');let busy=false;
-appState.faceDetectionInterval=setInterval(async()=>{if(!appState.cameraStream||busy)return;busy=true;try{if(v.readyState>=2){const d=await faceapi.detectSingleFace(v,new faceapi.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:0.4})).withFaceLandmarks().withFaceDescriptor();x.clearRect(0,0,cv.width,cv.height);
-if(d){const m=findMatch(Array.from(d.descriptor));const b=d.detection.box;x.strokeStyle=m?'#22c55e':'#ef4444';x.lineWidth=4;x.strokeRect(b.x,b.y,b.width,b.height);x.font='bold 16px Inter';x.fillStyle=m?'#22c55e':'#ef4444';x.fillText(m?m.student.name:'Unknown',b.x,Math.max(18,b.y-6));
-live.innerHTML=m?'<span class="ok-t">✓ Recognized: '+m.student.name+'</span>':'<span class="no-t">Unknown Face</span>';
-if(m){const now=Date.now();if(!attCooldown[m.student.id]||now-attCooldown[m.student.id]>5000){attCooldown[m.student.id]=now;if(markPresent(m.student)){beep(660,.12);setTimeout(()=>beep(990,.2),130);showToast('✓ '+m.student.name+' Marked PRESENT!');}}}}else live.textContent='Scanning for faces...';}}catch(e){}busy=false;},400);}
-function manualMark(id){const s=appState.students.find(x=>x.id===id);if(markPresent(s)){beep(740,.12);showToast('✓ '+s.name+' marked present');}}
-function undoMark(id){const t=todayKey();if(appState.attendance[t]){delete appState.attendance[t][id];saveState();renderTodayAttendance();renderDashboard();}}
-function renderTodayAttendance(){const c=document.getElementById('today-attendance');const t=todayKey();const att=appState.attendance[t]||{};const pr=appState.students.filter(s=>att[s.id]);const ab=appState.students.filter(s=>!att[s.id]);
-c.innerHTML=`<div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3"><p class="text-xs font-extrabold text-emerald-800 mb-2">✓ PRESENT STUDENTS (${pr.length})</p><div class="space-y-2">${pr.map(s=>`<div class="flex items-center gap-2 bg-white rounded-lg p-2 border border-emerald-100"><span class="w-7 h-7 rounded-full bg-emerald-500 text-white text-[10px] font-bold flex items-center justify-center">✓</span><div class="flex-1"><p class="text-xs font-bold text-slate-800">${s.name}</p><p class="text-[10px] text-slate-500">${att[s.id].time} • Class ${s.class}</p></div><button onclick="undoMark('${s.id}')" class="text-red-500 text-xs font-bold bg-red-50 px-2 py-1 rounded">✕</button></div>`).join('')||'<p class="text-[11px] text-slate-400 text-center py-2">No students present yet</p>'}</div></div>
-<div class="bg-red-50 border border-red-200 rounded-xl p-3 mt-3"><p class="text-xs font-extrabold text-red-700 mb-2">✗ ABSENT STUDENTS (${ab.length})</p><div class="space-y-2">${ab.map(s=>`<div class="flex items-center gap-2 bg-white rounded-lg p-2 border border-red-100"><span class="w-7 h-7 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">✗</span><div class="flex-1"><p class="text-xs font-bold text-slate-800">${s.name}</p><p class="text-[10px] text-slate-500">Class ${s.class}</p></div><button onclick="manualMark('${s.id}')" class="bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded">+ Present</button></div>`).join('')||'<p class="text-[11px] text-slate-400 text-center py-2">All students present! 🎉</p>'}</div></div>`;}
+            let excelData = [
+                ["GOVT. GIRLS PRIMARY SCHOOL JHERAN WALI"],
+                ["EMIS: 32342342 | District: Rahim Yar Khan"],
+                ["Date: " + new Date().toLocaleDateString()],
+                [],
+                ["STUDENTS ATTENDANCE REGISTER"],
+                ["Sr.No", "Student Name", "Father Name", "Class", "Time", "Status"]
+            ];
 
-/* WHATSAPP BILINGUAL */
-let absentQueue=[],absentIdx=0;
-function absentMsg(s){const d=new Date().toLocaleDateString('en-GB');return `🏫 ${SCHOOL_EN} — ABSENCE ALERT\n\nDear Parent,\nYour child ${s.name} (S/O ${s.father}, Class ${s.class}) is ABSENT today (${d}). Kindly inform the school.\n\nمحترم والدین،\nآپ کا بچہ ${s.name} (والد: ${s.father}، کلاس: ${s.class}) آج (${d}) غیر حاضر ہے۔ برائے مہربانی سکول کو مطلع کریں۔\n\nThank you,\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`;}
-function startAbsentQueue(){const t=todayKey();const att=appState.attendance[t]||{};absentQueue=appState.students.filter(s=>!att[s.id]&&s.phone);if(!absentQueue.length)return showToast('✗ No absent students with phone numbers',1);absentIdx=0;document.getElementById('wa-modal').classList.remove('hidden');document.getElementById('wa-modal').classList.add('flex');showWaCurrent();}
-function showWaCurrent(){if(absentIdx>=absentQueue.length){document.getElementById('wa-progress').textContent=absentQueue.length+' / '+absentQueue.length+' ✓ COMPLETED';document.getElementById('wa-current').innerHTML='<p class="font-extrabold text-emerald-700 text-center py-4">🎉 All parent notifications sent!</p>';document.getElementById('wa-send-btn').classList.add('hidden');return;}
-document.getElementById('wa-send-btn').classList.remove('hidden');const s=absentQueue[absentIdx];document.getElementById('wa-progress').textContent='Progress: '+(absentIdx+1)+' of '+absentQueue.length;
-document.getElementById('wa-student').textContent='👤 '+s.name+' — Class '+s.class;document.getElementById('wa-parent').textContent='📱 Phone: '+s.phone;document.getElementById('wa-preview').textContent=absentMsg(s);}
-function sendNextAbsent(){const s=absentQueue[absentIdx];window.open('https://wa.me/'+s.phone+'?text='+encodeURIComponent(absentMsg(s)),'_blank');absentIdx++;setTimeout(showWaCurrent,600);}
-function closeWaModal(){document.getElementById('wa-modal').classList.add('hidden');document.getElementById('wa-modal').classList.remove('flex');}
-function sendWhatsAppToAll(){const t=todayKey();const att=appState.attendance[t]||{};const p=appState.students.filter(s=>att[s.id]).length;const wp=appState.students.filter(s=>s.phone);if(!wp.length)return showToast('✗ No parent numbers available',1);
-const msg=`📊 ${SCHOOL_EN} — DAILY REPORT\n\n✅ Present: ${p}\n❌ Absent: ${appState.students.length-p}\n👥 Total: ${appState.students.length}\n📅 Date: ${new Date().toLocaleDateString('en-GB')}\n\n${SCHOOL_UR} | EMIS: ${SCHOOL_EMIS}`;
-wp.forEach(s=>window.open('https://wa.me/'+s.phone+'?text='+encodeURIComponent(msg),'_blank'));showToast('✓ Reports sent to '+wp.length+' parents');}
+            students.forEach((s, idx) => {
+                excelData.push([idx + 1, s.name, s.father, s.class, s.time || '', s.status]);
+            });
 
-/* DASHBOARD & REPORTS */
-function renderDashboard(){const t=todayKey();const att=appState.attendance[t]||{};const p=appState.students.filter(s=>att[s.id]).length;const a=appState.students.length-p;const tp=appState.teachers.filter(x=>x.present).length;
-document.getElementById('stat-total').textContent=appState.students.length;document.getElementById('stat-present').textContent=p;document.getElementById('stat-absent').textContent=a;document.getElementById('stat-rate').textContent=(appState.students.length?Math.round(p/appState.students.length*100):0)+'%';document.getElementById('stat-teachers').textContent=tp+'/'+appState.teachers.length;}
-function renderReports(){const t=todayKey();const att=appState.attendance[t]||{};const p=appState.students.filter(s=>att[s.id]);const a=appState.students.filter(s=>!att[s.id]);
-document.getElementById('report-stats').innerHTML=`<div class="stat-card"><p class="lbl">Total Students</p><p class="text-2xl font-extrabold">${appState.students.length}</p></div><div class="stat-card" style="background:#ecfdf5"><p class="lbl" style="color:#047857">Present Students</p><p class="text-2xl font-extrabold text-emerald-700">${p.length}</p></div><div class="stat-card" style="background:#fef2f2"><p class="lbl" style="color:#b91c1c">Absent Students</p><p class="text-2xl font-extrabold text-red-600">${a.length}</p></div><div class="stat-card" style="background:#fffbeb"><p class="lbl" style="color:#92400e">Attendance Rate</p><p class="text-2xl font-extrabold text-amber-600">${appState.students.length?Math.round(p.length/appState.students.length*100):0}%</p></div>`;
-document.getElementById('report-table').innerHTML=`<h3 class="text-xs font-extrabold text-slate-700 mb-2">👥 Students Attendance Register</h3><table class="reg"><thead><tr><th>#</th><th>Student Name</th><th>Father Name</th><th>Class</th><th>Time</th><th>Status</th></tr></thead><tbody>${appState.students.map((s,i)=>`<tr><td>${i+1}</td><td><b>${s.name}</b></td><td>${s.father}</td><td>${s.class}</td><td>${att[s.id]?att[s.id].time:'—'}</td><td style="font-weight:800;color:${att[s.id]?'#059669':'#dc2626'}">${att[s.id]?'✓ Present':'✗ Absent'}</td></tr>`).join('')||'<tr><td colspan="6">No students found</td></tr>'}</tbody></table>`;
-document.getElementById('report-teachers').innerHTML=`<h3 class="text-xs font-extrabold text-slate-700 mb-2">👩‍🏫 Teachers Staff Register</h3><table class="reg"><thead><tr><th>#</th><th>Teacher Name</th><th>Designation</th><th>Status</th></tr></thead><tbody>${appState.teachers.map((t,i)=>`<tr><td>${i+1}</td><td><b>${t.name}</b></td><td>${t.designation||'—'}</td><td style="font-weight:800;color:${t.present?'#059669':'#dc2626'}">${t.present?'✓ Present':'✗ Absent'}</td></tr>`).join('')||'<tr><td colspan="4">No teachers found</td></tr>'}</tbody></table>`;}
-async function generatePDFReport(){showToast('⏳ Generating PDF report...');try{const c=await html2canvas(document.getElementById('report-content'),{scale:2});const{jsPDF}=window.jspdf;const pdf=new jsPDF('p','mm','a4');pdf.addImage(c.toDataURL('image/png'),'PNG',0,0,210,(c.height*210)/c.width);pdf.save('GGPS_Attendance_'+todayKey()+'.pdf');showToast('✓ PDF downloaded successfully');}catch(e){showToast('✗ PDF generation failed',1);}}
-function exportToExcel(){const t=todayKey();const att=appState.attendance[t]||{};let csv='\uFEFF#,Student Name,Father Name,Class,Phone,Time,Status\n';appState.students.forEach((s,i)=>{const a=att[s.id];csv+=`${i+1},${s.name},${s.father},${s.class},${s.phone||'-'},${a?a.time:'-'},${a?'Present':'Absent'}\n`;});csv+='\n# TEACHERS LIST\nTeacher Name,Designation,Status\n';appState.teachers.forEach(t=>{csv+=`${t.name},${t.designation||'-'},${t.present?'Present':'Absent'}\n`;});
-const l=document.createElement('a');l.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));l.download='GGPS_Attendance_'+t+'.csv';l.click();showToast('✓ Excel file downloaded');}
+            excelData.push([]);
+            excelData.push([]);
+            excelData.push(["TEACHERS STAFF REGISTER"]);
+            excelData.push(["Sr.No", "Teacher Name", "Designation", "Status"]);
 
-window.addEventListener('load',()=>{loadState();applyLogo();updateDateTime();loadFaceModels();renderDashboard();renderStudents();renderTeachers();renderTodayAttendance();});
-</script>
+            teachers.forEach((t, idx) => {
+                excelData.push([idx + 1, t.name, t.designation, t.status]);
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(excelData);
+            XLSX.utils.book_append_sheet(wb, ws, "Attendance_Report");
+            XLSX.writeFile(wb, "GGPS_Attendance_Report.xlsx");
+        }
+
+        // PDF Export matching formats
+        function exportPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFillColor(20, 83, 45);
+            doc.rect(0, 0, 210, 25, "F");
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text("GOVT. GIRLS PRIMARY SCHOOL JHERAN WALI", 105, 12, { align: "center" });
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "normal");
+            doc.text("EMIS: 32342342 | District: Rahim Yar Khan | Date: " + new Date().toLocaleDateString(), 105, 19, { align: "center" });
+
+            let startY = 32;
+
+            doc.setTextColor(20, 83, 45);
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "bold");
+            doc.text("STUDENTS ATTENDANCE REGISTER", 14, startY);
+            startY += 4;
+
+            let studentRows = students.map((s, idx) => [
+                idx + 1,
+                s.name,
+                s.father,
+                s.class,
+                s.time || '-',
+                s.status
+            ]);
+
+            doc.autoTable({
+                startY: startY,
+                head: [['#', 'Student Name', 'Father Name', 'Class', 'Time', 'Status']],
+                body: studentRows,
+                theme: 'grid',
+                headStyles: { fillColor: [20, 83, 45], textColor: [255, 255, 255], fontStyle: 'bold' },
+                styles: { fontSize: 9, cellPadding: 4 },
+            });
+
+            let finalY = doc.lastAutoTable.finalY + 10;
+
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "bold");
+            doc.text("TEACHERS STAFF REGISTER", 14, finalY);
+            finalY += 4;
+
+            let teacherRows =teachers.map((t, idx) => [
+                idx + 1,
+                t.name,
+                t.designation,
+                t.status
+            ]);
+
+            doc.autoTable({
+                startY: finalY,
+                head: [['Sr.No', 'Teacher Name', 'Designation', 'Status']],
+                body: teacherRows,
+                theme: 'grid',
+                headStyles: { fillColor: [20, 83, 45], textColor: [255, 255, 255], fontStyle: 'bold' },
+                styles: { fontSize: 9, cellPadding: 4 },
+            });
+
+            let signY = doc.lastAutoTable.finalY + 20;
+            if (signY > 270) {
+                doc.addPage();
+                signY = 30;
+            }
+            doc.setFontSize(10);
+            doc.setTextColor(50, 50, 50);
+            doc.text("Signature & Stamp", 170, signY, { align: "center" });
+            doc.line(140, signY + 15, 200, signY + 15);
+
+            doc.save("GGPS_Attendance_Report.pdf");
+        }
+    </script>
 </body>
 </html>
