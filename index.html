@@ -13,9 +13,10 @@
   *{box-sizing:border-box}
   body{font-family:'Inter',sans-serif;background:#f1f5f9;margin:0;color:#1e293b}
   .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-  .lbl{display:block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#475569;margin-bottom:6px}
+  .lbl{display:block;font-size:11px;font-weight:700;letter-spacing:.03em;color:#475569;margin-bottom:6px}
   .inp{width:100%;border:1.5px solid #cbd5e1;border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;background:#fff;transition:.15s}
   .inp:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,.15)}
+  .inp-ur{direction:rtl;font-family:'Cairo',sans-serif}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:13px;border:none;border-radius:10px;padding:11px 18px;cursor:pointer;transition:.15s;font-family:inherit}
   .btn:active{transform:scale(.98)}
   .btn-primary{background:linear-gradient(135deg,#059669,#047857);color:#fff;box-shadow:0 2px 8px rgba(5,150,105,.35)}
@@ -40,7 +41,6 @@
   .m-load{background:#fef3c7;color:#92400e}.m-ok{background:#d1fae5;color:#065f46}.m-err{background:#fee2e2;color:#991b1b}
   .sample-thumb{width:56px;height:56px;border-radius:10px;object-fit:cover;border:2px solid #d4af37}
   .ok-t{color:#059669}.no-t{color:#dc2626}
-  /* ── سرکاری رجسٹر (پرفارما) اسٹائل ── */
   table.reg{width:100%;border-collapse:collapse;font-size:11px;background:#fff}
   table.reg th,table.reg td{border:1.5px solid #1e293b;padding:4px 6px;text-align:center;font-weight:600}
   table.reg th{background:#f1f5f9;font-weight:800}
@@ -149,10 +149,12 @@
     <section id="content-students" class="hidden space-y-4">
       <div class="card p-5" style="border-top:4px solid #059669">
         <h2 class="text-sm font-extrabold text-slate-900 mb-1">➕ Register New Student</h2>
-        <p class="text-xs text-slate-500 mb-4">نیا طالب علم درج کریں</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-          <div><label class="lbl">Student Name</label><input id="student-name" class="inp" placeholder="e.g. Ayesha Bibi"></div>
-          <div><label class="lbl">Father Name</label><input id="father-name" class="inp" placeholder="e.g. Muhammad Ahmad"></div>
+        <p class="text-xs text-slate-500 mb-4">نام اور والد کا نام دونوں زبانوں میں لکھیں — انگریزی میسج میں انگریزی اور اردو میسج میں اردو نام جائے گا</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div><label class="lbl">Student Name (English) / نام انگریزی</label><input id="student-name-en" class="inp" placeholder="e.g. Shabbir"></div>
+          <div><label class="lbl">Student Name (Urdu) / نام اردو</label><input id="student-name-ur" class="inp inp-ur" placeholder="مثلاً: شبیر"></div>
+          <div><label class="lbl">Father Name (English) / والد کا نام انگریزی</label><input id="father-name-en" class="inp" placeholder="e.g. Nazir"></div>
+          <div><label class="lbl">Father Name (Urdu) / والد کا نام اردو</label><input id="father-name-ur" class="inp inp-ur" placeholder="مثلاً: نذیر"></div>
           <div><label class="lbl">Parent WhatsApp</label><input id="parent-phone" type="tel" class="inp" placeholder="03001234567"></div>
           <div><label class="lbl">Class</label><select id="student-class" class="inp"><option>Nursery</option><option>Prep</option><option>One</option><option>Two</option><option>Three</option><option>Four</option><option>Five</option></select></div>
           <div><label class="lbl">Gender</label><select id="student-gender" class="inp"><option value="girl">Girl (لڑکی)</option><option value="boy">Boy (لڑکا)</option></select></div>
@@ -192,7 +194,7 @@
       </div>
       <div class="card p-5" style="border-top:4px solid #25D366">
         <h2 class="text-sm font-extrabold text-slate-900 mb-1">📱 Parent WhatsApp Notifications</h2>
-        <p class="text-xs text-slate-500 mb-4">والدین کو غیر حاضری اور روزانہ کارکردگی کا پیغام بھیجیں</p>
+        <p class="text-xs text-slate-500 mb-4">انگریزی حصے میں انگریزی نام/کلاس اور اردو حصے میں اردو نام/کلاس جائے گی</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <button onclick="startAbsentQueue()" class="btn btn-wa w-full py-3">📤 Send Absent Alerts (ایک ایک کر کے)</button>
           <button onclick="sendWhatsAppToAll()" class="btn btn-primary w-full py-3">📊 Send Full Day Report to All</button>
@@ -226,7 +228,7 @@
       </div>
     </section>
 
-    <!-- ── REPORTS (پرفارما والی exact رجسٹر) ── -->
+    <!-- ── REPORTS ── -->
     <section id="content-reports" class="hidden space-y-4">
       <div class="card p-5" style="border-top:4px solid #dc2626">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
@@ -301,9 +303,19 @@
 let appState={students:[],teachers:[],attendance:{},password:"1234",modelsLoaded:false,cameraStream:null,faceDetectionInterval:null};
 const SCHOOL_EMIS="34210690",THRESHOLD=0.5,SCHOOL_EN="GGPS Jheran Wali",SCHOOL_UR="گورنمنٹ گرلز پرائمری سکول جھیورانوالی";
 const CLASSES=['Nursery','Prep','One','Two','Three','Four','Five'];
-/* پرانے (1,2,3…) اور نئے (One,Two…) دونوں کلاس ویلیوز کو یکساں بنانے کے لیے */
 const CLASS_MAP={'1':'One','2':'Two','3':'Three','4':'Four','5':'Five','پہلی':'One','دوسری':'Two','تیسری':'Three','چوتھی':'Four','پانچویں':'Five','نرسری':'Nursery','پریپ':'Prep'};
+const CLASS_UR={'Nursery':'نرسری','Prep':'پریپ','One':'پہلی','Two':'دوسری','Three':'تیسری','Four':'چوتھی','Five':'پانچویں'};
 function normClass(c){return CLASS_MAP[c]||c;}
+function isUrduStr(x){return /[\u0600-\u06FF]/.test(x||'');}
+function namesFor(s){
+  let en=s.nameEn||(!isUrduStr(s.name)?s.name:'');
+  let u=s.nameUr||(isUrduStr(s.name)?s.name:'');
+  if(!en)en=s.name||s.nameUr||''; if(!u)u=s.name||s.nameEn||'';
+  let fen=s.fatherEn||(!isUrduStr(s.father)?s.father:'');
+  let fu=s.fatherUr||(isUrduStr(s.father)?s.father:'');
+  if(!fen)fen=s.father||''; if(!fu)fu=s.father||'';
+  return{en,u,fen,fu};
+}
 let attCooldown={};
 const LOGO_SVG='<svg viewBox="0 0 96 96" class="w-full h-full"><circle cx="48" cy="48" r="46" fill="#065f46"/><circle cx="48" cy="48" r="46" fill="none" stroke="#d4af37" stroke-width="3"/><circle cx="48" cy="48" r="38" fill="none" stroke="#d4af37" stroke-width="2"/><path d="M48 30c-8-5-18-5-24-1v24c6-4 16-4 24 1 8-5 18-5 24-1V29c-6-4-16-4-24 1z" fill="#10b981" stroke="#d4af37" stroke-width="2"/><line x1="48" y1="30" x2="48" y2="54" stroke="#d4af37" stroke-width="2"/><text x="48" y="74" text-anchor="middle" font-family="Arial" font-weight="900" font-size="15" fill="#d4af37">GGPS</text><path d="M58 14a8 8 0 1 0 6 14 10 10 0 1 1-6-14z" fill="#d4af37"/><circle cx="63" cy="20" r="2" fill="#d4af37"/></svg>';
 
@@ -343,12 +355,20 @@ function withTimeout(p,ms){return Promise.race([p,new Promise((_,r)=>setTimeout(
 async function loadFaceModels(){if(typeof faceapi==='undefined'){updateModelChips('✗ Library Failed','m-err');return;}if(appState.modelsLoaded)return;let a=1;while(!appState.modelsLoaded){for(const u of MODEL_URLS){updateModelChips('⏳ Loading AI ('+a+')','m-load');try{await withTimeout(faceapi.nets.tinyFaceDetector.loadFromUri(u),180000);await withTimeout(faceapi.nets.faceLandmark68Net.loadFromUri(u),180000);await withTimeout(faceapi.nets.faceRecognitionNet.loadFromUri(u),600000);appState.modelsLoaded=true;updateModelChips('✓ AI Ready','m-ok');showToast('✓ AI Models Loaded Successfully!');return;}catch(e){}a++;}}}
 
 /* STUDENTS */
-function addNewStudent(){const n=document.getElementById('student-name').value.trim(),f=document.getElementById('father-name').value.trim();if(!n||!f)return showToast('✗ Name & Father Name are required',1);
-appState.students.push({id:Date.now().toString(),name:n,father:f,phone:normalizePhone(document.getElementById('parent-phone').value),class:document.getElementById('student-class').value,gender:document.getElementById('student-gender').value,faceSamples:[],createdAt:new Date().toISOString()});saveState();
-['student-name','father-name','parent-phone'].forEach(i=>document.getElementById(i).value='');showToast('✓ '+n+' saved! Now enroll face 📸');renderStudents();renderDashboard();}
+function addNewStudent(){
+  const nEn=document.getElementById('student-name-en').value.trim();
+  const nUr=document.getElementById('student-name-ur').value.trim();
+  const fEn=document.getElementById('father-name-en').value.trim();
+  const fUr=document.getElementById('father-name-ur').value.trim();
+  if(!nEn&&!nUr)return showToast('✗ Student name required (English or Urdu) / نام درج کریں',1);
+  const name=nEn||nUr, father=fEn||fUr;
+  appState.students.push({id:Date.now().toString(),name,nameEn:nEn,nameUr:nUr,father,fatherEn:fEn,fatherUr:fUr,phone:normalizePhone(document.getElementById('parent-phone').value),class:document.getElementById('student-class').value,gender:document.getElementById('student-gender').value,faceSamples:[],createdAt:new Date().toISOString()});
+  saveState();
+  ['student-name-en','student-name-ur','father-name-en','father-name-ur','parent-phone'].forEach(i=>document.getElementById(i).value='');
+  showToast('✓ '+name+' saved! Now enroll face 📸');renderStudents();renderDashboard();}
 function renderStudents(){const c=document.getElementById('students-list');document.getElementById('total-students').textContent=appState.students.length;
 if(!appState.students.length){c.innerHTML='<div class="col-span-full text-center py-10 text-slate-400 text-sm font-bold">No students registered yet.</div>';return;}
-c.innerHTML=appState.students.map(s=>`<div class="card p-4"><div class="flex items-center gap-3"><div class="w-11 h-11 rounded-full flex items-center justify-center text-xl" style="background:${s.gender==='girl'?'#fce7f3':'#dbeafe'}">${s.gender==='girl'?'👧':'👦'}</div><div class="flex-1 min-w-0"><p class="font-extrabold text-slate-900 text-sm truncate">${s.name}</p><p class="text-[10px] text-slate-500 font-semibold">S/O ${s.father} • Class ${s.class}</p>${(s.faceSamples||[]).length?'<span class="badge" style="background:#d1fae5;color:#065f46">✓ Face Enrolled</span>':'<span class="badge" style="background:#fef3c7;color:#92400e">⚠ Face Pending</span>'}</div></div><div class="flex gap-2 mt-3"><button onclick="openFaceModal('${s.id}')" class="btn btn-primary flex-1" style="padding:8px;font-size:11px">📸 Enroll Face</button><button onclick="deleteStudent('${s.id}')" class="btn btn-danger" style="padding:8px 10px;font-size:11px" title="Delete">🗑</button></div></div>`).join('');}
+c.innerHTML=appState.students.map(s=>`<div class="card p-4"><div class="flex items-center gap-3"><div class="w-11 h-11 rounded-full flex items-center justify-center text-xl" style="background:${s.gender==='girl'?'#fce7f3':'#dbeafe'}">${s.gender==='girl'?'👧':''}</div><div class="flex-1 min-w-0"><p class="font-extrabold text-slate-900 text-sm truncate">${s.name}</p><p class="text-[10px] text-slate-500 font-semibold">S/O ${s.father} • Class ${s.class}</p>${(s.faceSamples||[]).length?'<span class="badge" style="background:#d1fae5;color:#065f46">✓ Face Enrolled</span>':'<span class="badge" style="background:#fef3c7;color:#92400e">⚠ Face Pending</span>'}</div></div><div class="flex gap-2 mt-3"><button onclick="openFaceModal('${s.id}')" class="btn btn-primary flex-1" style="padding:8px;font-size:11px">📸 Enroll Face</button><button onclick="deleteStudent('${s.id}')" class="btn" style="background:#dc2626;color:#fff;padding:8px 12px;font-size:11px">✕ Remove (حذف کریں)</button></div></div>`).join('');}
 function deleteStudent(id){if(!confirm('Are you sure you want to delete this student?'))return;appState.students=appState.students.filter(s=>s.id!==id);saveState();renderStudents();renderDashboard();showToast('✓ Student deleted successfully');}
 
 /* TEACHERS */
@@ -361,7 +381,7 @@ function removeTeacher(id){if(!confirm('Are you sure you want to remove this tea
 function renderTeachers(){const c=document.getElementById('teachers-list');document.getElementById('total-teachers').textContent=appState.teachers.length;
 if(!appState.teachers.length){c.innerHTML='<div class="col-span-full text-center py-10 text-slate-400 text-sm font-bold">No teachers registered yet.</div>';return;}
 const M={present:['✓ Present (حاضر)','btn-primary','#10b981'],absent:['✗ Absent (غیر حاضر)','btn-danger','#ef4444'],leave:['🌙 On Leave (رخصت)','btn-gold','#d4af37']};
-c.innerHTML=appState.teachers.map(t=>{const m=M[t.status]||M.present;return `<div class="card p-4" style="border-top:3px solid ${m[2]}"><p class="font-extrabold text-slate-900 text-sm">${t.name}</p><p class="text-[10px] font-bold text-purple-700 bg-purple-50 rounded-full px-2 py-0.5 inline-block mt-1">${t.designation||'Teacher'}</p><div class="flex gap-2 mt-3"><button onclick="toggleTeacher('${t.id}')" class="btn flex-1 ${m[1]}" style="padding:8px;font-size:11px">${m[0]}</button><button onclick="removeTeacher('${t.id}')" class="btn btn-danger" style="padding:8px 10px;font-size:11px" title="Delete">🗑</button></div></div>`;}).join('');}
+c.innerHTML=appState.teachers.map(t=>{const m=M[t.status]||M.present;return `<div class="card p-4" style="border-top:3px solid ${m[2]}"><p class="font-extrabold text-slate-900 text-sm">${t.name}</p><p class="text-[10px] font-bold text-purple-700 bg-purple-50 rounded-full px-2 py-0.5 inline-block mt-1">${t.designation||'Teacher'}</p><div class="flex gap-2 mt-3"><button onclick="toggleTeacher('${t.id}')" class="btn flex-1 ${m[1]}" style="padding:8px;font-size:11px">${m[0]}</button><button onclick="removeTeacher('${t.id}')" class="btn" style="background:#dc2626;color:#fff;padding:8px 12px;font-size:11px">✕ Remove (حذف کریں)</button></div></div>`;}).join('');}
 
 /* FACE CAPTURE */
 let faceModalStudentId=null,faceStream=null,faceSamples=[],faceBusy=false,faceLoopOn=false,lastAuto=0;
@@ -400,7 +420,12 @@ c.innerHTML=`<div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3"
 
 /* WHATSAPP */
 let absentQueue=[],absentIdx=0;
-function absentMsg(s){const d=new Date().toLocaleDateString('en-GB');return `🏫 ${SCHOOL_EN} — ABSENCE ALERT\n\nDear Parent,\nYour child ${s.name} (S/O ${s.father}, Class ${s.class}) is ABSENT today (${d}). Kindly inform the school.\n\nمحترم والدین،\nآپ کا بچہ ${s.name} (والد: ${s.father}، کلاس: ${s.class}) آج (${d}) غیر حاضر ہے۔ برائے مہربانی سکول کو مطلع کریں۔\n\nThank you,\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`;}
+function absentMsg(s){
+  const d=new Date().toLocaleDateString('en-GB');
+  const n=namesFor(s);
+  const cEn=normClass(s.class), cUr=CLASS_UR[cEn]||s.class;
+  return `🏫 ${SCHOOL_EN} — ABSENCE ALERT\n\nDear Parent,\nYour child ${n.en} (S/O ${n.fen}, Class ${cEn}) is ABSENT today (${d}). Kindly inform the school.\n\nمحترم والدین،\nآپ کا بچہ ${n.u} (والد: ${n.fu}، کلاس: ${cUr}) آج (${d}) غیر حاضر ہے۔ برائے مہربانی سکول کو مطلع کریں۔\n\nThank you / شکریہ\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`;
+}
 function startAbsentQueue(){const t=todayKey();const att=appState.attendance[t]||{};absentQueue=appState.students.filter(s=>!att[s.id]&&s.phone);if(!absentQueue.length)return showToast('✗ No absent students with phone numbers',1);absentIdx=0;document.getElementById('wa-modal').classList.remove('hidden');document.getElementById('wa-modal').classList.add('flex');showWaCurrent();}
 function showWaCurrent(){if(absentIdx>=absentQueue.length){document.getElementById('wa-progress').textContent=absentQueue.length+' / '+absentQueue.length+' ✓ COMPLETED';document.getElementById('wa-current').innerHTML='<p class="font-extrabold text-emerald-700 text-center py-4">🎉 All parent notifications sent!</p>';document.getElementById('wa-send-btn').classList.add('hidden');return;}
 document.getElementById('wa-send-btn').classList.remove('hidden');const s=absentQueue[absentIdx];document.getElementById('wa-progress').textContent='Progress: '+(absentIdx+1)+' of '+absentQueue.length;
@@ -408,14 +433,14 @@ document.getElementById('wa-student').textContent='👤 '+s.name+' — Class '+s
 function sendNextAbsent(){const s=absentQueue[absentIdx];window.open('https://wa.me/'+s.phone+'?text='+encodeURIComponent(absentMsg(s)),'_blank');absentIdx++;setTimeout(showWaCurrent,600);}
 function closeWaModal(){document.getElementById('wa-modal').classList.add('hidden');document.getElementById('wa-modal').classList.remove('flex');}
 function sendWhatsAppToAll(){const t=todayKey();const att=appState.attendance[t]||{};const p=appState.students.filter(s=>att[s.id]&&!att[s.id].leave).length;const lv=appState.students.filter(s=>att[s.id]&&att[s.id].leave).length;const wp=appState.students.filter(s=>s.phone);if(!wp.length)return showToast('✗ No parent numbers available',1);
-const msg=`📊 ${SCHOOL_EN} — DAILY REPORT\n\n✅ Present: ${p}\n On Leave: ${lv}\n❌ Absent: ${appState.students.length-p-lv}\n👥 Total: ${appState.students.length}\n📅 Date: ${new Date().toLocaleDateString('en-GB')}\n\n${SCHOOL_UR} | EMIS: ${SCHOOL_EMIS}`;
+const msg=`📊 ${SCHOOL_EN} — DAILY REPORT / روزانہ رپورٹ\n\n✅ Present حاضر: ${p}\n🌙 On Leave رخصت: ${lv}\n❌ Absent غیر حاضر: ${appState.students.length-p-lv}\n👥 Total کل: ${appState.students.length}\n📅 Date: ${new Date().toLocaleDateString('en-GB')}\n\n${SCHOOL_UR} | EMIS: ${SCHOOL_EMIS}`;
 wp.forEach(s=>window.open('https://wa.me/'+s.phone+'?text='+encodeURIComponent(msg),'_blank'));showToast('✓ Reports sent to '+wp.length+' parents');}
 
 /* DASHBOARD */
 function renderDashboard(){const t=todayKey();const att=appState.attendance[t]||{};const p=appState.students.filter(s=>att[s.id]&&!att[s.id].leave).length;const lv=appState.students.filter(s=>att[s.id]&&att[s.id].leave).length;const a=appState.students.length-p-lv;const tp=appState.teachers.filter(x=>x.status==='present').length;
 document.getElementById('stat-total').textContent=appState.students.length;document.getElementById('stat-present').textContent=p;document.getElementById('stat-absent').textContent=a;document.getElementById('stat-leave').textContent=lv;document.getElementById('stat-teachers').textContent=tp+'/'+appState.teachers.length;}
 
-/* ── پرفارما والی exact رجسٹر ── */
+/* رجسٹر رپورٹ */
 function registerData(){const t=todayKey();const att=appState.attendance[t]||{};const rows=[];let T={eB:0,eG:0,pB:0,pG:0};
 CLASSES.forEach(cl=>{const inCl=appState.students.filter(s=>normClass(s.class)===cl);
 const eB=inCl.filter(s=>s.gender==='boy').length,eG=inCl.filter(s=>s.gender==='girl').length;
@@ -442,7 +467,7 @@ if(!appState.teachers.length)html+='<tr><td colspan="6">No teachers registered</
 html+=`</tbody></table><div class="sig-box"><div>Signature & Stamp</div></div></div>`;
 document.getElementById('report-content').innerHTML=html;}
 
-/* PDF — ایک صفحہ */
+/* PDF */
 async function generatePDFReport(){showToast('⏳ Generating 1-Page PDF...');renderReports();
 try{const c=await html2canvas(document.getElementById('report-content'),{scale:2,backgroundColor:'#ffffff'});
 const{jsPDF}=window.jspdf;const pdf=new jsPDF('l','mm','a4');
@@ -451,7 +476,7 @@ if(ih>maxH){const k=maxH/ih;ih=maxH;iw=iw*k;}
 pdf.addImage(c.toDataURL('image/png'),'PNG',(pw-iw)/2,(ph-ih)/2,iw,ih);
 pdf.save('GGPS_Register_'+todayKey()+'.pdf');showToast('✓ 1-Page PDF downloaded!');}catch(e){showToast('✗ PDF generation failed',1);}}
 
-/* EXCEL — رجسٹر اسٹائل */
+/* EXCEL */
 function exportToExcel(){const {rows,T}=registerData();const t=todayKey();const att=appState.attendance[t]||{};
 let csv='\uFEFFGOVERNMENT GIRLS PRIMARY SCHOOL JHERAN WALI\nگورنمنٹ گرلز پرائمری سکول جھیورانوالی\nEMIS: '+SCHOOL_EMIS+' | Shift 1 | Date: '+new Date().toLocaleDateString('en-GB')+'\n\n';
 csv+='Sr.No,Class,Section,Boys,Girls,Total,Present Boys,Present Girls,Present Total,Absent Boys,Absent Girls,Absent Total\n';
