@@ -40,7 +40,7 @@
   .m-load{background:#fef3c7;color:#92400e}.m-ok{background:#d1fae5;color:#065f46}.m-err{background:#fee2e2;color:#991b1b}
   .sample-thumb{width:56px;height:56px;border-radius:10px;object-fit:cover;border:2px solid #d4af37}
   .ok-t{color:#059669}.no-t{color:#dc2626}
-  /* ── سرکاری رجسٹر اسٹائل ── */
+  /* ── سرکاری رجسٹر (پرفارما) اسٹائل ── */
   table.reg{width:100%;border-collapse:collapse;font-size:11px;background:#fff}
   table.reg th,table.reg td{border:1.5px solid #1e293b;padding:4px 6px;text-align:center;font-weight:600}
   table.reg th{background:#f1f5f9;font-weight:800}
@@ -226,13 +226,13 @@
       </div>
     </section>
 
-    <!-- ── REPORTS (سرکاری رجسٹر اسٹائل) ── -->
+    <!-- ── REPORTS (پرفارما والی exact رجسٹر) ── -->
     <section id="content-reports" class="hidden space-y-4">
       <div class="card p-5" style="border-top:4px solid #dc2626">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div>
-            <h2 class="text-sm font-extrabold text-slate-900">📑 Daily Attendance Register (سرکاری فارمیٹ)</h2>
-            <p class="text-xs text-slate-500">Shift 1 • Section (A) • ایک صفحہ پرنٹ</p>
+            <h2 class="text-sm font-extrabold text-slate-900">📑 Daily Attendance Register (پرفارما فارمیٹ)</h2>
+            <p class="text-xs text-slate-500">Shift 1 • Section (A) • Strength + Present + Absent (Boys/Girls/Total) • ایک صفحہ پرنٹ</p>
           </div>
           <div class="flex gap-2">
             <button onclick="generatePDFReport()" class="btn btn-danger">📄 Print / PDF (1 Page)</button>
@@ -243,7 +243,7 @@
       </div>
     </section>
 
-    <!-- ── SETTINGS ─ -->
+    <!-- ── SETTINGS  -->
     <section id="content-settings" class="hidden">
       <div class="card p-6 max-w-md mx-auto" style="border-top:4px solid #d4af37">
         <h2 class="text-sm font-extrabold text-slate-900 mb-1 text-center">🔐 Change System Password</h2>
@@ -301,6 +301,9 @@
 let appState={students:[],teachers:[],attendance:{},password:"1234",modelsLoaded:false,cameraStream:null,faceDetectionInterval:null};
 const SCHOOL_EMIS="34210690",THRESHOLD=0.5,SCHOOL_EN="GGPS Jheran Wali",SCHOOL_UR="گورنمنٹ گرلز پرائمری سکول جھیورانوالی";
 const CLASSES=['Nursery','Prep','One','Two','Three','Four','Five'];
+/* پرانے (1,2,3…) اور نئے (One,Two…) دونوں کلاس ویلیوز کو یکساں بنانے کے لیے */
+const CLASS_MAP={'1':'One','2':'Two','3':'Three','4':'Four','5':'Five','پہلی':'One','دوسری':'Two','تیسری':'Three','چوتھی':'Four','پانچویں':'Five','نرسری':'Nursery','پریپ':'Prep'};
+function normClass(c){return CLASS_MAP[c]||c;}
 let attCooldown={};
 const LOGO_SVG='<svg viewBox="0 0 96 96" class="w-full h-full"><circle cx="48" cy="48" r="46" fill="#065f46"/><circle cx="48" cy="48" r="46" fill="none" stroke="#d4af37" stroke-width="3"/><circle cx="48" cy="48" r="38" fill="none" stroke="#d4af37" stroke-width="2"/><path d="M48 30c-8-5-18-5-24-1v24c6-4 16-4 24 1 8-5 18-5 24-1V29c-6-4-16-4-24 1z" fill="#10b981" stroke="#d4af37" stroke-width="2"/><line x1="48" y1="30" x2="48" y2="54" stroke="#d4af37" stroke-width="2"/><text x="48" y="74" text-anchor="middle" font-family="Arial" font-weight="900" font-size="15" fill="#d4af37">GGPS</text><path d="M58 14a8 8 0 1 0 6 14 10 10 0 1 1-6-14z" fill="#d4af37"/><circle cx="63" cy="20" r="2" fill="#d4af37"/></svg>';
 
@@ -345,10 +348,10 @@ appState.students.push({id:Date.now().toString(),name:n,father:f,phone:normalize
 ['student-name','father-name','parent-phone'].forEach(i=>document.getElementById(i).value='');showToast('✓ '+n+' saved! Now enroll face 📸');renderStudents();renderDashboard();}
 function renderStudents(){const c=document.getElementById('students-list');document.getElementById('total-students').textContent=appState.students.length;
 if(!appState.students.length){c.innerHTML='<div class="col-span-full text-center py-10 text-slate-400 text-sm font-bold">No students registered yet.</div>';return;}
-c.innerHTML=appState.students.map(s=>`<div class="card p-4"><div class="flex items-center gap-3"><div class="w-11 h-11 rounded-full flex items-center justify-center text-xl" style="background:${s.gender==='girl'?'#fce7f3':'#dbeafe'}">${s.gender==='girl'?'👧':''}</div><div class="flex-1 min-w-0"><p class="font-extrabold text-slate-900 text-sm truncate">${s.name}</p><p class="text-[10px] text-slate-500 font-semibold">S/O ${s.father} • Class ${s.class}</p>${(s.faceSamples||[]).length?'<span class="badge" style="background:#d1fae5;color:#065f46">✓ Face Enrolled</span>':'<span class="badge" style="background:#fef3c7;color:#92400e">⚠ Face Pending</span>'}</div></div><div class="flex gap-2 mt-3"><button onclick="openFaceModal('${s.id}')" class="btn btn-primary flex-1" style="padding:8px;font-size:11px">📸 Enroll Face</button><button onclick="deleteStudent('${s.id}')" class="btn btn-danger" style="padding:8px 10px;font-size:11px" title="Delete">🗑</button></div></div>`).join('');}
+c.innerHTML=appState.students.map(s=>`<div class="card p-4"><div class="flex items-center gap-3"><div class="w-11 h-11 rounded-full flex items-center justify-center text-xl" style="background:${s.gender==='girl'?'#fce7f3':'#dbeafe'}">${s.gender==='girl'?'👧':'👦'}</div><div class="flex-1 min-w-0"><p class="font-extrabold text-slate-900 text-sm truncate">${s.name}</p><p class="text-[10px] text-slate-500 font-semibold">S/O ${s.father} • Class ${s.class}</p>${(s.faceSamples||[]).length?'<span class="badge" style="background:#d1fae5;color:#065f46">✓ Face Enrolled</span>':'<span class="badge" style="background:#fef3c7;color:#92400e">⚠ Face Pending</span>'}</div></div><div class="flex gap-2 mt-3"><button onclick="openFaceModal('${s.id}')" class="btn btn-primary flex-1" style="padding:8px;font-size:11px">📸 Enroll Face</button><button onclick="deleteStudent('${s.id}')" class="btn btn-danger" style="padding:8px 10px;font-size:11px" title="Delete">🗑</button></div></div>`).join('');}
 function deleteStudent(id){if(!confirm('Are you sure you want to delete this student?'))return;appState.students=appState.students.filter(s=>s.id!==id);saveState();renderStudents();renderDashboard();showToast('✓ Student deleted successfully');}
 
-/* TEACHERS (3-state) */
+/* TEACHERS */
 function addTeacher(){const n=document.getElementById('teacher-name').value.trim();if(!n)return showToast('✗ Teacher name is required',1);
 const d=document.getElementById('teacher-desig').value;
 appState.teachers.push({id:Date.now().toString(),name:n,designation:d,status:'present'});saveState();
@@ -405,16 +408,16 @@ document.getElementById('wa-student').textContent='👤 '+s.name+' — Class '+s
 function sendNextAbsent(){const s=absentQueue[absentIdx];window.open('https://wa.me/'+s.phone+'?text='+encodeURIComponent(absentMsg(s)),'_blank');absentIdx++;setTimeout(showWaCurrent,600);}
 function closeWaModal(){document.getElementById('wa-modal').classList.add('hidden');document.getElementById('wa-modal').classList.remove('flex');}
 function sendWhatsAppToAll(){const t=todayKey();const att=appState.attendance[t]||{};const p=appState.students.filter(s=>att[s.id]&&!att[s.id].leave).length;const lv=appState.students.filter(s=>att[s.id]&&att[s.id].leave).length;const wp=appState.students.filter(s=>s.phone);if(!wp.length)return showToast('✗ No parent numbers available',1);
-const msg=`📊 ${SCHOOL_EN} — DAILY REPORT\n\n✅ Present: ${p}\n🌙 On Leave: ${lv}\n❌ Absent: ${appState.students.length-p-lv}\n👥 Total: ${appState.students.length}\n📅 Date: ${new Date().toLocaleDateString('en-GB')}\n\n${SCHOOL_UR} | EMIS: ${SCHOOL_EMIS}`;
+const msg=`📊 ${SCHOOL_EN} — DAILY REPORT\n\n✅ Present: ${p}\n On Leave: ${lv}\n❌ Absent: ${appState.students.length-p-lv}\n👥 Total: ${appState.students.length}\n📅 Date: ${new Date().toLocaleDateString('en-GB')}\n\n${SCHOOL_UR} | EMIS: ${SCHOOL_EMIS}`;
 wp.forEach(s=>window.open('https://wa.me/'+s.phone+'?text='+encodeURIComponent(msg),'_blank'));showToast('✓ Reports sent to '+wp.length+' parents');}
 
 /* DASHBOARD */
 function renderDashboard(){const t=todayKey();const att=appState.attendance[t]||{};const p=appState.students.filter(s=>att[s.id]&&!att[s.id].leave).length;const lv=appState.students.filter(s=>att[s.id]&&att[s.id].leave).length;const a=appState.students.length-p-lv;const tp=appState.teachers.filter(x=>x.status==='present').length;
 document.getElementById('stat-total').textContent=appState.students.length;document.getElementById('stat-present').textContent=p;document.getElementById('stat-absent').textContent=a;document.getElementById('stat-leave').textContent=lv;document.getElementById('stat-teachers').textContent=tp+'/'+appState.teachers.length;}
 
-/* ── سرکاری رجسٹر رپورٹ ── */
+/* ── پرفارما والی exact رجسٹر ── */
 function registerData(){const t=todayKey();const att=appState.attendance[t]||{};const rows=[];let T={eB:0,eG:0,pB:0,pG:0};
-CLASSES.forEach(cl=>{const inCl=appState.students.filter(s=>s.class===cl);
+CLASSES.forEach(cl=>{const inCl=appState.students.filter(s=>normClass(s.class)===cl);
 const eB=inCl.filter(s=>s.gender==='boy').length,eG=inCl.filter(s=>s.gender==='girl').length;
 const pB=inCl.filter(s=>s.gender==='boy'&&att[s.id]&&!att[s.id].leave).length,pG=inCl.filter(s=>s.gender==='girl'&&att[s.id]&&!att[s.id].leave).length;
 T.eB+=eB;T.eG+=eG;T.pB+=pB;T.pG+=pG;
@@ -425,20 +428,21 @@ let html=`<div class="reg-page">
 <div class="reg-top"><div class="rlogo">${logo?'<img src="'+logo+'" style="width:100%;height:100%;object-fit:cover">':LOGO_SVG}</div>
 <div style="flex:1"><h3>Government Girls Primary School Jheran Wali</h3><p style="font-family:Cairo">گورنمنٹ گرلز پرائمری سکول جھیورانوالی</p>
 <p>EMIS Code: ${SCHOOL_EMIS} &nbsp;•&nbsp; District: ____________ &nbsp;•&nbsp; Tehsil: ____________ &nbsp;•&nbsp; Phase: ______ &nbsp;•&nbsp; <b>Shift 1</b> &nbsp;•&nbsp; Date: ${d}</p></div></div>
-<table class="reg"><thead><tr><th rowspan="2">Sr.No</th><th rowspan="2">Class</th><th rowspan="2">Section</th><th colspan="3">Enrolment</th><th colspan="3">Present</th><th colspan="3">Absent</th></tr>
+<table class="reg"><thead><tr><th rowspan="2">Sr.No</th><th rowspan="2">Class</th><th rowspan="2">Section</th><th colspan="3">Strength / Enrolment</th><th colspan="3">Present</th><th colspan="3">Absent</th></tr>
 <tr><th>Boys</th><th>Girls</th><th>Total</th><th>Boys</th><th>Girls</th><th>Total</th><th>Boys</th><th>Girls</th><th>Total</th></tr></thead><tbody>`;
 rows.forEach((r,i)=>{html+=`<tr><td>${i+1}</td><td>${r.cl}</td><td>(A)</td><td>${r.eB}</td><td>${r.eG}</td><td>${r.eB+r.eG}</td><td>${r.pB}</td><td>${r.pG}</td><td>${r.pB+r.pG}</td><td>${r.aB}</td><td>${r.aG}</td><td>${r.aB+r.aG}</td></tr>`;});
-html+=`<tr style="font-weight:800;background:#f1f5f9"><td colspan="3">TOTAL</td><td>${T.eB}</td><td>${T.eG}</td><td>${T.eB+T.eG}</td><td>${T.pB}</td><td>${T.pG}</td><td>${T.pB+T.pG}</td><td>${T.eB-T.pB}</td><td>${T.eG-T.pG}</td><td>${T.eB+T.eG-T.pB-T.pG}</td></tr></tbody></table>`;
-const lv=appState.students.filter(s=>{const a=appState.attendance[todayKey()]||{};return a[s.id]&&a[s.id].leave;});
+html+=`<tr style="font-weight:800;background:#f1f5f9"><td colspan="3">TOTAL (گرینڈ ٹوٹل)</td><td>${T.eB}</td><td>${T.eG}</td><td>${T.eB+T.eG}</td><td>${T.pB}</td><td>${T.pG}</td><td>${T.pB+T.pG}</td><td>${T.eB-T.pB}</td><td>${T.eG-T.pG}</td><td>${T.eB+T.eG-T.pB-T.pG}</td></tr></tbody></table>`;
+const t=todayKey();const att=appState.attendance[t]||{};
+const lv=appState.students.filter(s=>att[s.id]&&att[s.id].leave);
 if(lv.length)html+=`<p style="font-size:10px;font-weight:700;margin:6px 0 0">🌙 On Leave (رخصت): ${lv.map(s=>s.name).join(', ')}</p>`;
 html+=`<h4 style="margin:14px 0 6px;font-size:13px;font-weight:800;text-align:center">Teachers Attendance</h4>
 <table class="reg"><thead><tr><th style="width:40px">Sr.No</th><th>Teacher Name</th><th>Designation</th><th style="width:70px">Present</th><th style="width:70px">Absent</th><th style="width:70px">On Leave</th></tr></thead><tbody>`;
-appState.teachers.forEach((t,i)=>{html+=`<tr><td>${i+1}</td><td style="text-align:left;padding-left:8px"><b>${t.name}</b></td><td>${t.designation||'—'}</td><td>${t.status==='present'?'✓':''}</td><td>${t.status==='absent'?'✗':''}</td><td>${t.status==='leave'?'🌙':''}</td></tr>`;});
+appState.teachers.forEach((t2,i)=>{html+=`<tr><td>${i+1}</td><td style="text-align:left;padding-left:8px"><b>${t2.name}</b></td><td>${t2.designation||'—'}</td><td>${t2.status==='present'?'✓':''}</td><td>${t2.status==='absent'?'✗':''}</td><td>${t2.status==='leave'?'🌙':''}</td></tr>`;});
 if(!appState.teachers.length)html+='<tr><td colspan="6">No teachers registered</td></tr>';
 html+=`</tbody></table><div class="sig-box"><div>Signature & Stamp</div></div></div>`;
 document.getElementById('report-content').innerHTML=html;}
 
-/* PDF — ایک صفحہ (landscape fit) */
+/* PDF — ایک صفحہ */
 async function generatePDFReport(){showToast('⏳ Generating 1-Page PDF...');renderReports();
 try{const c=await html2canvas(document.getElementById('report-content'),{scale:2,backgroundColor:'#ffffff'});
 const{jsPDF}=window.jspdf;const pdf=new jsPDF('l','mm','a4');
