@@ -26,6 +26,7 @@
   .btn-danger{background:#fee2e2;color:#b91c1c}
   .btn-ghost{background:#f1f5f9;color:#334155}
   .btn-wa{background:#25D366;color:#fff}
+  .btn-love{background:linear-gradient(135deg,#ec4899,#db2777);color:#fff}
   .tab-btn{display:flex;align-items:center;gap:6px;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700;color:#64748b;cursor:pointer;border:none;background:transparent;font-family:inherit;transition:.15s;white-space:nowrap}
   .tab-btn:hover{background:#f1f5f9;color:#0f172a}
   .tab-btn.active{background:#064e3b;color:#fff;box-shadow:0 2px 8px rgba(6,78,59,.3)}
@@ -103,18 +104,18 @@
       </div>
       <div class="flex items-center gap-2">
         <div id="modelStatus" class="model-chip m-load hidden sm:inline-flex" onclick="loadFaceModels()">⏳ Loading AI…</div>
-        <button onclick="document.getElementById('logo-input').click()" class="btn btn-gold text-xs py-1.5 px-3">🏫 Logo</button>
+        <button onclick="document.getElementById('logo-input').click()" class="btn btn-gold text-xs py-1.5 px-3"> Logo</button>
         <button onclick="logout()" class="btn btn-danger text-xs py-1.5 px-3">🔒 Lock</button>
       </div>
     </div>
     <div class="px-4 pb-2 sm:hidden flex justify-end bg-emerald-950/80 border-t border-emerald-900/50">
-      <div id="modelStatusMobile" class="model-chip m-load text-[10px] mt-1" onclick="loadFaceModels()">⏳ Loading AI Models...</div>
+      <div id="modelStatusMobile" class="model-chip m-load text-[10px] mt-1" onclick="loadFaceModels()"> Loading AI Models...</div>
     </div>
     <div class="bg-white border-t border-slate-200 px-4 py-1.5 shadow-sm">
       <div class="max-w-6xl mx-auto flex gap-1 overflow-x-auto">
         <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active">📊 Dashboard</button>
         <button onclick="switchTab('students')" id="tab-students" class="tab-btn">👥 Students</button>
-        <button onclick="switchTab('attendance')" id="tab-attendance" class="tab-btn">📷 Attendance</button>
+        <button onclick="switchTab('attendance')" id="tab-attendance" class="tab-btn"> Attendance</button>
         <button onclick="switchTab('messages')" id="tab-messages" class="tab-btn">📢 Messages</button>
         <button onclick="switchTab('teachers')" id="tab-teachers" class="tab-btn">👩‍🏫 Teachers</button>
         <button onclick="switchTab('reports')" id="tab-reports" class="tab-btn">📑 Reports</button>
@@ -142,7 +143,7 @@
         <div class="stat-card"><p class="lbl">Teachers Present (اساتذہ حاضر)</p><p id="stat-teachers" class="text-3xl font-extrabold text-slate-900">0/0</p></div>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
-        <button onclick="switchTab('attendance');setTimeout(startFaceAttendance,300)" class="btn btn-primary w-full py-4">📷 Start Face Scan Attendance</button>
+        <button onclick="switchTab('attendance');setTimeout(startFaceAttendance,300)" class="btn btn-primary w-full py-4"> Start Face Scan Attendance</button>
         <button onclick="switchTab('messages')" class="btn btn-wa w-full py-4">📢 Send Announcement / اعلان بھیجیں</button>
         <button onclick="switchTab('reports')" class="btn btn-ghost w-full py-4">📑 View Daily Register & Reports</button>
       </div>
@@ -151,8 +152,8 @@
     <!-- STUDENTS -->
     <section id="content-students" class="hidden space-y-4">
       <div class="card p-5" style="border-top:4px solid #059669">
-        <h2 class="text-sm font-extrabold text-slate-900 mb-1">➕ Register New Student</h2>
-        <p class="text-xs text-slate-500 mb-4">نام اور والد کا نام دونوں زبانوں میں لکھیں</p>
+        <h2 class="text-sm font-extrabold text-slate-900 mb-1">➕ Register New Student 🔒</h2>
+        <p class="text-xs text-slate-500 mb-4">نام اور والد کا نام دونوں زبانوں میں لکھیں۔ (Admin PIN درکار ہے)</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           <div><label class="lbl">Student Name (English)</label><input id="student-name-en" class="inp" placeholder="e.g. Shabbir"></div>
           <div><label class="lbl">Student Name (Urdu)</label><input id="student-name-ur" class="inp inp-ur" placeholder="مثلاً: شبیر"></div>
@@ -162,7 +163,7 @@
           <div><label class="lbl">Class</label><select id="student-class" class="inp"><option>Nursery</option><option>Prep</option><option>One</option><option>Two</option><option>Three</option><option>Four</option><option>Five</option></select></div>
           <div><label class="lbl">Gender</label><select id="student-gender" class="inp"><option value="girl">Girl (لڑکی)</option><option value="boy">Boy (لڑکا)</option></select></div>
         </div>
-        <button onclick="addNewStudent()" class="btn btn-primary w-full mt-4">💾 Save Student (محفوظ کریں)</button>
+        <button onclick="addNewStudent()" class="btn btn-primary w-full mt-4"> Save Student (محفوظ کریں)</button>
       </div>
       <div class="card p-5">
         <h2 class="text-sm font-extrabold text-slate-900 mb-1">📚 Enrolled Students (<span id="total-students">0</span>)</h2>
@@ -196,11 +197,12 @@
         </div>
       </div>
       <div class="card p-5" style="border-top:4px solid #25D366">
-        <h2 class="text-sm font-extrabold text-slate-900 mb-1"> Parent WhatsApp Notifications</h2>
-        <p class="text-xs text-slate-500 mb-4">غیر حاضر بچوں کے والدین کو واٹس ایپ پیغام</p>
+        <h2 class="text-sm font-extrabold text-slate-900 mb-1">📱 Parent WhatsApp Notifications</h2>
+        <p class="text-xs text-slate-500 mb-4">حاضر اور غیر حاضر بچوں کے والدین کو خوبصورت پیغامات</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <button onclick="startAbsentQueue()" class="btn btn-wa w-full py-3">📤 Send Absent Alerts (ایک ایک کر کے)</button>
-          <button onclick="sendWhatsAppToAll()" class="btn btn-primary w-full py-3"> Send Full Day Report to All</button>
+          <button onclick="sendPresentAlerts()" class="btn btn-love w-full py-3">💖 Send Present Alerts (حاضر بچوں کو)</button>
+          <button onclick="startAbsentQueue()" class="btn btn-wa w-full py-3">📤 Send Absent Alerts (غیر حاضر بچوں کو)</button>
+          <button onclick="sendWhatsAppToAll()" class="btn btn-ghost w-full py-3 col-span-2">📊 Send Full Day Report to All</button>
         </div>
       </div>
     </section>
@@ -208,23 +210,24 @@
     <!-- MESSAGES -->
     <section id="content-messages" class="hidden space-y-4">
       <div class="card p-5" style="border-top:4px solid #25D366">
-        <h2 class="text-sm font-extrabold text-slate-900 mb-1">📢 Message Center / والدین کو پیغام بھیجیں</h2>
-        <p class="text-xs text-slate-500 mb-4">کوئی بھی اعلان — ٹیسٹ، وارننگ، جلسہ، فیس یا اپنی مرضی کا پیغام</p>
+        <h2 class="text-sm font-extrabold text-slate-900 mb-1"> Message Center / والدین کو پیغام بھیجیں</h2>
+        <p class="text-xs text-slate-500 mb-4">دل کو چھو لینے والے خوبصورت پیغامات</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           <div><label class="lbl">Message Type / پیغام کی قسم</label>
             <select id="msg-type" class="inp" onchange="applyTemplate()">
               <option value="custom">✍️ Custom (اپنی مرضی کا پیغام)</option>
-              <option value="test">📝 Test/Exam Notice (ٹیسٹ کا اعلان)</option>
-              <option value="warning">⚠️ Absence Warning (غیر حاضری کی وارننگ)</option>
+              <option value="welcome">🎉 New Admission (نئی داخلہ / خوش آمدید)</option>
+              <option value="test"> Test/Exam Notice (ٹیسٹ کا اعلان)</option>
+              <option value="warning">❤️ Absence Warning (غیر حاضری کی وارننگ)</option>
               <option value="meeting">👥 Parent-Teacher Meeting (جلسہ والدین)</option>
-              <option value="fees">💰 Fee Reminder (فیس یاد دہانی)</option>
+              <option value="appreciation">🌟 Appreciation (تعریفی پیغام)</option>
             </select>
           </div>
           <div><label class="lbl">Test/Event Date / تاریخ</label><input type="date" id="msg-date" class="inp"></div>
           <div><label class="lbl">Recipients / وصول کنندگان</label>
             <select id="msg-audience" class="inp">
-              <option value="all">‍👩‍👧 All Parents (سب والدین)</option>
-              <option value="absent2">⚠️ Absent 2+ days (2 دن سے غیر حاضر)</option>
+              <option value="all">👨‍👩‍👧 All Parents (سب والدین)</option>
+              <option value="absent2">️ Absent 2+ days (2 دن سے غیر حاضر)</option>
               <option value="absent3">⚠️ Absent 3+ days (3 دن سے غیر حاضر)</option>
               <option value="class">🏫 Specific Class (مخصوص کلاس)</option>
             </select>
@@ -238,15 +241,15 @@
           <textarea id="msg-text" class="inp" placeholder="اپنا پیغام یہاں لکھیں...&#10;Write your announcement here..."></textarea>
           <p class="text-[10px] text-slate-400 mt-1 font-semibold">Personalize: {name} {nameUr} {father} {fatherUr} {class} {classUr} {date} {days}</p>
         </div>
-        <button onclick="startMessageCenter()" class="btn btn-wa w-full mt-4 py-3">📤 Send to Parents (والدین کو بھیجیں)</button>
+        <button onclick="startMessageCenter()" class="btn btn-wa w-full mt-4 py-3"> Send to Parents (والدین کو بھیجیں)</button>
       </div>
     </section>
 
     <!-- TEACHERS -->
     <section id="content-teachers" class="hidden space-y-4">
       <div class="card p-5" style="border-top:4px solid #7c3aed">
-        <h2 class="text-sm font-extrabold text-slate-900 mb-1">➕ Register New Teacher</h2>
-        <p class="text-xs text-slate-500 mb-4">اساتذہ کا نام اور عہدہ درج کریں</p>
+        <h2 class="text-sm font-extrabold text-slate-900 mb-1">➕ Register New Teacher 🔒</h2>
+        <p class="text-xs text-slate-500 mb-4">اساتذہ کا نام اور عہدہ درج کریں۔ (Admin PIN درکار ہے)</p>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div><label class="lbl">Teacher Name</label><input id="teacher-name" class="inp" placeholder="e.g. Miss Farzana Kousar"></div>
           <div><label class="lbl">Designation</label>
@@ -262,7 +265,7 @@
         </div>
       </div>
       <div class="card p-5">
-        <h2 class="text-sm font-extrabold text-slate-900 mb-1">‍🏫 Teaching Staff List (<span id="total-teachers">0</span>)</h2>
+        <h2 class="text-sm font-extrabold text-slate-900 mb-1">👩🏫 Teaching Staff List (<span id="total-teachers">0</span>)</h2>
         <p class="text-xs text-slate-500 mb-4">بٹن دبا کر Present / Absent / On Leave تبدیل کریں</p>
         <div id="teachers-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
       </div>
@@ -273,11 +276,11 @@
       <div class="card p-5" style="border-top:4px solid #dc2626">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div>
-            <h2 class="text-sm font-extrabold text-slate-900">📑 Daily Attendance Register (پرفارما فارمیٹ)</h2>
+            <h2 class="text-sm font-extrabold text-slate-900"> Daily Attendance Register (پرفارما فارمیٹ)</h2>
             <p class="text-xs text-slate-500">Shift 1 • Section (A) • Strength + Present + Absent</p>
           </div>
           <div class="flex gap-2">
-            <button onclick="generatePDFReport()" class="btn btn-danger">📄 Print / PDF (1 Page)</button>
+            <button onclick="generatePDFReport()" class="btn btn-danger"> Print / PDF (1 Page)</button>
             <button onclick="exportToExcel()" class="btn btn-primary">📊 Export Excel</button>
           </div>
         </div>
@@ -317,7 +320,7 @@
     </div>
     <div id="face-samples-row" class="flex gap-2 justify-center mb-3"></div>
     <div class="flex gap-2 mb-2">
-      <button onclick="doCapture(false)" class="btn btn-gold flex-1">📸 Manual Capture</button>
+      <button onclick="doCapture(false)" class="btn btn-gold flex-1"> Manual Capture</button>
       <button onclick="closeFaceModal()" class="btn btn-ghost flex-1">✖ Close</button>
     </div>
     <button onclick="saveFaceSamples()" class="btn btn-primary w-full">💾 Save Face Samples (محفوظ کریں)</button>
@@ -327,7 +330,7 @@
 <!-- WHATSAPP QUEUE MODAL -->
 <div id="wa-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4">
   <div class="bg-white rounded-2xl p-6 max-w-md w-full text-center shadow-2xl">
-    <h3 class="text-sm font-extrabold text-slate-900 mb-1">📤 Absence Alerts via WhatsApp</h3>
+    <h3 class="text-sm font-extrabold text-slate-900 mb-1">📤 WhatsApp Messages Queue</h3>
     <p id="wa-progress" class="text-xs font-bold text-slate-500 mb-4"></p>
     <div id="wa-current" class="bg-red-50 border border-red-200 rounded-xl p-4 mb-4 text-left">
       <p class="font-extrabold text-slate-900 text-sm" id="wa-student"></p>
@@ -344,7 +347,6 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, onSnapshot, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  // ✅ آپ کا Firebase Config
   const firebaseConfig = {
     apiKey: "AIzaSyA4CamdJGCWGMjO-uR3_WOvvq2RwSMnHZc",
     authDomain: "ggps-jheran-wali-91e0c.firebaseapp.com",
@@ -381,34 +383,23 @@
     try {
       const studentsSnap = await getDocs(collection(db, "students"));
       window.appState.students = studentsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-
       const teachersSnap = await getDocs(collection(db, "teachers"));
       window.appState.teachers = teachersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-
       const today = todayKey();
       const attDoc = await getDocs(collection(db, "attendance"));
-      attDoc.forEach(d => {
-        if(d.id === today) window.appState.attendance[today] = d.data();
-      });
-
+      attDoc.forEach(d => { if(d.id === today) window.appState.attendance[today] = d.data(); });
       onSnapshot(doc(db, "attendance", today), (snap) => {
         if(snap.exists()) {
           window.appState.attendance[today] = snap.data();
-          if(!document.getElementById('content-attendance').classList.contains('hidden')) {
-            window.renderTodayAttendance();
-          }
+          if(!document.getElementById('content-attendance').classList.contains('hidden')) window.renderTodayAttendance();
           window.renderDashboard();
         }
       });
-
-      window.renderStudents();
-      window.renderTeachers();
-      window.renderDashboard();
-      window.renderTodayAttendance();
+      window.renderStudents(); window.renderTeachers(); window.renderDashboard(); window.renderTodayAttendance();
       showToast('✅ Cloud Database Connected!');
     } catch (e) {
       console.error("Database error:", e);
-      showToast("⚠️ Database connection error. Check Firebase Config.", 1);
+      showToast("⚠️ Database connection error.", 1);
     }
   }
 
@@ -461,7 +452,7 @@
   }
   window.changePassword = function() {
     const o = document.getElementById('old-password').value, n = document.getElementById('new-password').value, c = document.getElementById('confirm-password').value;
-    if (o !== window.appState.password) return showToast(' Old password incorrect', 1);
+    if (o !== window.appState.password) return showToast('✗ Old password incorrect', 1);
     if (!n || n !== c) return showToast('✗ Passwords do not match', 1);
     window.appState.password = n; showToast('✓ Password updated!');
   }
@@ -500,7 +491,7 @@
     let a = 1;
     while (!window.appState.modelsLoaded) {
       for (const u of MODEL_URLS) {
-        updateModelChips(' Loading AI (' + a + ')', 'm-load');
+        updateModelChips('⏳ Loading AI (' + a + ')', 'm-load');
         try {
           await withTimeout(faceapi.nets.tinyFaceDetector.loadFromUri(u), 180000);
           await withTimeout(faceapi.nets.faceLandmark68Net.loadFromUri(u), 180000);
@@ -515,13 +506,23 @@
     }
   }
 
+  // 🔒 ADMIN SECURITY CHECK
+  function checkAdminAccess() {
+    const pin = prompt("🔒 Enter Admin PIN to proceed:");
+    if (pin !== window.appState.password) {
+      showToast('✗ Wrong Admin PIN! Access Denied.', 1);
+      return false;
+    }
+    return true;
+  }
+
   window.addNewStudent = async function() {
+    if (!checkAdminAccess()) return;
     const nEn = document.getElementById('student-name-en').value.trim();
     const nUr = document.getElementById('student-name-ur').value.trim();
     const fEn = document.getElementById('father-name-en').value.trim();
     const fUr = document.getElementById('father-name-ur').value.trim();
     if (!nEn && !nUr) return showToast('✗ Student name required', 1);
-
     const studentData = {
       name: nEn || nUr, nameEn: nEn, nameUr: nUr,
       father: fEn || fUr, fatherEn: fEn, fatherUr: fUr,
@@ -530,17 +531,14 @@
       gender: document.getElementById('student-gender').value,
       faceSamples: [], createdAt: new Date().toISOString()
     };
-
     try {
       const docRef = await addDoc(collection(db, "students"), studentData);
-      showToast('✓ ' + studentData.name + ' saved to Cloud! Now enroll face ');
+      showToast('✓ ' + studentData.name + ' saved to Cloud! Now enroll face 📸');
       ['student-name-en', 'student-name-ur', 'father-name-en', 'father-name-ur', 'parent-phone'].forEach(i => document.getElementById(i).value = '');
       studentData.id = docRef.id;
       window.appState.students.push(studentData);
       window.renderStudents(); window.renderDashboard();
-    } catch (e) {
-      showToast(' Error saving: ' + e.message, 1);
-    }
+    } catch (e) { showToast('✗ Error saving: ' + e.message, 1); }
   }
 
   window.renderStudents = function() {
@@ -551,20 +549,21 @@
   }
 
   window.deleteStudent = async function(id) {
+    if (!checkAdminAccess()) return;
     if (!confirm('Delete this student from Cloud?')) return;
     try {
       await deleteDoc(doc(db, "students", id));
       window.appState.students = window.appState.students.filter(s => s.id !== id);
       window.renderStudents(); window.renderDashboard(); showToast('✓ Student deleted');
-    } catch (e) { showToast(' Delete failed', 1); }
+    } catch (e) { showToast('✗ Delete failed', 1); }
   }
 
   window.addTeacher = async function() {
+    if (!checkAdminAccess()) return;
     const n = document.getElementById('teacher-name').value.trim();
     if (!n) return showToast('✗ Teacher name required', 1);
     const d = document.getElementById('teacher-desig').value;
     const teacherData = { name: n, designation: d, status: 'present' };
-
     try {
       const docRef = await addDoc(collection(db, "teachers"), teacherData);
       showToast('✓ ' + n + ' registered to Cloud!');
@@ -587,6 +586,7 @@
   }
 
   window.removeTeacher = async function(id) {
+    if (!checkAdminAccess()) return;
     if (!confirm('Remove this teacher?')) return;
     try {
       await deleteDoc(doc(db, "teachers", id));
@@ -618,7 +618,7 @@
       const v = document.getElementById('face-video'); v.srcObject = faceStream; v.muted = true;
       try { await v.play(); } catch (e) {}
       faceLoopOn = true; faceLoop();
-    } catch (e) { showToast('✗ Camera access denied', 1); closeFaceModal(); }
+    } catch (e) { showToast(' Camera access denied', 1); closeFaceModal(); }
   }
   async function faceLoop() {
     if (!faceLoopOn) return;
@@ -658,7 +658,7 @@
     } catch (e) { if (!auto) showToast('✗ Capture failed', 1); }
   }
   window.saveFaceSamples = async function() {
-    if (!faceSamples.length) return showToast(' Please capture at least 1 photo', 1);
+    if (!faceSamples.length) return showToast('✗ Please capture at least 1 photo', 1);
     const s = window.appState.students.find(x => x.id === faceModalStudentId);
     try {
       await updateDoc(doc(db, "students", faceModalStudentId), { faceSamples: faceSamples });
@@ -674,8 +674,8 @@
   }
 
   window.startFaceAttendance = async function() {
-    if (!window.appState.modelsLoaded) return showToast('⏳ AI Models still loading...', 1);
-    if (!window.appState.students.length) return showToast('✗ Please register students first', 1);
+    if (!window.appState.modelsLoaded) return showToast(' AI Models still loading...', 1);
+    if (!window.appState.students.length) return showToast(' Please register students first', 1);
     try {
       const v = document.getElementById('attendance-video');
       window.appState.cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 } } });
@@ -688,7 +688,7 @@
       document.getElementById('start-camera-btn').classList.add('hidden');
       document.getElementById('stop-camera-btn').classList.remove('hidden');
       startFaceDetection(); showToast('✓ Camera started');
-    } catch (e) { showToast(' Camera access denied', 1); }
+    } catch (e) { showToast('✗ Camera access denied', 1); }
   }
   window.stopFaceAttendance = function() {
     if (window.appState.cameraStream) { window.appState.cameraStream.getTracks().forEach(t => t.stop()); window.appState.cameraStream = null; }
@@ -713,15 +713,8 @@
     const t = todayKey();
     if (!window.appState.attendance[t]) window.appState.attendance[t] = {};
     if (window.appState.attendance[t][st.id] && !window.appState.attendance[t][st.id].leave) return false;
-
     window.appState.attendance[t][st.id] = { time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }), ts: Date.now() };
-
-    try {
-      await setDoc(doc(db, "attendance", t), window.appState.attendance[t]);
-    } catch(e) {
-      showToast('✗ Save failed', 1);
-    }
-
+    try { await setDoc(doc(db, "attendance", t), window.appState.attendance[t]); } catch(e) { showToast('✗ Save failed', 1); }
     window.renderTodayAttendance(); window.renderDashboard(); return true;
   }
   window.markLeave = async function(id) {
@@ -729,11 +722,8 @@
     const t = todayKey();
     if (!window.appState.attendance[t]) window.appState.attendance[t] = {};
     window.appState.attendance[t][id] = { leave: true, time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }), ts: Date.now() };
-
-    try { await setDoc(doc(db, "attendance", t), window.appState.attendance[t]); }
-    catch(e) { showToast('✗ Save failed', 1); }
-
-    window.renderTodayAttendance(); window.renderDashboard(); showToast('🌙 ' + s.name + ' marked ON LEAVE');
+    try { await setDoc(doc(db, "attendance", t), window.appState.attendance[t]); } catch(e) { showToast('✗ Save failed', 1); }
+    window.renderTodayAttendance(); window.renderDashboard(); showToast(' ' + s.name + ' marked ON LEAVE');
   }
   function startFaceDetection() {
     const v = document.getElementById('attendance-video'), cv = document.getElementById('attendance-canvas'), x = cv.getContext('2d'), live = document.getElementById('att-live-status');
@@ -788,8 +778,8 @@
     const lv = window.appState.students.filter(s => att[s.id] && att[s.id].leave);
     const ab = window.appState.students.filter(s => !att[s.id]);
     c.innerHTML = `<div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3"><p class="text-xs font-extrabold text-emerald-800 mb-2">✓ PRESENT (${pr.length})</p><div class="space-y-2">${pr.map(s => `<div class="flex items-center gap-2 bg-white rounded-lg p-2 border border-emerald-100"><span class="w-7 h-7 rounded-full bg-emerald-500 text-white text-[10px] font-bold flex items-center justify-center">✓</span><div class="flex-1"><p class="text-xs font-bold text-slate-800">${s.name}</p><p class="text-[10px] text-slate-500">${att[s.id].time} • Class ${s.class}</p></div><button onclick="undoMark('${s.id}')" class="text-red-500 text-xs font-bold bg-red-50 px-2 py-1 rounded">✕</button></div>`).join('') || '<p class="text-[11px] text-slate-400 text-center py-2">No students present yet</p>'}</div></div>
-    <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mt-3"><p class="text-xs font-extrabold text-amber-700 mb-2">🌙 ON LEAVE (${lv.length})</p><div class="space-y-2">${lv.map(s => `<div class="flex items-center gap-2 bg-white rounded-lg p-2 border border-amber-100"><span class="w-7 h-7 rounded-full bg-amber-500 text-white text-[10px] font-bold flex items-center justify-center">🌙</span><div class="flex-1"><p class="text-xs font-bold text-slate-800">${s.name}</p><p class="text-[10px] text-slate-500">Class ${s.class}</p></div><button onclick="manualMark('${s.id}')" class="bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded">+ Present</button><button onclick="undoMark('${s.id}')" class="text-red-500 text-xs font-bold bg-red-50 px-2 py-1 rounded"></button></div>`).join('') || '<p class="text-[11px] text-slate-400 text-center py-2">No one on leave</p>'}</div></div>
-    <div class="bg-red-50 border border-red-200 rounded-xl p-3 mt-3"><p class="text-xs font-extrabold text-red-700 mb-2">✗ ABSENT (${ab.length})</p><div class="space-y-2">${ab.map(s => `<div class="flex items-center gap-2 bg-white rounded-lg p-2 border border-red-100"><span class="w-7 h-7 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">✗</span><div class="flex-1"><p class="text-xs font-bold text-slate-800">${s.name}</p><p class="text-[10px] text-slate-500">Class ${s.class}</p></div><button onclick="manualMark('${s.id}')" class="bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded">+ Present</button><button onclick="markLeave('${s.id}')" class="bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded">🌙 Leave</button></div>`).join('') || '<p class="text-[11px] text-slate-400 text-center py-2">All students present! 🎉</p>'}</div></div>`;
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mt-3"><p class="text-xs font-extrabold text-amber-700 mb-2">🌙 ON LEAVE (${lv.length})</p><div class="space-y-2">${lv.map(s => `<div class="flex items-center gap-2 bg-white rounded-lg p-2 border border-amber-100"><span class="w-7 h-7 rounded-full bg-amber-500 text-white text-[10px] font-bold flex items-center justify-center">🌙</span><div class="flex-1"><p class="text-xs font-bold text-slate-800">${s.name}</p><p class="text-[10px] text-slate-500">Class ${s.class}</p></div><button onclick="manualMark('${s.id}')" class="bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded">+ Present</button><button onclick="undoMark('${s.id}')" class="text-red-500 text-xs font-bold bg-red-50 px-2 py-1 rounded">✕</button></div>`).join('') || '<p class="text-[11px] text-slate-400 text-center py-2">No one on leave</p>'}</div></div>
+    <div class="bg-red-50 border border-red-200 rounded-xl p-3 mt-3"><p class="text-xs font-extrabold text-red-700 mb-2">✗ ABSENT (${ab.length})</p><div class="space-y-2">${ab.map(s => `<div class="flex items-center gap-2 bg-white rounded-lg p-2 border border-red-100"><span class="w-7 h-7 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">✗</span><div class="flex-1"><p class="text-xs font-bold text-slate-800">${s.name}</p><p class="text-[10px] text-slate-500">Class ${s.class}</p></div><button onclick="manualMark('${s.id}')" class="bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded">+ Present</button><button onclick="markLeave('${s.id}')" class="bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded"> Leave</button></div>`).join('') || '<p class="text-[11px] text-slate-400 text-center py-2">All students present! 🎉</p>'}</div></div>`;
   }
 
   function absentDaysCount(s, n) {
@@ -810,7 +800,7 @@
   function showWaCurrent() {
     if (waIdx >= waQueue.length) {
       document.getElementById('wa-progress').textContent = waQueue.length + ' / ' + waQueue.length + ' ✓ COMPLETED';
-      document.getElementById('wa-current').innerHTML = '<p class="font-extrabold text-emerald-700 text-center py-4"> All messages delivered!</p>';
+      document.getElementById('wa-current').innerHTML = '<p class="font-extrabold text-emerald-700 text-center py-4">🎉 All messages delivered!</p>';
       document.getElementById('wa-send-btn').classList.add('hidden'); return;
     }
     document.getElementById('wa-send-btn').classList.remove('hidden'); const it = waQueue[waIdx];
@@ -825,35 +815,83 @@
   }
   window.closeWaModal = function() { document.getElementById('wa-modal').classList.add('hidden'); document.getElementById('wa-modal').classList.remove('flex'); }
 
+  // 💖 PRESENT MESSAGE - دل کو چھو لینے والا
+  function presentMsg(s) {
+    const d = new Date().toLocaleDateString('en-GB'); const n = namesFor(s);
+    const cEn = normClass(s.class), cUr = CLASS_UR[cEn] || s.class;
+    return `💖 MashaAllah! ${SCHOOL_EN} — PRESENT ALERT\n\nDear Parent,\nAlhamdulillah! Your beloved child ${n.en} (Class ${cEn}) is present in school today (${d}). Every day of attendance is a step towards a bright future. Your child's smile lights up our classroom! Keep shining, keep learning! 🌟\n\nماشاءاللہ! ${SCHOOL_UR}\nآپ کا پیارا بچہ ${n.u} (کلاس: ${cUr}) آج (${d}) اسکول حاضر ہے۔ 🌟 حاضری کا ہر دن روشن مستقبل کی طرف ایک قدم ہے۔ آپ کے بچے کی مسکراہٹ ہماری کلاس کو روشن کرتی ہے! اللہ آپ کے بچے کو ہمیشہ کامیاب، صحت مند اور خوش رکھے۔ آمین!\n\nEMIS: ${SCHOOL_EMIS}`;
+  }
+
+  // ❤️ ABSENT MESSAGE - دل کو چھو لینے والا
   function absentMsg(s) {
     const d = new Date().toLocaleDateString('en-GB'); const n = namesFor(s);
     const cEn = normClass(s.class), cUr = CLASS_UR[cEn] || s.class;
-    return `🏫 ${SCHOOL_EN} — ABSENCE ALERT\n\nDear Parent,\nYour child ${n.en} (S/O ${n.fen}, Class ${cEn}) is ABSENT today (${d}). Kindly inform the school.\n\nمحترم والدین،\nآپ کا بچہ ${n.u} (والد: ${n.fu}، کلاس: ${cUr}) آج (${d}) غیر حاضر ہے۔ برائے مہربانی سکول کو مطلع کریں۔\n\nThank you / شکریہ\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`;
+    return `❤️ ${SCHOOL_EN} — WE MISS YOUR CHILD\n\nDear Parent,\nToday, your child ${n.en}'s (Class ${cEn}) empty seat reminds us how much joy they bring to our classroom. We miss their smile, their curiosity, and their friendship with classmates. Regular attendance is the secret to a bright future. Please send them to school tomorrow — their friends and teachers are waiting! \n\nمحترم والدین،\nآج آپ کے بچے ${n.u} (کلاس: ${cUr}) کی خالی سیٹ ہمیں یاد دلاتی ہے کہ وہ ہماری کلاس میں کتنی خوشیاں لاتے ہیں۔ ہمیں ان کی مسکراہٹ، ان کی تجسس، اور ان کی دوستی بہت یاد آ رہی ہے۔ باقاعدہ حاضری ہی روشن مستقبل کی پہلی سیڑھی ہے۔ براہ کرم کل انہیں اسکول ضرور بھیجیں — ان کے دوست اور اساتذہ ان کا انتظار کر رہے ہیں! 🌸\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`;
   }
+
+  // 🎉 WELCOME MESSAGE - نئی داخلہ
+  function welcomeMsg(s) {
+    const n = namesFor(s);
+    const cEn = normClass(s.class), cUr = CLASS_UR[cEn] || s.class;
+    return `🎉 ${SCHOOL_EN} — WELCOME TO OUR FAMILY!\n\nDear Parent,\nWelcome to our GGPS family! 🌟 Thank you for trusting us with your beloved child ${n.en}'s (Class ${cEn}) bright future. We promise to nurture their dreams, build their character with love, and guide them towards success. Your child is now our responsibility and our pride. Together, we will make their journey beautiful! 💝\n\nہمارے خاندان میں خوش آمدید! \nمحترم والدین، آپ کے پیارے بچے ${n.u} (کلاس: ${cUr}) کے روشن مستقبل کے لیے ہم پر اعتماد (بھروسہ) کرنے کا بہت بہت شکریہ۔ ہم وعدہ کرتے ہیں کہ ان کے خوابوں کو پروان چڑھائیں گے، محبت سے ان کی تربیت کریں گے، اور انہیں کامیابی کی منزلیں طے کروائیں گے۔ آپ کا بچہ اب ہماری ذمہ داری اور ہماری شان ہے! مل کر ہم ان کا سفر خوبصورت بنائیں گے! 💝\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`;
+  }
+
   window.startAbsentQueue = function() {
     const t = todayKey(); const att = window.appState.attendance[t] || {};
     const items = window.appState.students.filter(s => !att[s.id] && s.phone).map(s => ({ phone: s.phone, label: s.name + ' — Absent Today', text: absentMsg(s) }));
     window.openWaQueue(items);
   }
+
+  window.sendPresentAlerts = function() {
+    const t = todayKey(); const att = window.appState.attendance[t] || {};
+    const items = window.appState.students.filter(s => att[s.id] && !att[s.id].leave && s.phone).map(s => ({ phone: s.phone, label: s.name + ' — Present Today', text: presentMsg(s) }));
+    window.openWaQueue(items);
+  }
+
   window.sendWhatsAppToAll = function() {
     const t = todayKey(); const att = window.appState.attendance[t] || {};
     const p = window.appState.students.filter(s => att[s.id] && !att[s.id].leave).length;
     const lv = window.appState.students.filter(s => att[s.id] && att[s.id].leave).length;
     const wp = window.appState.students.filter(s => s.phone);
     if (!wp.length) return showToast('✗ No parent numbers available', 1);
-    const msg = `📊 ${SCHOOL_EN} — DAILY REPORT\n\n✅ Present: ${p}\n🌙 On Leave: ${lv}\n❌ Absent: ${window.appState.students.length - p - lv}\n👥 Total: ${window.appState.students.length}\n📅 Date: ${new Date().toLocaleDateString('en-GB')}\n\n${SCHOOL_UR} | EMIS: ${SCHOOL_EMIS}`;
+    const msg = `📊 ${SCHOOL_EN} — DAILY REPORT\n\n✅ Present: ${p}\n🌙 On Leave: ${lv}\n❌ Absent: ${window.appState.students.length - p - lv}\n Total: ${window.appState.students.length}\n Date: ${new Date().toLocaleDateString('en-GB')}\n\n${SCHOOL_UR} | EMIS: ${SCHOOL_EMIS}`;
     window.openWaQueue(wp.map(s => ({ phone: s.phone, label: s.name + ' — Daily Report', text: msg })));
   }
 
   document.addEventListener('change', e => { if (e.target.id === 'msg-audience') { document.getElementById('msg-class-box').classList.toggle('hidden', e.target.value !== 'class'); } });
+  
+  // 💖 خوبصورت ٹیمپلیٹس
   window.applyTemplate = function() {
-    const t = document.getElementById('msg-type').value; const box = document.getElementById('msg-text');
+    const t = document.getElementById('msg-type').value; 
+    const box = document.getElementById('msg-text');
     if (t === 'custom') return;
-    if (t === 'test') { box.value = `📝 ${SCHOOL_EN} — TEST NOTICE\n\nDear Parent,\nTests for your child {name} (Class {class}) will start from {date}.\n\nمحترم والدین،\nآپ کے بچے {nameUr} (کلاس: {classUr}) کے ٹیسٹ {date} سے شروع ہو رہے ہیں۔\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; return; }
-    if (t === 'warning') { box.value = `⚠️ ${SCHOOL_EN} — ATTENDANCE WARNING\n\nDear Parent,\nYour child {name} (Class {class}) has been absent for {days} day(s).\n\nمحترم والدین،\nآپ کا بچہ {nameUr} (کلاس: {classUr}) {days} دنوں سے غیر حاضر ہے۔\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; return; }
-    if (t === 'meeting') { box.value = `👥 ${SCHOOL_EN} — PARENT-TEACHER MEETING\n\nDear Parent,\nA meeting will be held on {date} at 9:00 AM.\n\nمحترم والدین،\nبتاریخ {date} صبح 9 بجے جلسہ والدین منعقد ہوگا۔\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; return; }
-    if (t === 'fees') { box.value = `💰 ${SCHOOL_EN} — FEE REMINDER\n\nDear Parent,\nPlease submit the monthly fee for {name} (Class {class}).\n\nمحترم والدین،\nبراہ کرم {nameUr} (کلاس: {classUr}) کی ماہانہ فیس جمع کروائیں۔\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; return; }
+    
+    if (t === 'welcome') { 
+      box.value = `🎉 ${SCHOOL_EN} — WELCOME TO OUR FAMILY!\n\nDear Parent,\nWelcome to our GGPS family! 🌟 Thank you for trusting us with your beloved child {name}'s (Class {class}) bright future. We promise to nurture their dreams, build their character with love, and guide them towards success. Your child is now our responsibility and our pride. Together, we will make their journey beautiful! 💝\n\nہمارے خاندان میں خوش آمدید! 🌟\nمحترم والدین، آپ کے پیارے بچے {nameUr} (کلاس: {classUr}) کے روشن مستقبل کے لیے ہم پر اعتماد (بھروسہ) کرنے کا بہت بہت شکریہ۔ ہم وعدہ کرتے ہیں کہ ان کے خوابوں کو پروان چڑھائیں گے، محبت سے ان کی تربیت کریں گے، اور انہیں کامیابی کی منزلیں طے کروائیں گے۔ آپ کا بچہ اب ہماری ذمہ داری اور ہماری شان ہے! مل کر ہم ان کا سفر خوبصورت بنائیں گے! 💝\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; 
+      return; 
+    }
+    
+    if (t === 'test') { 
+      box.value = `📝 ${SCHOOL_EN} — TEST NOTICE / ٹیسٹ کا اعلان\n\nDear Parent,\nTests are not just exams, they are stepping stones to success. Please support your child {name} (Class {class}) in their preparation starting from {date}. Your encouragement is their biggest strength. Together, we can make them shine! 🌟\n\nمحترم والدین،\nٹیسٹ صرف امتحان نہیں، بلکہ کامیابی کی سیڑھیاں ہیں۔ براہ کرم اپنے بچے {nameUr} (کلاس: {classUr}) کی تیاری میں ان کا ہاتھ بٹائیں جو {date} سے شروع ہو رہے ہیں۔ آپ کی حوصلہ افزائی ان کی سب سے بڑی طاقت ہے۔ مل کر ہم انہیں ضرور کامیاب کریں گے! 🌟\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; 
+      return; 
+    }
+    
+    if (t === 'warning') { 
+      box.value = `❤️ ${SCHOOL_EN} — WE MISS YOUR CHILD / ہمیں آپ کے بچے کی کمی ہے\n\nDear Parent,\nToday, your child {name}'s empty seat reminds us how much joy they bring to our classroom. They have been absent for {days} day(s). We miss their smile, their curiosity, and their friendship with classmates. Regular attendance is the secret to a bright future. Please send them to school — their friends and teachers are waiting! \n\nمحترم والدین،\nآج آپ کے بچے {nameUr} کی خالی سیٹ ہمیں یاد دلاتی ہے کہ وہ ہماری کلاس میں کتنی خوشیاں لاتے ہیں۔ وہ {days} دنوں سے غیر حاضر ہیں۔ ہمیں ان کی مسکراہٹ، ان کی تجسس، اور ان کی دوستی بہت یاد آ رہی ہے۔ باقاعدہ حاضری ہی روشن مستقبل کی پہلی سیڑھی ہے۔ براہ کرم انہیں اسکول بھیجیں — ان کے دوست اور اساتذہ ان کا انتظار کر رہے ہیں! 🌸\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; 
+      return; 
+    }
+    
+    if (t === 'meeting') { 
+      box.value = `👥 ${SCHOOL_EN} — PARENT-TEACHER MEETING / جلسہ والدین\n\nDear Parent,\nYour child's bright future is our shared dream. A meeting will be held on {date} at 9:00 AM. Let's meet to discuss their beautiful journey. Your presence is their biggest motivation and shows how much you care about their education. We look forward to seeing you! 💝\n\nمحترم والدین،\nآپ کے بچے کا روشن مستقبل ہم سب کا مشترکہ خواب ہے۔ بتاریخ {date} صبح 9 بجے جلسہ والدین منعقد ہوگا۔ آئیے، مل کر ان کی تعلیمی سفر پر بات کریں۔ آپ کی تشریف آوری آپ کے بچے کے لیے سب سے بڑی حوصلہ افزائی ہے اور یہ ظاہر کرتی ہے کہ آپ ان کی تعلیم سے کتنا پیار کرتے ہیں۔ ہم آپ سے ملنے کے منتظر ہیں! 💝\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; 
+      return; 
+    }
+    
+    if (t === 'appreciation') { 
+      box.value = `🌟 ${SCHOOL_EN} — APPRECIATION / تعریفی پیغام\n\nMashaAllah! Dear Parent,\nYour child {name} (Class {class}) did a wonderful job today! We are so proud of their hard work, good behavior, and beautiful smile. They are a shining star in our classroom. Keep encouraging them — your love is their greatest strength! 🌟\n\nماشاءاللہ! محترم والدین،\nآپ کے بچے {nameUr} (کلاس: {classUr}) نے آج بہت زبردست کارکردگی دکھائی! ہمیں ان کی محنت، اچھے اخلاق، اور خوبصورت مسکراہٹ پر بہت فخر ہے۔ وہ ہماری کلاس کا چمکتا ہوا ستارہ ہیں۔ ان کی حوصلہ افزائی جاری رکھیں — آپ کا پیار ان کی سب سے بڑی طاقت ہے! 🌟\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; 
+      return; 
+    }
   }
+  
   function fillMsg(s, text) {
     const n = namesFor(s); const cEn = normClass(s.class); const cUr = CLASS_UR[cEn] || s.class;
     const dv = document.getElementById('msg-date').value; const dt = dv ? new Date(dv).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
