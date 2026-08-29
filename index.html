@@ -118,9 +118,9 @@
         <button onclick="switchTab('students')" id="tab-students" class="tab-btn">👥 Students</button>
         <button onclick="switchTab('attendance')" id="tab-attendance" class="tab-btn"> Attendance</button>
         <button onclick="switchTab('messages')" id="tab-messages" class="tab-btn">📢 Messages</button>
-        <button onclick="switchTab('teachers')" id="tab-teachers" class="tab-btn">👩🏫 Teachers</button>
-        <button onclick="switchTab('reports')" id="tab-reports" class="tab-btn">📑 Reports</button>
-        <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn">️ Settings</button>
+        <button onclick="switchTab('teachers')" id="tab-teachers" class="tab-btn">👩‍🏫 Teachers</button>
+        <button onclick="switchTab('reports')" id="tab-reports" class="tab-btn">📑 Reports & History</button>
+        <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn">⚙️ Settings</button>
       </div>
     </div>
   </header>
@@ -144,7 +144,7 @@
         <div class="stat-card"><p class="lbl">Teachers Present (اساتذہ حاضر)</p><p id="stat-teachers" class="text-3xl font-extrabold text-slate-900">0/0</p></div>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
-        <button onclick="switchTab('attendance');setTimeout(startFaceAttendance,300)" class="btn btn-primary w-full py-4"> Start Face Scan Attendance</button>
+        <button onclick="switchTab('attendance');setTimeout(startFaceAttendance,300)" class="btn btn-primary w-full py-4">📸 Start Face Scan Attendance</button>
         <button onclick="switchTab('messages')" class="btn btn-wa w-full py-4">📢 Send Announcement / اعلان بھیجیں</button>
         <button onclick="switchTab('reports')" class="btn btn-ghost w-full py-4">📑 View Daily Register & Reports</button>
       </div>
@@ -201,7 +201,7 @@
         <h2 class="text-sm font-extrabold text-slate-900 mb-1">📱 Parent WhatsApp Notifications</h2>
         <p class="text-xs text-slate-500 mb-4">حاضر اور غیر حاضر بچوں کے والدین کو خوبصورت پیغامات</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <button onclick="sendPresentAlerts()" class="btn btn-love w-full py-3"> Send Present Alerts (حاضر بچوں کو)</button>
+          <button onclick="sendPresentAlerts()" class="btn btn-love w-full py-3">💖 Send Present Alerts (حاضر بچوں کو)</button>
           <button onclick="startAbsentQueue()" class="btn btn-wa w-full py-3">📤 Send Absent Alerts (غیر حاضر بچوں کو)</button>
           <button onclick="sendWhatsAppToAll()" class="btn btn-ghost w-full py-3 col-span-2">📊 Send Full Day Report to All</button>
         </div>
@@ -216,9 +216,9 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           <div><label class="lbl">Message Type / پیغام کی قسم</label>
             <select id="msg-type" class="inp" onchange="applyTemplate()">
-              <option value="custom">️ Custom (اپنی مرضی کا پیغام)</option>
-              <option value="welcome"> New Admission (نئی داخلہ / خوش آمدید)</option>
-              <option value="test"> Test/Exam Notice (ٹیسٹ کا اعلان)</option>
+              <option value="custom">✍️ Custom (اپنی مرضی کا پیغام)</option>
+              <option value="welcome">🎉 New Admission (نئی داخلہ / خوش آمدید)</option>
+              <option value="test">📝 Test/Exam Notice (ٹیسٹ کا اعلان)</option>
               <option value="warning">❤️ Absence Warning (غیر حاضری کی وارننگ)</option>
               <option value="meeting">👥 Parent-Teacher Meeting (جلسہ والدین)</option>
               <option value="appreciation">🌟 Appreciation (تعریفی پیغام)</option>
@@ -227,9 +227,9 @@
           <div><label class="lbl">Test/Event Date / تاریخ</label><input type="date" id="msg-date" class="inp"></div>
           <div><label class="lbl">Recipients / وصول کنندگان</label>
             <select id="msg-audience" class="inp">
-              <option value="all">👨👩‍👧 All Parents (سب والدین)</option>
+              <option value="all">👨‍👩‍👧 All Parents (سب والدین)</option>
               <option value="absent2">⚠️ Absent 2+ days (2 دن سے غیر حاضر)</option>
-              <option value="absent3">️ Absent 3+ days (3 دن سے غیر حاضر)</option>
+              <option value="absent3">⚠️ Absent 3+ days (3 دن سے غیر حاضر)</option>
               <option value="class">🏫 Specific Class (مخصوص کلاس)</option>
             </select>
           </div>
@@ -272,20 +272,43 @@
       </div>
     </section>
 
-    <!-- REPORTS -->
+    <!-- REPORTS & HISTORY -->
     <section id="content-reports" class="hidden space-y-4">
+      <!-- 1. Date-wise Historical Daily Register -->
       <div class="card p-5" style="border-top:4px solid #dc2626">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div>
-            <h2 class="text-sm font-extrabold text-slate-900">📑 Daily Attendance Register (پرفارما فارمیٹ)</h2>
-            <p class="text-xs text-slate-500">Shift 1 • Section (A) • Strength + Present + Absent</p>
+            <h2 class="text-sm font-extrabold text-slate-900">📑 Date-wise Attendance Register (تاریخ وار پرانا ریکارڈ)</h2>
+            <p class="text-xs text-slate-500">کوئی بھی تاریخ منتخب کریں اور اس دن کا پرفارما دیکھیں</p>
           </div>
-          <div class="flex gap-2">
-            <button onclick="generatePDFReport()" class="btn btn-danger">📄 Print / PDF (1 Page)</button>
-            <button onclick="exportToExcel()" class="btn btn-primary">📊 Export Excel</button>
+          <div class="flex flex-wrap gap-2 items-center">
+            <input type="date" id="history-date-inp" class="inp" style="width:auto;padding:7px 10px;font-size:12px">
+            <button onclick="loadHistoryReport()" class="btn btn-primary" style="padding:8px 14px;font-size:12px">🔍 View Date</button>
+            <button onclick="generatePDFReport()" class="btn btn-danger" style="padding:8px 14px;font-size:12px">📄 PDF</button>
+            <button onclick="exportToExcel()" class="btn btn-gold" style="padding:8px 14px;font-size:12px">📊 Excel</button>
           </div>
         </div>
         <div id="report-content" class="overflow-x-auto"></div>
+      </div>
+
+      <!-- 2. Individual Student Monthly Report -->
+      <div class="card p-5" style="border-top:4px solid #2563eb">
+        <h2 class="text-sm font-extrabold text-slate-900 mb-1">👤 Student Monthly Attendance Report (طالب علم کی ماہانہ رپورٹ)</h2>
+        <p class="text-xs text-slate-500 mb-4">کسی بھی طالب علم کا پورے مہینے کا ریکارڈ دیکھیں</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+          <div>
+            <label class="lbl">Select Student (طالب علم)</label>
+            <select id="report-student-select" class="inp"></select>
+          </div>
+          <div>
+            <label class="lbl">Select Month & Year (مہینہ منتخب کریں)</label>
+            <input type="month" id="report-month-inp" class="inp">
+          </div>
+          <div class="flex items-end">
+            <button onclick="generateStudentMonthlyReport()" class="btn btn-primary w-full">📊 Generate Monthly Report</button>
+          </div>
+        </div>
+        <div id="student-monthly-result" class="overflow-x-auto"></div>
       </div>
     </section>
 
@@ -346,7 +369,7 @@
 <!-- FIREBASE + APP SCRIPT -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, onSnapshot, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, onSnapshot, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyA4CamdJGCWGMjO-uR3_WOvvq2RwSMnHZc",
@@ -388,7 +411,8 @@
       window.appState.teachers = teachersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
       const today = todayKey();
       const attDoc = await getDocs(collection(db, "attendance"));
-      attDoc.forEach(d => { if(d.id === today) window.appState.attendance[today] = d.data(); });
+      attDoc.forEach(d => { window.appState.attendance[d.id] = d.data(); });
+      
       onSnapshot(doc(db, "attendance", today), (snap) => {
         if(snap.exists()) {
           window.appState.attendance[today] = snap.data();
@@ -396,7 +420,11 @@
           window.renderDashboard();
         }
       });
-      window.renderStudents(); window.renderTeachers(); window.renderDashboard(); window.renderTodayAttendance();
+      window.renderStudents(); window.renderTeachers(); window.renderDashboard(); 
+      document.getElementById('history-date-inp').value = today;
+      document.getElementById('report-month-inp').value = today.slice(0, 7);
+      populateStudentDropdown();
+      window.renderReports();
       showToast('✅ Cloud Database Connected!');
     } catch (e) {
       console.error("Database error:", e);
@@ -475,7 +503,7 @@
     if (n === 'students') window.renderStudents();
     if (n === 'attendance') window.renderTodayAttendance();
     if (n === 'teachers') window.renderTeachers();
-    if (n === 'reports') window.renderReports();
+    if (n === 'reports') { window.renderReports(); populateStudentDropdown(); }
   }
 
   function updateModelChips(text, cls) {
@@ -537,7 +565,7 @@
       ['student-name-en', 'student-name-ur', 'father-name-en', 'father-name-ur', 'parent-phone'].forEach(i => document.getElementById(i).value = '');
       studentData.id = docRef.id;
       window.appState.students.push(studentData);
-      window.renderStudents(); window.renderDashboard();
+      window.renderStudents(); window.renderDashboard(); populateStudentDropdown();
     } catch (e) { showToast('✗ Error saving: ' + e.message, 1); }
   }
 
@@ -556,7 +584,7 @@
         ? '<span class="badge" style="background:#d1fae5;color:#065f46">✓ Face Enrolled</span>'
         : '<span class="badge" style="background:#fef3c7;color:#92400e">⚠ Face Pending</span>';
 
-      const genderIcon = s.gender === 'girl' ? '👧' : '';
+      const genderIcon = s.gender === 'girl' ? '👧' : '👦';
       const bgColor = s.gender === 'girl' ? '#fce7f3' : '#dbeafe';
 
       html += `
@@ -585,7 +613,7 @@
     try {
       await deleteDoc(doc(db, "students", id));
       window.appState.students = window.appState.students.filter(s => s.id !== id);
-      window.renderStudents(); window.renderDashboard(); showToast('✓ Student deleted');
+      window.renderStudents(); window.renderDashboard(); populateStudentDropdown(); showToast('✓ Student deleted');
     } catch (e) { showToast('✗ Delete failed', 1); }
   }
 
@@ -791,7 +819,7 @@
   }
   window.manualMark = async function(id) {
     const s = window.appState.students.find(x => x.id === id);
-    if (await markPresent(id)) { beep(740, .12); showToast('✓ ' + s.name + ' marked present'); }
+    if (await markPresent(s)) { beep(740, .12); showToast('✓ ' + s.name + ' marked present'); }
   }
   window.undoMark = async function(id) {
     const t = todayKey();
@@ -809,8 +837,8 @@
     const lv = window.appState.students.filter(s => att[s.id] && att[s.id].leave);
     const ab = window.appState.students.filter(s => !att[s.id]);
     c.innerHTML = `<div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3"><p class="text-xs font-extrabold text-emerald-800 mb-2">✓ PRESENT (${pr.length})</p><div class="space-y-2">${pr.map(s => `<div class="flex items-center gap-2 bg-white rounded-lg p-2 border border-emerald-100"><span class="w-7 h-7 rounded-full bg-emerald-500 text-white text-[10px] font-bold flex items-center justify-center">✓</span><div class="flex-1"><p class="text-xs font-bold text-slate-800">${s.name}</p><p class="text-[10px] text-slate-500">${att[s.id].time} • Class ${s.class}</p></div><button onclick="undoMark('${s.id}')" class="text-red-500 text-xs font-bold bg-red-50 px-2 py-1 rounded">✕</button></div>`).join('') || '<p class="text-[11px] text-slate-400 text-center py-2">No students present yet</p>'}</div></div>
-    <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mt-3"><p class="text-xs font-extrabold text-amber-700 mb-2"> ON LEAVE (${lv.length})</p><div class="space-y-2">${lv.map(s => `<div class="flex items-center gap-2 bg-white rounded-lg p-2 border border-amber-100"><span class="w-7 h-7 rounded-full bg-amber-500 text-white text-[10px] font-bold flex items-center justify-center">🌙</span><div class="flex-1"><p class="text-xs font-bold text-slate-800">${s.name}</p><p class="text-[10px] text-slate-500">Class ${s.class}</p></div><button onclick="manualMark('${s.id}')" class="bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded">+ Present</button><button onclick="undoMark('${s.id}')" class="text-red-500 text-xs font-bold bg-red-50 px-2 py-1 rounded">✕</button></div>`).join('') || '<p class="text-[11px] text-slate-400 text-center py-2">No one on leave</p>'}</div></div>
-    <div class="bg-red-50 border border-red-200 rounded-xl p-3 mt-3"><p class="text-xs font-extrabold text-red-700 mb-2">✗ ABSENT (${ab.length})</p><div class="space-y-2">${ab.map(s => `<div class="flex items-center gap-2 bg-white rounded-lg p-2 border border-red-100"><span class="w-7 h-7 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center"></span><div class="flex-1"><p class="text-xs font-bold text-slate-800">${s.name}</p><p class="text-[10px] text-slate-500">Class ${s.class}</p></div><button onclick="manualMark('${s.id}')" class="bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded">+ Present</button><button onclick="markLeave('${s.id}')" class="bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded">🌙 Leave</button></div>`).join('') || '<p class="text-[11px] text-slate-400 text-center py-2">All students present! 🎉</p>'}</div></div>`;
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mt-3"><p class="text-xs font-extrabold text-amber-700 mb-2">🌙 ON LEAVE (${lv.length})</p><div class="space-y-2">${lv.map(s => `<div class="flex items-center gap-2 bg-white rounded-lg p-2 border border-amber-100"><span class="w-7 h-7 rounded-full bg-amber-500 text-white text-[10px] font-bold flex items-center justify-center">🌙</span><div class="flex-1"><p class="text-xs font-bold text-slate-800">${s.name}</p><p class="text-[10px] text-slate-500">Class ${s.class}</p></div><button onclick="manualMark('${s.id}')" class="bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded">+ Present</button><button onclick="undoMark('${s.id}')" class="text-red-500 text-xs font-bold bg-red-50 px-2 py-1 rounded">✕</button></div>`).join('') || '<p class="text-[11px] text-slate-400 text-center py-2">No one on leave</p>'}</div></div>
+    <div class="bg-red-50 border border-red-200 rounded-xl p-3 mt-3"><p class="text-xs font-extrabold text-red-700 mb-2">✗ ABSENT (${ab.length})</p><div class="space-y-2">${ab.map(s => `<div class="flex items-center gap-2 bg-white rounded-lg p-2 border border-red-100"><span class="w-7 h-7 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">✗</span><div class="flex-1"><p class="text-xs font-bold text-slate-800">${s.name}</p><p class="text-[10px] text-slate-500">Class ${s.class}</p></div><button onclick="manualMark('${s.id}')" class="bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded">+ Present</button><button onclick="markLeave('${s.id}')" class="bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded">🌙 Leave</button></div>`).join('') || '<p class="text-[11px] text-slate-400 text-center py-2">All students present! 🎉</p>'}</div></div>`;
   }
 
   function absentDaysCount(s, n) {
@@ -861,12 +889,6 @@
     return `❤️ ${SCHOOL_EN} — WE MISS YOUR CHILD\n\nDear Parent,\nToday, your child ${n.en}'s (Class ${cEn}) empty seat reminds us how much joy they bring to our classroom. We miss their smile, their curiosity, and their friendship with classmates. They have been absent for ${days} ${dayWordEn}. Regular attendance is the secret to a bright future. Please send them to school tomorrow — their friends and teachers are waiting! \n\nمحترم والدین،\nآج آپ کے بچے ${n.u} (کلاس: ${cUr}) کی خالی سیٹ ہمیں یاد دلاتی ہے کہ وہ ہماری کلاس میں کتنی خوشیاں لاتے ہیں۔ وہ ${days} ${dayWordUr} سے غیر حاضر ہیں۔ ہمیں ان کی مسکراہٹ، ان کی تجسس، اور ان کی دوستی بہت یاد آ رہی ہے۔ باقاعدہ حاضری ہی روشن مستقبل کی پہلی سیڑھی ہے۔ براہ کرم کل انہیں اسکول ضرور بھیجیں — ان کے دوست اور اساتذہ ان کا انتظار کر رہے ہیں! 🌸\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`;
   }
 
-  function welcomeMsg(s) {
-    const n = namesFor(s);
-    const cEn = normClass(s.class), cUr = CLASS_UR[cEn] || s.class;
-    return `🎉 ${SCHOOL_EN} — WELCOME TO OUR FAMILY!\n\nDear Parent,\nWelcome to our GGPS family! 🌟 Thank you for trusting us with your beloved child ${n.en}'s (Class ${cEn}) bright future. We promise to nurture their dreams, build their character with love, and guide them towards success. Your child is now our responsibility and our pride. Together, we will make their journey beautiful! 💝\n\nہمارے خاندان میں خوش آمدید! 🌟\nمحترم والدین، آپ کے پیارے بچے ${n.u} (کلاس: ${cUr}) کے روشن مستقبل کے لیے ہم پر اعتماد (بھروسہ) کرنے کا بہت بہت شکریہ۔ ہم وعدہ کرتے ہیں کہ ان کے خوابوں کو پروان چڑھائیں گے، محبت سے ان کی تربیت کریں گے، اور انہیں کامیابی کی منزلیں طے کروائیں گے۔ آپ کا بچہ اب ہماری ذمہ داری اور ہماری شان ہے! مل کر ہم ان کا سفر خوبصورت بنائیں گے! \n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`;
-  }
-
   window.startAbsentQueue = function() {
     const t = todayKey(); const att = window.appState.attendance[t] || {};
     const items = window.appState.students.filter(s => !att[s.id] && s.phone).map(s => ({ phone: s.phone, label: s.name + ' — Absent Today', text: absentMsg(s) }));
@@ -885,7 +907,7 @@
     const lv = window.appState.students.filter(s => att[s.id] && att[s.id].leave).length;
     const wp = window.appState.students.filter(s => s.phone);
     if (!wp.length) return showToast('✗ No parent numbers available', 1);
-    const msg = `📊 ${SCHOOL_EN} — DAILY REPORT\n\n✅ Present: ${p}\n🌙 On Leave: ${lv}\n❌ Absent: ${window.appState.students.length - p - lv}\n👥 Total: ${window.appState.students.length}\n Date: ${new Date().toLocaleDateString('en-GB')}\n\n${SCHOOL_UR} | EMIS: ${SCHOOL_EMIS}`;
+    const msg = `📊 ${SCHOOL_EN} — DAILY REPORT\n\n✅ Present: ${p}\n🌙 On Leave: ${lv}\n❌ Absent: ${window.appState.students.length - p - lv}\n👥 Total: ${window.appState.students.length}\n📅 Date: ${new Date().toLocaleDateString('en-GB')}\n\n${SCHOOL_UR} | EMIS: ${SCHOOL_EMIS}`;
     window.openWaQueue(wp.map(s => ({ phone: s.phone, label: s.name + ' — Daily Report', text: msg })));
   }
 
@@ -895,34 +917,29 @@
     const t = document.getElementById('msg-type').value; 
     const box = document.getElementById('msg-text');
     if (t === 'custom') return;
-    
     if (t === 'welcome') { 
-      box.value = `🎉 ${SCHOOL_EN} — WELCOME TO OUR FAMILY!\n\nDear Parent,\nWelcome to our GGPS family! 🌟 Thank you for trusting us with your beloved child {name}'s (Class {class}) bright future. We promise to nurture their dreams, build their character with love, and guide them towards success. Your child is now our responsibility and our pride. Together, we will make their journey beautiful! 💝\n\nہمارے خاندان میں خوش آمدید! 🌟\nمحترم والدین، آپ کے پیارے بچے {nameUr} (کلاس: {classUr}) کے روشن مستقبل کے لیے ہم پر اعتماد (بھروسہ) کرنے کا بہت بہت شکریہ۔ ہم وعدہ کرتے ہیں کہ ان کے خوابوں کو پروان چڑھائیں گے، محبت سے ان کی تربیت کریں گے، اور انہیں کامیابی کی منزلیں طے کروائیں گے۔ آپ کا بچہ اب ہماری ذمہ داری اور ہماری شان ہے! مل کر ہم ان کا سفر خوبصورت بنائیں گے! 💝\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; 
+      box.value = `🎉 ${SCHOOL_EN} — WELCOME TO OUR FAMILY!\n\nDear Parent,\nWelcome to our GGPS family! 🌟 Thank you for trusting us with your beloved child {name}'s (Class {class}) bright future. We promise to nurture their dreams, build their character with love, and guide them towards success. Your child is now our responsibility and our pride. Together, we will make their journey beautiful! 💝\n\nہمارے خاندان میں خوش آمدید! 🌟\nمحترم والدین، آپ کے پیارے بچے {nameUr} (کلاس: {classUr}) کے روشن مستقبل کے لیے ہم پر اعتماد کرنے کا بہت بہت شکریہ۔ ہم وعدہ کرتے ہیں کہ ان کے خوابوں کو پروان چڑھائیں گے، محبت سے ان کی تربیت کریں گے، اور انہیں کامیابی کی منزلیں طے کروائیں گے۔ آپ کا بچہ اب ہماری ذمہ داری اور ہماری شان ہے!\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; 
       return; 
     }
-    
     if (t === 'test') { 
-      box.value = `📝 ${SCHOOL_EN} — TEST NOTICE / ٹیسٹ کا اعلان\n\nDear Parent,\nTests are not just exams, they are stepping stones to success. Please support your child {name} (Class {class}) in their preparation starting from {date}. Your encouragement is their biggest strength. Together, we can make them shine! 🌟\n\nمحترم والدین،\nٹیسٹ صرف امتحان نہیں، بلکہ کامیابی کی سیڑھیاں ہیں۔ براہ کرم اپنے بچے {nameUr} (کلاس: {classUr}) کی تیاری میں ان کا ہاتھ بٹائیں جو {date} سے شروع ہو رہے ہیں۔ آپ کی حوصلہ افزائی ان کی سب سے بڑی طاقت ہے۔ مل کر ہم انہیں ضرور کامیاب کریں گے! \n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; 
+      box.value = `📝 ${SCHOOL_EN} — TEST NOTICE / ٹیسٹ کا اعلان\n\nDear Parent,\nTests are not just exams, they are stepping stones to success. Please support your child {name} (Class {class}) in their preparation starting from {date}. Your encouragement is their biggest strength. Together, we can make them shine! 🌟\n\nمحترم والدین،\nٹیسٹ صرف امتحان نہیں، بلکہ کامیابی کی سیڑھیاں ہیں۔ براہ کرم اپنے بچے {nameUr} (کلاس: {classUr}) کی تیاری میں ان کا ہاتھ بٹائیں جو {date} سے شروع ہو رہے ہیں۔ آپ کی حوصلہ افزائی ان کی سب سے بڑی طاقت ہے۔\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; 
       return; 
     }
-    
     if (t === 'warning') { 
-      box.value = `❤️ ${SCHOOL_EN} — WE MISS YOUR CHILD / ہمیں آپ کے بچے کی کمی ہے\n\nDear Parent,\nToday, your child {name}'s empty seat reminds us how much joy they bring to our classroom. They have been absent for {days} {dayWord}. We miss their smile, their curiosity, and their friendship with classmates. Regular attendance is the secret to a bright future. Please send them to school — their friends and teachers are waiting! 🌸\n\nمحترم والدین،\nآج آپ کے بچے {nameUr} کی خالی سیٹ ہمیں یاد دلاتی ہے کہ وہ ہماری کلاس میں کتنی خوشیاں لاتے ہیں۔ وہ {days} {dayWordUr} سے غیر حاضر ہیں۔ ہمیں ان کی مسکراہٹ، ان کی تجسس، اور ان کی دوستی بہت یاد آ رہی ہے۔ باقاعدہ حاضری ہی روشن مستقبل کی پہلی سیڑھی ہے۔ براہ کرم انہیں اسکول بھیجیں — ان کے دوست اور اساتذہ ان کا انتظار کر رہے ہیں! 🌸\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`;
+      box.value = `❤️ ${SCHOOL_EN} — WE MISS YOUR CHILD / ہمیں آپ کے بچے کی کمی ہے\n\nDear Parent,\nToday, your child {name}'s empty seat reminds us how much joy they bring to our classroom. They have been absent for {days} {dayWord}. Regular attendance is the secret to a bright future. Please send them to school — their friends and teachers are waiting! 🌸\n\nمحترم والدین،\nآج آپ کے بچے {nameUr} کی خالی سیٹ ہمیں یاد دلاتی ہے کہ وہ ہماری کلاس میں کتنی خوشیاں لاتے ہیں۔ وہ {days} {dayWordUr} سے غیر حاضر ہیں۔ براہ کرم انہیں اسکول بھیجیں — ان کے دوست اور اساتذہ ان کا انتظار کر رہے ہیں! 🌸\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`;
       return; 
     }
-    
     if (t === 'meeting') { 
-      box.value = `👥 ${SCHOOL_EN} — PARENT-TEACHER MEETING / جلسہ والدین\n\nDear Parent,\nYour child's bright future is our shared dream. A meeting will be held on {date} at 9:00 AM. Let's meet to discuss their beautiful journey. Your presence is their biggest motivation and shows how much you care about their education. We look forward to seeing you! 💝\n\nمحترم والدین،\nآپ کے بچے کا روشن مستقبل ہم سب کا مشترکہ خواب ہے۔ بتاریخ {date} صبح 9 بجے جلسہ والدین منعقد ہوگا۔ آئیے، مل کر ان کی تعلیمی سفر پر بات کریں۔ آپ کی تشریف آوری آپ کے بچے کے لیے سب سے بڑی حوصلہ افزائی ہے اور یہ ظاہر کرتی ہے کہ آپ ان کی تعلیم سے کتنا پیار کرتے ہیں۔ ہم آپ سے ملنے کے منتظر ہیں! 💝\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; 
+      box.value = `👥 ${SCHOOL_EN} — PARENT-TEACHER MEETING / جلسہ والدین\n\nDear Parent,\nYour child's bright future is our shared dream. A meeting will be held on {date} at 9:00 AM. Let's meet to discuss their beautiful journey. Your presence is their biggest motivation!\n\nمحترم والدین،\nآپ کے بچے کا روشن مستقبل ہم سب کا مشترکہ خواب ہے۔ بتاریخ {date} صبح 9 بجے جلسہ والدین منعقد ہوگا۔ آئیے، مل کر ان کی تعلیمی سفر پر بات کریں۔ آپ کی تشریف آوری ہمارے لیے باعث مسرت ہے۔\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; 
       return; 
     }
-    
     if (t === 'appreciation') { 
-      box.value = `🌟 ${SCHOOL_EN} — APPRECIATION / تعریفی پیغام\n\nMashaAllah! Dear Parent,\nYour child {name} (Class {class}) did a wonderful job today! We are so proud of their hard work, good behavior, and beautiful smile. They are a shining star in our classroom. Keep encouraging them — your love is their greatest strength! \n\nماشاءاللہ! محترم والدین،\nآپ کے بچے {nameUr} (کلاس: {classUr}) نے آج بہت زبردست کارکردگی دکھائی! ہمیں ان کی محنت، اچھے اخلاق، اور خوبصورت مسکراہٹ پر بہت فخر ہے۔ وہ ہماری کلاس کا چمکتا ہوا ستارہ ہیں۔ ان کی حوصلہ افزائی جاری رکھیں — آپ کا پیار ان کی سب سے بڑی طاقت ہے! 🌟\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; 
+      box.value = `🌟 ${SCHOOL_EN} — APPRECIATION / تعریفی پیغام\n\nMashaAllah! Dear Parent,\nYour child {name} (Class {class}) did a wonderful job today! We are so proud of their hard work, good behavior, and beautiful smile. Keep encouraging them!\n\nماشاءاللہ! محترم والدین،\nآپ کے بچے {nameUr} (کلاس: {classUr}) نے آج بہت زبردست کارکردگی دکھائی! ہمیں ان کی محنت، اچھے اخلاق، اور خوبصورت مسکراہٹ پر بہت فخر ہے۔ ان کی حوصلہ افزائی جاری رکھیں!\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; 
       return; 
     }
   }
   
-function fillMsg(s, text) {
+  function fillMsg(s, text) {
   const n = namesFor(s); 
   const cEn = normClass(s.class); 
   const cUr = CLASS_UR[cEn] || s.class;
@@ -945,6 +962,7 @@ function fillMsg(s, text) {
     .split('{dayWord}').join(dayWord)
     .split('{dayWordUr}').join(dayWordUr);
 }
+
   window.startMessageCenter = function() {
     const text = document.getElementById('msg-text').value.trim();
     if (!text) return showToast('✗ Please write a message first', 1);
@@ -969,8 +987,14 @@ function fillMsg(s, text) {
     document.getElementById('stat-teachers').textContent = tp + '/' + window.appState.teachers.length;
   }
 
-  window.renderReports = function() {
-    const t = todayKey(); const att = window.appState.attendance[t] || {};
+  // 1. Historical Daily Register
+  window.loadHistoryReport = function() {
+    const selDate = document.getElementById('history-date-inp').value || todayKey();
+    window.renderReportsForDate(selDate);
+  }
+
+  window.renderReportsForDate = function(dtStr) {
+    const att = window.appState.attendance[dtStr] || {};
     const rows = []; let T = { eB: 0, eG: 0, pB: 0, pG: 0 };
     CLASSES.forEach(cl => {
       const inCl = window.appState.students.filter(s => normClass(s.class) === cl);
@@ -979,33 +1003,98 @@ function fillMsg(s, text) {
       T.eB += eB; T.eG += eG; T.pB += pB; T.pG += pG;
       rows.push({ cl, eB, eG, pB, pG, aB: eB - pB, aG: eG - pG });
     });
-    const logo = localStorage.getItem('ggps_logo'); const d = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
-    let html = `<div class="reg-page"><div class="reg-top"><div class="rlogo">${logo ? '<img src="' + logo + '" style="width:100%;height:100%;object-fit:cover">' : LOGO_SVG}</div><div style="flex:1"><h3>Government Girls Primary School Jheran Wali</h3><p style="font-family:Cairo">گورنمنٹ گرلز پرائمری سکول جھیورانوالی</p><p>EMIS Code: ${SCHOOL_EMIS} &nbsp;•&nbsp; Shift 1 &nbsp;•&nbsp; Date: ${d}</p></div></div><table class="reg"><thead><tr><th rowspan="2">Sr.No</th><th rowspan="2">Class</th><th colspan="3">Strength</th><th colspan="3">Present</th><th colspan="3">Absent</th></tr><tr><th>Boys</th><th>Girls</th><th>Total</th><th>Boys</th><th>Girls</th><th>Total</th><th>Boys</th><th>Girls</th><th>Total</th></tr></thead><tbody>`;
+    const logo = localStorage.getItem('ggps_logo'); 
+    const formattedDate = new Date(dtStr).toLocaleDateString('en-GB', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+    let html = `<div class="reg-page"><div class="reg-top"><div class="rlogo">${logo ? '<img src="' + logo + '" style="width:100%;height:100%;object-fit:cover">' : LOGO_SVG}</div><div style="flex:1"><h3>Government Girls Primary School Jheran Wali</h3><p style="font-family:Cairo">گورنمنٹ گرلز پرائمری سکول جھیورانوالی</p><p>EMIS Code: ${SCHOOL_EMIS} &nbsp;•&nbsp; Date: ${formattedDate}</p></div></div><table class="reg"><thead><tr><th rowspan="2">Sr.No</th><th rowspan="2">Class</th><th colspan="3">Strength</th><th colspan="3">Present</th><th colspan="3">Absent</th></tr><tr><th>Boys</th><th>Girls</th><th>Total</th><th>Boys</th><th>Girls</th><th>Total</th><th>Boys</th><th>Girls</th><th>Total</th></tr></thead><tbody>`;
     rows.forEach((r, i) => { html += `<tr><td>${i + 1}</td><td>${r.cl}</td><td>${r.eB}</td><td>${r.eG}</td><td>${r.eB + r.eG}</td><td>${r.pB}</td><td>${r.pG}</td><td>${r.pB + r.pG}</td><td>${r.aB}</td><td>${r.aG}</td><td>${r.aB + r.aG}</td></tr>`; });
     html += `<tr style="font-weight:800;background:#f1f5f9"><td colspan="2">TOTAL</td><td>${T.eB}</td><td>${T.eG}</td><td>${T.eB + T.eG}</td><td>${T.pB}</td><td>${T.pG}</td><td>${T.pB + T.pG}</td><td>${T.eB - T.pB}</td><td>${T.eG - T.pG}</td><td>${T.eB + T.eG - T.pB - T.pG}</td></tr></tbody></table></div>`;
     document.getElementById('report-content').innerHTML = html;
   }
 
+  window.renderReports = function() {
+    const dt = document.getElementById('history-date-inp').value || todayKey();
+    window.renderReportsForDate(dt);
+  }
+
+  // 2. Individual Student Monthly Report
+  function populateStudentDropdown() {
+    const sel = document.getElementById('report-student-select');
+    if(!sel) return;
+    sel.innerHTML = window.appState.students.map(s => `<option value="${s.id}">${s.name} (Class ${s.class})</option>`).join('');
+  }
+
+  window.generateStudentMonthlyReport = function() {
+    const sId = document.getElementById('report-student-select').value;
+    const mStr = document.getElementById('report-month-inp').value; // YYYY-MM
+    if(!sId || !mStr) return showToast('✗ Select student and month', 1);
+    const s = window.appState.students.find(x => x.id === sId);
+    if(!s) return;
+
+    // Parse year and month
+    const [year, month] = mStr.split('-').map(Number);
+    const daysInMonth = new Date(year, month, 0).getDate();
+
+    let presentCount = 0, absentCount = 0, leaveCount = 0;
+    let rowsHtml = '';
+
+    for(let d = 1; d <= daysInMonth; d++) {
+      const dayStr = String(d).padStart(2, '0');
+      const dateKey = `${year}-${String(month).padStart(2, '0')}-${dayStr}`;
+      const dayAtt = window.appState.attendance[dateKey] || {};
+      const record = dayAtt[sId];
+
+      let statusBadge = '<span class="text-red-600 font-bold">Absent (غیر حاضر)</span>';
+      if(record) {
+        if(record.leave) {
+          statusBadge = '<span class="text-amber-600 font-bold">On Leave (رخصت)</span>';
+          leaveCount++;
+        } else {
+          statusBadge = `<span class="text-emerald-600 font-bold">Present (${record.time})</span>`;
+          presentCount++;
+        }
+      } else {
+        absentCount++;
+      }
+
+      rowsHtml += `<tr><td style="border:1px solid #cbd5e1;padding:6px;text-align:center">${dateKey}</td><td style="border:1px solid #cbd5e1;padding:6px;text-align:center">${statusBadge}</td></tr>`;
+    }
+
+    const html = `
+      <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+        <h3 class="font-extrabold text-slate-900 text-sm mb-1">👤 ${s.name} (S/O ${s.father}) — Class ${s.class}</h3>
+        <p class="text-xs text-slate-600 mb-3">Month: ${mStr} &nbsp;•&nbsp; Present: <b>${presentCount}</b> &nbsp;•&nbsp; Leave: <b>${leaveCount}</b> &nbsp;•&nbsp; Absent: <b>${absentCount}</b></p>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;background:#fff">
+          <thead><tr style="background:#f1f5f9"><th style="border:1px solid #cbd5e1;padding:6px">Date (تاریخ)</th><th style="border:1px solid #cbd5e1;padding:6px">Status (حاضری کی کیفیت)</th></tr></thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+      </div>
+    `;
+    document.getElementById('student-monthly-result').innerHTML = html;
+    showToast('✓ Monthly report generated!');
+  }
+
   window.generatePDFReport = async function() {
-    showToast(' Generating PDF...'); window.renderReports();
+    showToast('📄 Generating PDF...');
     try {
       const c = await html2canvas(document.getElementById('report-content'), { scale: 2, backgroundColor: '#ffffff' });
       const { jsPDF } = window.jspdf; const pdf = new jsPDF('l', 'mm', 'a4');
       const pw = 297, ph = 210, m = 6; let iw = pw - 2 * m, ih = (c.height * iw) / c.width; const maxH = ph - 2 * m;
       if (ih > maxH) { const k = maxH / ih; ih = maxH; iw = iw * k; }
       pdf.addImage(c.toDataURL('image/png'), 'PNG', (pw - iw) / 2, (ph - ih) / 2, iw, ih);
-      pdf.save('GGPS_Register_' + todayKey() + '.pdf'); showToast('✓ PDF downloaded!');
+      const dt = document.getElementById('history-date-inp').value || todayKey();
+      pdf.save('GGPS_Register_' + dt + '.pdf'); showToast('✓ PDF downloaded!');
     } catch (e) { showToast('✗ PDF failed', 1); }
   }
 
   window.exportToExcel = function() {
-    const t = todayKey(); const att = window.appState.attendance[t] || {};
-    let csv = '\uFEFFGOVERNMENT GIRLS PRIMARY SCHOOL JHERAN WALI\nEMIS: ' + SCHOOL_EMIS + ' | Date: ' + new Date().toLocaleDateString('en-GB') + '\n\n';
+    const dt = document.getElementById('history-date-inp').value || todayKey();
+    const att = window.appState.attendance[dt] || {};
+    let csv = '\uFEFFGOVERNMENT GIRLS PRIMARY SCHOOL JHERAN WALI\nEMIS: ' + SCHOOL_EMIS + ' | Date: ' + dt + '\n\n';
     csv += 'Name,Father,Class,Time,Status\n';
     window.appState.students.forEach((s, i) => {
       const a = att[s.id]; csv += `${i + 1},${s.name},${s.father},${s.class},${a ? a.time : '-'},${a ? (a.leave ? 'On Leave' : 'Present') : 'Absent'}\n`;
     });
-    const l = document.createElement('a'); l.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' })); l.download = 'GGPS_Register_' + t + '.csv'; l.click(); showToast('✓ Excel downloaded');
+    const l = document.createElement('a'); l.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' })); l.download = 'GGPS_Register_' + dt + '.csv'; l.click(); showToast('✓ Excel downloaded');
   }
 
   window.addEventListener('load', () => {
