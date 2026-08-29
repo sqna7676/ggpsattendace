@@ -27,6 +27,7 @@
   .btn-ghost{background:#f1f5f9;color:#334155}
   .btn-wa{background:#25D366;color:#fff}
   .btn-love{background:linear-gradient(135deg,#ec4899,#db2777);color:#fff}
+  .grid-cols-1.md\:grid-cols-2{display:grid!important;grid-template-columns:1fr 1fr!important;gap:12px!important}
   .tab-btn{display:flex;align-items:center;gap:6px;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700;color:#64748b;cursor:pointer;border:none;background:transparent;font-family:inherit;transition:.15s;white-space:nowrap}
   .tab-btn:hover{background:#f1f5f9;color:#0f172a}
   .tab-btn.active{background:#064e3b;color:#fff;box-shadow:0 2px 8px rgba(6,78,59,.3)}
@@ -906,7 +907,7 @@
     }
     
     if (t === 'warning') { 
-      box.value = `❤️ ${SCHOOL_EN} — WE MISS YOUR CHILD / ہمیں آپ کے بچے کی کمی ہے\n\nDear Parent,\nToday, your child {name}'s empty seat reminds us how much joy they bring to our classroom. They have been absent for {days} {days === '1' ? 'day' : 'days'}. We miss their smile, their curiosity, and their friendship with classmates. Regular attendance is the secret to a bright future. Please send them to school — their friends and teachers are waiting! 🌸\n\nمحترم والدین،\nآج آپ کے بچے {nameUr} کی خالی سیٹ ہمیں یاد دلاتی ہے کہ وہ ہماری کلاس میں کتنی خوشیاں لاتے ہیں۔ وہ {days} {days === '1' ? 'دن' : 'دنوں'} سے غیر حاضر ہیں۔ ہمیں ان کی مسکراہٹ، ان کی تجسس، اور ان کی دوستی بہت یاد آ رہی ہے۔ باقاعدہ حاضری ہی روشن مستقبل کی پہلی سیڑھی ہے۔ براہ کرم انہیں اسکول بھیجیں — ان کے دوست اور اساتذہ ان کا انتظار کر رہے ہیں! 🌸\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`; 
+      box.value = `❤️ ${SCHOOL_EN} — WE MISS YOUR CHILD / ہمیں آپ کے بچے کی کمی ہے\n\nDear Parent,\nToday, your child {name}'s empty seat reminds us how much joy they bring to our classroom. They have been absent for {days} {dayWord}. We miss their smile, their curiosity, and their friendship with classmates. Regular attendance is the secret to a bright future. Please send them to school — their friends and teachers are waiting! 🌸\n\nمحترم والدین،\nآج آپ کے بچے {nameUr} کی خالی سیٹ ہمیں یاد دلاتی ہے کہ وہ ہماری کلاس میں کتنی خوشیاں لاتے ہیں۔ وہ {days} {dayWordUr} سے غیر حاضر ہیں۔ ہمیں ان کی مسکراہٹ، ان کی تجسس، اور ان کی دوستی بہت یاد آ رہی ہے۔ باقاعدہ حاضری ہی روشن مستقبل کی پہلی سیڑھی ہے۔ براہ کرم انہیں اسکول بھیجیں — ان کے دوست اور اساتذہ ان کا انتظار کر رہے ہیں! 🌸\n\n${SCHOOL_UR}\nEMIS: ${SCHOOL_EMIS}`;
       return; 
     }
     
@@ -921,12 +922,29 @@
     }
   }
   
-  function fillMsg(s, text) {
-    const n = namesFor(s); const cEn = normClass(s.class); const cUr = CLASS_UR[cEn] || s.class;
-    const dv = document.getElementById('msg-date').value; const dt = dv ? new Date(dv).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
-    const days = String(absentDaysCount(s, 7));
-    return text.split('{name}').join(n.en).split('{nameUr}').join(n.u).split('{father}').join(n.fen).split('{fatherUr}').join(n.fu).split('{class}').join(cEn).split('{classUr}').join(cUr).split('{date}').join(dt).split('{days}').join(days);
-  }
+function fillMsg(s, text) {
+  const n = namesFor(s); 
+  const cEn = normClass(s.class); 
+  const cUr = CLASS_UR[cEn] || s.class;
+  const dv = document.getElementById('msg-date').value; 
+  const dt = dv ? new Date(dv).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
+  const days = absentDaysCount(s, 7);
+  const daysStr = String(days);
+  const dayWord = days === 1 ? 'day' : 'days';
+  const dayWordUr = days === 1 ? 'دن' : 'دنوں';
+  
+  return text
+    .split('{name}').join(n.en)
+    .split('{nameUr}').join(n.u)
+    .split('{father}').join(n.fen)
+    .split('{fatherUr}').join(n.fu)
+    .split('{class}').join(cEn)
+    .split('{classUr}').join(cUr)
+    .split('{date}').join(dt)
+    .split('{days}').join(daysStr)
+    .split('{dayWord}').join(dayWord)
+    .split('{dayWordUr}').join(dayWordUr);
+}
   window.startMessageCenter = function() {
     const text = document.getElementById('msg-text').value.trim();
     if (!text) return showToast('✗ Please write a message first', 1);
