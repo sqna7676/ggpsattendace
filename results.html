@@ -16,10 +16,10 @@
     #printableResult { 
       position: absolute; left: 0; top: 0; width: 100%; padding: 10px; background: white; 
       box-shadow: none !important; border: 3px solid #065f46 !important;
-      transform: scale(0.95); transform-origin: top center;
+      transform: scale(0.92); transform-origin: top center;
     }
     .no-print { display: none !important; }
-    @page { size: A4 portrait; margin: 10mm; }
+    @page { size: A4 portrait; margin: 8mm; }
   }
 
   .card-watermark {
@@ -51,7 +51,7 @@
 <!-- Navigation Tabs -->
 <div class="max-w-7xl mx-auto mt-6 px-4 no-print">
   <div class="flex flex-wrap gap-2 border-b-2 border-slate-200">
-    <button onclick="switchTab('entry')" id="tab-entry" class="px-6 py-3 font-bold text-emerald-900 border-b-4 border-emerald-800 bg-white rounded-t-xl shadow-sm transition">📝 Enter Marks & Custom Subjects</button>
+    <button onclick="switchTab('entry')" id="tab-entry" class="px-6 py-3 font-bold text-emerald-900 border-b-4 border-emerald-800 bg-white rounded-t-xl shadow-sm transition">📝 Enter Marks & Subjects</button>
     <button onclick="switchTab('search')" id="tab-search" class="px-6 py-3 font-bold text-slate-500 hover:text-emerald-900 transition">🔍 Student Result Card</button>
     <button onclick="switchTab('report')" id="tab-report" class="px-6 py-3 font-bold text-slate-500 hover:text-emerald-900 transition">📊 Class & School Reports</button>
   </div>
@@ -59,10 +59,10 @@
 
 <main class="max-w-7xl mx-auto p-4 space-y-6">
 
-  <!-- TAB 1: MARK ENTRY WITH CUSTOM SUBJECTS & MAX MARKS -->
+  <!-- TAB 1: MARK ENTRY WITH DYNAMIC SUBJECTS -->
   <section id="content-entry" class="bg-white p-6 rounded-2xl shadow-lg border border-slate-100">
     <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-extrabold text-slate-900">Student Examination & Custom Subject Marks Entry</h2>
+      <h2 class="text-xl font-extrabold text-slate-900">Student Examination & Subjects Configuration</h2>
     </div>
     
     <div class="grid md:grid-cols-4 gap-4 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
@@ -87,12 +87,10 @@
       </div>
     </div>
 
-    <!-- CUSTOM SUBJECTS & MAX MARKS CONFIGURATION PANEL -->
+    <!-- SUBJECTS CONFIGURATION PANEL (Leave blank or uncheck/clear name if not needed) -->
     <div class="mb-6 bg-emerald-50 p-4 rounded-xl border border-emerald-200">
-      <h3 class="text-xs font-extrabold text-emerald-900 uppercase mb-3">⚙️ Subject Names & Maximum Marks Setup (آپ یہاں نام اور ٹوٹل نمبر خود بدل سکتے ہیں)</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3" id="subjectSetupContainer">
-        <!-- Dynamic setup boxes will load here -->
-      </div>
+      <h3 class="text-xs font-extrabold text-emerald-900 uppercase mb-3">⚙️ Setup Subjects (جن مضامین کے نام خالی چھوڑیں گے وہ رزلٹ میں شامل نہیں ہوں گے)</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2" id="subjectSetupContainer"></div>
     </div>
 
     <div class="overflow-x-auto rounded-xl border border-slate-200">
@@ -103,17 +101,16 @@
             <th class="p-3 border border-emerald-800 text-left pl-4">Student Name</th>
             <th class="p-3 border border-emerald-800 text-left pl-4">Father Name</th>
             <th class="p-3 border border-emerald-800">Class</th>
-            <!-- Dynamic Subject Columns headers inserted via JS -->
           </tr>
         </thead>
         <tbody id="entryTableBody" class="text-center">
-          <tr><td colspan="9" class="p-10 text-slate-400 font-medium">Please select a class and click "Load Student Sheet" above</td></tr>
+          <tr><td colspan="12" class="p-10 text-slate-400 font-medium">Please select a class and click "Load Student Sheet" above</td></tr>
         </tbody>
       </table>
     </div>
 
     <button onclick="saveBulkResults()" class="mt-6 w-full bg-blue-600 text-white p-3.5 rounded-xl font-bold text-base hover:bg-blue-700 shadow-lg transition flex items-center justify-center gap-2">
-      💾 Save All Marks & Custom Subjects to Cloud Database
+      💾 Save All Marks & Subjects to Cloud Database
     </button>
   </section>
 
@@ -189,33 +186,37 @@
             <th class="border border-emerald-800 p-2 text-center font-bold">Grade</th>
           </tr>
         </thead>
-        <tbody id="cardMarksBody" class="text-center font-medium text-slate-800">
-          <!-- Dynamic Subject Rows -->
-        </tbody>
+        <tbody id="cardMarksBody" class="text-center font-medium text-slate-800"></tbody>
         <tfoot class="bg-slate-100 font-bold text-slate-900">
           <tr>
             <td class="border border-slate-300 p-2 text-left pl-3 font-extrabold">Total Aggregate Score</td>
-            <td class="border border-slate-300 p-2 text-center" id="cardTotalMax">500</td>
+            <td class="border border-slate-300 p-2 text-center" id="cardTotalMax">0</td>
             <td class="border border-slate-300 p-2 text-center text-emerald-800 font-extrabold" id="cardTotalObt">0</td>
             <td class="border border-slate-300 p-2 text-center font-extrabold text-emerald-900" id="cardFinalGrade">-</td>
           </tr>
         </tfoot>
       </table>
 
-      <!-- Statistics Panel -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs sm:text-sm">
+      <!-- Statistics & Parent Instructions Panel -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs sm:text-sm">
         <div class="flex justify-between items-center px-3 py-2 bg-white rounded border border-slate-200">
           <span class="font-bold text-slate-600">Overall Percentage:</span>
           <span id="cardPercentage" class="text-base font-extrabold text-emerald-700">0%</span>
         </div>
         <div class="flex justify-between items-center px-3 py-2 bg-white rounded border border-slate-200">
-          <span class="font-bold text-slate-600">Academic Standing / Status:</span>
-          <span id="cardPosition" class="text-sm font-extrabold text-amber-600">Passed Successfully</span>
+          <span class="font-bold text-slate-600">Academic Standing:</span>
+          <span id="cardPosition" class="text-sm font-extrabold">Pending</span>
         </div>
       </div>
 
+      <!-- Parent Guidance Note Box -->
+      <div class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg mb-4 text-[11px] text-amber-900 font-medium">
+        <strong class="uppercase">Parent Guidance / Instructions (والدین کے لیے ہدایات):</strong> 
+        <span id="cardParentMsg">براہ کرم بچے کی روزانہ کی تعلیمی کارکردگی پر نظر رکھیں اور سکول کے ساتھ تعاون کریں۔</span>
+      </div>
+
       <!-- Signatures Footer -->
-      <div class="flex justify-between items-end mt-6 pt-2 text-[11px] font-bold text-slate-700">
+      <div class="flex justify-between items-end mt-4 pt-2 text-[11px] font-bold text-slate-700">
         <div class="text-center">
           <div class="border-t border-slate-400 w-32 pt-1 mb-0.5">Class Teacher</div>
           <span class="text-[9px] text-slate-400 uppercase">Signature</span>
@@ -267,11 +268,9 @@
 
     <div class="overflow-x-auto rounded-xl border border-slate-200">
       <table class="w-full text-sm text-right border-collapse" id="reportTable">
-        <thead class="bg-slate-900 text-white text-center" id="reportTableHeader">
-          <!-- Dynamic report headers -->
-        </thead>
+        <thead class="bg-slate-900 text-white text-center" id="reportTableHeader"></thead>
         <tbody id="reportTableBody" class="text-center">
-          <tr><td colspan="10" class="p-10 text-slate-400 font-medium">Please select an examination and class above</td></tr>
+          <tr><td colspan="12" class="p-10 text-slate-400 font-medium">Please select an examination and class above</td></tr>
         </tbody>
       </table>
     </div>
@@ -301,13 +300,16 @@
   let selectedStudentForCard = null;
   let selectedExamData = null;
 
-  // Default Subject Configuration with custom names & max marks support
+  // Up to 8 configurable slots (User can leave name blank to ignore)
   let defaultSubjects = [
     { id: 'sub1', name: 'Urdu', max: 100 },
     { id: 'sub2', name: 'English', max: 100 },
     { id: 'sub3', name: 'Math', max: 100 },
     { id: 'sub4', name: 'Science', max: 100 },
-    { id: 'sub5', name: 'G.K / Islamiyat', max: 100 }
+    { id: 'sub5', name: 'Islamiyat', max: 100 },
+    { id: 'sub6', name: 'Nazra Quran', max: 50 },
+    { id: 'sub7', name: '', max: 100 },
+    { id: 'sub8', name: '', max: 50 }
   ];
 
   async function initData() {
@@ -326,21 +328,24 @@
   function renderSubjectSetupUI() {
     const container = document.getElementById('subjectSetupContainer');
     container.innerHTML = defaultSubjects.map((sub, idx) => `
-      <div class="bg-white p-2.5 rounded-lg border border-emerald-200 shadow-sm">
-        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Subject ${idx+1} Name</label>
-        <input type="text" id="subName_${idx}" value="${sub.name}" class="w-full p-1.5 border border-slate-300 rounded text-xs font-bold mb-2">
-        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Max Marks</label>
-        <input type="number" id="subMax_${idx}" value="${sub.max}" class="w-full p-1.5 border border-slate-300 rounded text-xs font-bold text-center">
+      <div class="bg-white p-2 rounded-lg border border-emerald-200 shadow-sm">
+        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1">Sub ${idx+1} Name (خالی چھوڑیں اگر نہیں چاہیے)</label>
+        <input type="text" id="subName_${idx}" value="${sub.name}" class="w-full p-1 border border-slate-300 rounded text-xs font-bold mb-1" placeholder="Subject Name">
+        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1">Max Marks</label>
+        <input type="number" id="subMax_${idx}" value="${sub.max}" class="w-full p-1 border border-slate-300 rounded text-xs font-bold text-center">
       </div>
     `).join('');
   }
 
+  // Helper to fetch ONLY subjects that have names filled out
   function getActiveSubjectsConfig() {
     let active = [];
-    for(let i=0; i<5; i++) {
-      const name = document.getElementById(`subName_${i}`).value.trim() || `Subject ${i+1}`;
-      const max = parseInt(document.getElementById(`subMax_${i}`).value) || 100;
-      active.push({ key: `sub_${i}`, name: name, max: max });
+    for(let i=0; i<8; i++) {
+      const nameElem = document.getElementById(`subName_${i}`);
+      const maxElem = document.getElementById(`subMax_${i}`);
+      if(nameElem && nameElem.value.trim() !== "") {
+        active.push({ key: `sub_${i}`, name: nameElem.value.trim(), max: parseInt(maxElem.value) || 100 });
+      }
     }
     return active;
   }
@@ -367,10 +372,13 @@
     const cls = document.getElementById('entryClass').value;
     const tbody = document.getElementById('entryTableBody');
     const theadTr = document.querySelector('#entryTableHeader tr');
-    
     const activeSubs = getActiveSubjectsConfig();
 
-    // Rebuild Table Header with Dynamic Subject names & max marks
+    if(activeSubs.length === 0) {
+      alert('Please configure at least one subject with a name in the setup panel above!');
+      return;
+    }
+
     let headerHtml = `
       <th class="p-3 border border-emerald-800">Roll No</th>
       <th class="p-3 border border-emerald-800 text-left pl-4">Student Name</th>
@@ -378,7 +386,7 @@
       <th class="p-3 border border-emerald-800">Class</th>
     `;
     activeSubs.forEach(sub => {
-      headerHtml += `<th class="p-3 border border-emerald-800 w-28">${sub.name}<br><span class="text-[10px] font-normal text-emerald-200">(Max: ${sub.max})</span></th>`;
+      headerHtml += `<th class="p-3 border border-emerald-800 w-24">${sub.name}<br><span class="text-[9px] font-normal text-emerald-200">(Max: ${sub.max})</span></th>`;
     });
     theadTr.innerHTML = headerHtml;
 
@@ -410,10 +418,12 @@
     const examDate = document.getElementById('examDate').value;
     if(!examName || !examDate) return alert('Please enter Exam Title and Examination Date!');
 
+    const activeSubs = getActiveSubjectsConfig();
+    if(activeSubs.length === 0) return alert('Please configure at least one subject!');
+
     const examId = `exam_${Date.now()}`;
     const marksInputs = document.querySelectorAll('.marks-inp');
     const rollInputs = document.querySelectorAll('[data-field="rollNo"]');
-    const activeSubs = getActiveSubjectsConfig();
     
     rollInputs.forEach(inp => {
       const s = allStudents.find(st => st.id === inp.dataset.id);
@@ -431,15 +441,12 @@
 
     try {
       await setDoc(doc(db, "exams", examId), {
-        id: examId, 
-        name: examName, 
-        date: examDate, 
+        id: examId, name: examName, date: examDate, 
         class: document.getElementById('entryClass').value,
-        subjectsConfig: activeSubs, // Saving custom subjects structure with exam
-        results: resultsMap, 
-        timestamp: new Date().toISOString()
+        subjectsConfig: activeSubs,
+        results: resultsMap, timestamp: new Date().toISOString()
       });
-      alert('✅ Examination Results & Custom Subjects Saved Successfully to Cloud Database!');
+      alert('✅ Examination Results & Subjects Saved Successfully!');
       initData();
     } catch(e) { alert('Error saving results: ' + e.message); }
   }
@@ -482,14 +489,14 @@
 
     const exam = allExams.find(e => e.id === examId);
     if(!exam || !exam.results[selectedStudentForCard.id]) {
-      alert('Result record not found for this student in the selected exam! Please enter marks in "Enter Marks" tab first.');
+      alert('Result record not found for this student in the selected exam!');
       return;
     }
 
     selectedExamData = exam;
     const marks = exam.results[selectedStudentForCard.id];
     const s = selectedStudentForCard;
-    const subConfig = exam.subjectsConfig || defaultSubjects;
+    const subConfig = exam.subjectsConfig || []; // Only saved active subjects
 
     document.getElementById('cardExamName').innerText = exam.name;
     document.getElementById('cardName').innerText = s.name;
@@ -508,7 +515,7 @@
       totalMax += max;
       const subPerc = (m / max) * 100;
       const grade = subPerc >= 80 ? 'A+' : subPerc >= 70 ? 'A' : subPerc >= 60 ? 'B' : subPerc >= 50 ? 'C' : subPerc >= 40 ? 'D' : 'F';
-      tbody += `<tr><td class="border border-slate-300 p-2 text-left pl-3 font-bold text-slate-800">${sub.name}</td><td class="border border-slate-300 p-2">${max}</td><td class="border border-slate-300 p-2 font-extrabold text-emerald-900">${m}</td><td class="border border-slate-300 p-2 font-bold">${grade}</td></tr>`;
+      tbody += `<tr><td class="border border-slate-300 p-1.5 text-left pl-3 font-bold text-slate-800">${sub.name}</td><td class="border border-slate-300 p-1.5">${max}</td><td class="border border-slate-300 p-1.5 font-extrabold text-emerald-900">${m}</td><td class="border border-slate-300 p-1.5 font-bold">${grade}</td></tr>`;
     });
 
     document.getElementById('cardMarksBody').innerHTML = tbody;
@@ -517,7 +524,31 @@
     
     const perc = totalMax > 0 ? ((totalObt / totalMax) * 100).toFixed(1) : 0;
     document.getElementById('cardPercentage').innerText = perc + '%';
-    document.getElementById('cardFinalGrade').innerText = perc >= 80 ? 'A+' : perc >= 70 ? 'A' : perc >= 60 ? 'B' : perc >= 50 ? 'C' : perc >= 40 ? 'D' : 'F';
+
+    const posElem = document.getElementById('cardPosition');
+    const msgElem = document.getElementById('cardParentMsg');
+    const gradeElem = document.getElementById('cardFinalGrade');
+
+    const finalGrade = perc >= 80 ? 'A+' : perc >= 70 ? 'A' : perc >= 60 ? 'B' : perc >= 50 ? 'C' : perc >= 40 ? 'D' : 'F';
+    gradeElem.innerText = finalGrade;
+
+    if (perc >= 80) {
+      posElem.innerText = "Outstanding / A+";
+      posElem.className = "text-sm font-extrabold text-emerald-700";
+      msgElem.innerText = "ماشاءاللہ! بچے کی کارکردگی انتہائی شاندار (Outstanding) ہے۔ اسی طرح پڑھائی پر توجہ جاری رکھیں۔";
+    } else if (perc >= 60) {
+      posElem.innerText = "Passed Successfully";
+      posElem.className = "text-sm font-extrabold text-emerald-600";
+      msgElem.innerText = "بہترین کارکردگی! مزید محنت سے پوزیشن کو مزید بہتر بنایا جا سکتا ہے۔";
+    } else if (perc >= 40) {
+      posElem.innerText = "Satisfactory / Needs Hard Work";
+      posElem.className = "text-sm font-extrabold text-amber-600";
+      msgElem.innerText = "بچہ پاس ہو گیا ہے لیکن مزید محنت اور توجہ کی ضرورت ہے۔ کمزور مضامین پر دھیان دیں۔";
+    } else {
+      posElem.innerText = "Needs Improvement / Failed";
+      posElem.className = "text-sm font-extrabold text-red-600";
+      msgElem.innerText = "والدین سے گزارش ہے کہ بچے کی روزانہ کی پڑھائی پر خصوصی توجہ دیں اور سکول کے ساتھ رابطہ رکھیں۔";
+    }
 
     document.getElementById('printableResult').classList.remove('hidden');
     document.getElementById('resultActions').classList.remove('hidden');
@@ -528,7 +559,7 @@
     if(!selectedStudentForCard || !selectedExamData) return alert('Please select a student and exam first!');
     const s = selectedStudentForCard;
     const m = selectedExamData.results[s.id];
-    const subConfig = selectedExamData.subjectsConfig || defaultSubjects;
+    const subConfig = selectedExamData.subjectsConfig || [];
     
     let totalObt = 0;
     let totalMax = 0;
@@ -542,8 +573,9 @@
     });
     
     const perc = totalMax > 0 ? ((totalObt / totalMax) * 100).toFixed(1) : 0;
+    const statusMsg = perc >= 60 ? '👍 *Passed Successfully!*' : '⚠️ *Needs Improvement / Hard Work*';
 
-    const msg = `📊 *GGPS Jheran Wali - Official Result Card*\n\n📌 *Exam:* ${selectedExamData.name}\n👤 *Student:* ${s.name}\n👨 *Father:* ${s.father || '-'}\n🏫 *Class:* ${s.class} | Roll No: ${s.rollNo || '-'}\n\n📈 *Marks Breakdown:*\n${breakdownText}\n⭐ *Total Score:* ${totalObt}/${totalMax} (*${perc}%*)\n${perc >= 60 ? '👍 *Excellent Performance!*' : '💪 *Keep Working Hard!*'}`;
+    const msg = `📊 *GGPS Jheran Wali - Official Result Card*\n\n📌 *Exam:* ${selectedExamData.name}\n👤 *Student:* ${s.name}\n👨 *Father:* ${s.father || '-'}\n🏫 *Class:* ${s.class} | Roll No: ${s.rollNo || '-'}\n\n📈 *Marks Breakdown:*\n${breakdownText}\n⭐ *Total Score:* ${totalObt}/${totalMax} (*${perc}%*)\n📌 *Status:* ${statusMsg}`;
     
     const phone = s.phone ? s.phone : '';
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -555,13 +587,12 @@
     const tbody = document.getElementById('reportTableBody');
     const theadTr = document.querySelector('#reportTableHeader');
 
-    if(!examId) { tbody.innerHTML = '<tr><td colspan="10" class="p-6 text-center text-slate-400">Please select an exam</td></tr>'; return; }
+    if(!examId) { tbody.innerHTML = '<tr><td colspan="12" class="p-6 text-center text-slate-400">Please select an exam</td></tr>'; return; }
     const exam = allExams.find(e => e.id === examId);
     if(!exam) return;
 
-    const subConfig = exam.subjectsConfig || defaultSubjects;
+    const subConfig = exam.subjectsConfig || [];
 
-    // Build dynamic report header
     let headerHtml = `<tr><th class="p-3 border border-slate-800">Roll No</th><th class="p-3 border border-slate-800 text-left pl-4">Student Name</th><th class="p-3 border border-slate-800 text-left pl-4">Father Name</th><th class="p-3 border border-slate-800">Class</th>`;
     subConfig.forEach(sub => { headerHtml += `<th class="p-3 border border-slate-800">${sub.name}</th>`; });
     headerHtml += `<th class="p-3 border border-slate-800">Total</th><th class="p-3 border border-slate-800">%</th><th class="p-3 border border-slate-800">Grade</th></tr>`;
@@ -603,7 +634,7 @@
         <td class="p-2 border text-center font-bold text-emerald-900">${grade}</td>
       </tr>`;
     });
-    tbody.innerHTML = html || `<tr><td colspan="${4 + subConfig.length + 3}" class="p-6 text-center text-slate-400">No records available for this selection</td></tr>`;
+    tbody.innerHTML = html || `<tr><td colspan="${4 + subConfig.length + 3}" class="p-6 text-center text-slate-400">No records available</td></tr>`;
   }
 
   window.switchTab = function(tab) {
