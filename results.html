@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GGPS Jheran Wali - Result Management System</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', sans-serif; background: #f8fafc; }
+  
+  /* Professional Print Styles */
+  @media print {
+    body * { visibility: hidden; }
+    #printableResult, #printableResult * { visibility: visible; }
+    #printableResult { 
+      position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background: white; 
+      box-shadow: none !important; border: 3px solid #065f46 !important;
+    }
+    .no-print { display: none !important; }
+  }
+
+  /* Watermark Styling */
+  .card-watermark {
+    background-image: radial-gradient(circle, rgba(16, 185, 129, 0.04) 0%, rgba(255, 255, 255, 1) 85%);
+    position: relative;
+  }
+</style>
+</head>
+<body class="text-slate-800">
+
+<!-- Top Navigation & Header -->
+<header class="bg-gradient-to-r from-emerald-900 to-teal-900 text-white shadow-xl no-print">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 bg-amber-400 text-slate-900 rounded-full flex items-center justify-center font-extrabold text-xl shadow-md border-2 border-white">
+        🏫
+      </div>
+      <div>
+        <h1 class="text-xl sm:text-2xl font-extrabold tracking-wide">Government Girls Primary School Jheran Wali</h1>
+        <p class="text-emerald-200 text-xs font-medium uppercase tracking-wider">Official Result Management Portal • EMIS: 34210690</p>
+      </div>
+    </div>
+    <a href="index.html" class="bg-amber-500 text-slate-900 px-4 py-2 rounded-xl font-bold text-sm hover:bg-amber-400 shadow transition flex items-center gap-2">
+      🏠 Attendance App
+    </a>
+  </div>
+</header>
+
+<!-- Navigation Tabs -->
+<div class="max-w-7xl mx-auto mt-6 px-4 no-print">
+  <div class="flex flex-wrap gap-2 border-b-2 border-slate-200">
+    <button onclick="switchTab('entry')" id="tab-entry" class="px-6 py-3 font-bold text-emerald-900 border-b-4 border-emerald-800 bg-white rounded-t-xl shadow-sm transition">📝 Enter Marks</button>
+    <button onclick="switchTab('search')" id="tab-search" class="px-6 py-3 font-bold text-slate-500 hover:text-emerald-900 transition">🔍 Student Result Card</button>
+    <button onclick="switchTab('report')" id="tab-report" class="px-6 py-3 font-bold text-slate-500 hover:text-emerald-900 transition">📊 Class & School Reports</button>
+  </div>
+</div>
+
+<main class="max-w-7xl mx-auto p-4 space-y-6">
+
+  <!-- TAB 1: MARK ENTRY -->
+  <section id="content-entry" class="bg-white p-6 rounded-2xl shadow-lg border border-slate-100">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-extrabold text-slate-900">Student Examination Marks Entry</h2>
+    </div>
+    
+    <div class="grid md:grid-cols-4 gap-4 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+      <div>
+        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Exam Title</label>
+        <input type="text" id="examName" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-sm font-medium" placeholder="e.g. Annual Exam 2026">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Examination Date</label>
+        <input type="date" id="examDate" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-sm font-medium">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Select Class</label>
+        <select id="entryClass" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-sm font-medium">
+          <option value="All">Whole School (All Classes)</option>
+          <option>Nursery</option><option>Prep</option><option>One</option>
+          <option>Two</option><option>Three</option><option>Four</option><option>Five</option>
+        </select>
+      </div>
+      <div class="flex items-end">
+        <button onclick="loadStudentsForEntry()" class="w-full bg-emerald-700 text-white p-2.5 rounded-lg font-bold text-sm hover:bg-emerald-800 shadow transition">Load Student Sheet</button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto rounded-xl border border-slate-200">
+      <table class="w-full text-sm text-right border-collapse" id="entryTable">
+        <thead class="bg-emerald-900 text-white text-center">
+          <tr>
+            <th class="p-3 border border-emerald-800">Roll No</th>
+            <th class="p-3 border border-emerald-800 text-left pl-4">Student Name</th>
+            <th class="p-3 border border-emerald-800 text-left pl-4">Father Name</th>
+            <th class="p-3 border border-emerald-800">Class</th>
+            <th class="p-3 border border-emerald-800 w-24">Urdu (100)</th>
+            <th class="p-3 border border-emerald-800 w-24">English (100)</th>
+            <th class="p-3 border border-emerald-800 w-24">Math (100)</th>
+            <th class="p-3 border border-emerald-800 w-24">Science (100)</th>
+            <th class="p-3 border border-emerald-800 w-24">G.K (100)</th>
+          </tr>
+        </thead>
+        <tbody id="entryTableBody" class="text-center">
+          <tr><td colspan="9" class="p-10 text-slate-400 font-medium">Please select a class and click "Load Student Sheet" above</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button onclick="saveBulkResults()" class="mt-6 w-full bg-blue-600 text-white p-3.5 rounded-xl font-bold text-base hover:bg-blue-700 shadow-lg transition flex items-center justify-center gap-2">
+      💾 Save All Marks to Cloud Database
+    </button>
+  </section>
+
+  <!-- TAB 2: INDIVIDUAL RESULT CARD -->
+  <section id="content-search" class="hidden bg-white p-6 rounded-2xl shadow-lg border border-slate-100">
+    <div class="mb-6">
+      <h2 class="text-xl font-extrabold text-slate-900">Individual Student Result Card Generator</h2>
+    </div>
+    
+    <div class="grid md:grid-cols-2 gap-4 mb-6 relative">
+      <div>
+        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Search Student (By Name, Father Name or Roll No)</label>
+        <input type="text" id="searchInput" class="w-full p-3 bg-white border-2 border-emerald-300 rounded-xl focus:border-emerald-700 outline-none font-medium text-sm" placeholder="Type student name..." onkeyup="filterStudents()">
+        <div id="searchSuggestions" class="hidden absolute bg-white border border-slate-200 shadow-xl rounded-xl mt-1 max-h-60 overflow-y-auto z-20 w-full"></div>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Select Examination</label>
+        <select id="searchExam" class="w-full p-3 bg-white border border-slate-300 rounded-xl font-medium text-sm" onchange="generateResultCard()">
+          <option value="">Select Exam...</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- HIGHLY PROFESSIONAL RESULT CARD DESIGN -->
+    <div id="printableResult" class="hidden border-8 border-double border-emerald-900 p-6 sm:p-10 bg-white rounded-2xl shadow-2xl card-watermark max-w-4xl mx-auto my-6">
+      
+      <!-- Card Header -->
+      <div class="flex items-center justify-between border-b-4 border-emerald-900 pb-6 mb-6">
+        <div class="w-20 h-20 bg-emerald-900 text-white rounded-full flex items-center justify-center font-extrabold text-2xl shadow-inner border-2 border-amber-400">
+          🏫
+        </div>
+        <div class="text-center flex-1 px-4">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-emerald-950 tracking-wider">GOVERNMENT GIRLS PRIMARY SCHOOL</h1>
+          <h2 class="text-lg sm:text-xl font-bold text-emerald-800 tracking-wide mt-0.5">JHERAN WALI</h2>
+          <p class="text-xs font-semibold text-slate-600 mt-1 uppercase tracking-widest">Official Academic Progress Report Card • EMIS Code: 34210690</p>
+        </div>
+        <div class="w-20 h-20 bg-amber-400 text-slate-900 rounded-full flex items-center justify-center font-extrabold text-xs text-center p-1 shadow-md border-2 border-emerald-900">
+          VERIFIED RECORD
+        </div>
+      </div>
+
+      <!-- Exam Banner -->
+      <div class="text-center mb-6">
+        <span id="cardExamName" class="inline-block bg-emerald-900 text-white font-extrabold px-8 py-2 rounded-full text-base shadow uppercase tracking-wider">
+          Annual Examination 2026
+        </span>
+      </div>
+
+      <!-- Student Bio Details Box -->
+      <div class="bg-emerald-50/80 border-2 border-emerald-200 rounded-xl p-4 mb-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm shadow-sm">
+        <div><span class="block text-[11px] text-slate-500 font-bold uppercase">Student Name</span> <span id="cardName" class="text-emerald-950 font-extrabold text-base"></span></div>
+        <div><span class="block text-[11px] text-slate-500 font-bold uppercase">Father's Name</span> <span id="cardFather" class="text-slate-800 font-bold text-base"></span></div>
+        <div><span class="block text-[11px] text-slate-500 font-bold uppercase">Class / Grade</span> <span id="cardClass" class="text-slate-800 font-bold text-base"></span></div>
+        <div><span class="block text-[11px] text-slate-500 font-bold uppercase">Roll Number</span> <span id="cardRoll" class="text-slate-800 font-bold text-base"></span></div>
+      </div>
+
+      <!-- Marks Table -->
+      <table class="w-full border-collapse border-2 border-emerald-900 mb-6 bg-white shadow-sm">
+        <thead>
+          <tr class="bg-emerald-900 text-white text-sm sm:text-base">
+            <th class="border border-emerald-800 p-3 text-left pl-4 font-bold">Subject Name</th>
+            <th class="border border-emerald-800 p-3 text-center font-bold">Maximum Marks</th>
+            <th class="border border-emerald-800 p-3 text-center font-bold">Marks Obtained</th>
+            <th class="border border-emerald-800 p-3 text-center font-bold">Grade</th>
+          </tr>
+        </thead>
+        <tbody id="cardMarksBody" class="text-center text-sm sm:text-base font-medium text-slate-800">
+          <!-- Dynamic Subject Rows -->
+        </tbody>
+        <tfoot class="bg-slate-100 font-bold text-base text-slate-900">
+          <tr>
+            <td class="border border-slate-300 p-3 text-left pl-4 font-extrabold">Total Aggregate Score</td>
+            <td class="border border-slate-300 p-3 text-center">500</td>
+            <td class="border border-slate-300 p-3 text-center text-emerald-800 font-extrabold text-lg" id="cardTotalObt">0</td>
+            <td class="border border-slate-300 p-3 text-center font-extrabold text-emerald-900" id="cardFinalGrade">-</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <!-- Statistics Panel -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm">
+        <div class="flex justify-between items-center px-4 py-2.5 bg-white rounded-lg border border-slate-200">
+          <span class="font-bold text-slate-600">Overall Percentage:</span>
+          <span id="cardPercentage" class="text-lg font-extrabold text-emerald-700">0%</span>
+        </div>
+        <div class="flex justify-between items-center px-4 py-2.5 bg-white rounded-lg border border-slate-200">
+          <span class="font-bold text-slate-600">Academic Standing / Status:</span>
+          <span id="cardPosition" class="text-base font-extrabold text-amber-600">Passed Successfully</span>
+        </div>
+      </div>
+
+      <!-- Signatures Footer -->
+      <div class="flex justify-between items-end mt-12 pt-4 text-xs font-bold text-slate-700">
+        <div class="text-center">
+          <div class="border-t-2 border-slate-400 w-36 pt-1 mb-1">Class Teacher</div>
+          <span class="text-[10px] text-slate-400 uppercase">Signature</span>
+        </div>
+        <div class="text-center">
+          <div class="border-t-2 border-slate-400 w-36 pt-1 mb-1">Headmistress</div>
+          <span class="text-[10px] text-slate-400 uppercase">School Stamp</span>
+        </div>
+        <div class="text-center">
+          <div class="border-t-2 border-slate-400 w-36 pt-1 mb-1">Parent / Guardian</div>
+          <span class="text-[10px] text-slate-400 uppercase">Signature</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Action Buttons -->
+    <div id="resultActions" class="hidden gap-3 mt-6 no-print max-w-4xl mx-auto">
+      <button onclick="window.print()" class="flex-1 bg-red-600 text-white p-3.5 rounded-xl font-bold text-sm hover:bg-red-700 shadow-md transition flex items-center justify-center gap-2">🖨️ Print Professional Result Card</button>
+      <button onclick="sendResultWhatsApp()" class="flex-1 bg-green-600 text-white p-3.5 rounded-xl font-bold text-sm hover:bg-green-700 shadow-md transition flex items-center justify-center gap-2">💬 Share via WhatsApp</button>
+    </div>
+  </section>
+
+  <!-- TAB 3: CLASS & SCHOOL REPORT -->
+  <section id="content-report" class="hidden bg-white p-6 rounded-2xl shadow-lg border border-slate-100">
+    <div class="mb-6">
+      <h2 class="text-xl font-extrabold text-slate-900">Class & School-Wide Examination Report</h2>
+    </div>
+    
+    <div class="grid md:grid-cols-3 gap-4 mb-6">
+      <div>
+        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Select Examination</label>
+        <select id="reportExam" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-sm font-medium" onchange="loadReport()">
+          <option value="">Select Exam...</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Select Class / Level</label>
+        <select id="reportClass" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-sm font-medium" onchange="loadReport()">
+          <option value="All">Whole School Report (All Classes)</option>
+          <option>Nursery</option><option>Prep</option><option>One</option>
+          <option>Two</option><option>Three</option><option>Four</option><option>Five</option>
+        </select>
+      </div>
+      <div class="flex items-end">
+        <button onclick="window.print()" class="w-full bg-slate-800 text-white p-2.5 rounded-lg font-bold text-sm hover:bg-slate-900 shadow transition flex items-center justify-center gap-2">🖨️ Print Complete Report</button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto rounded-xl border border-slate-200">
+      <table class="w-full text-sm text-right border-collapse" id="reportTable">
+        <thead class="bg-slate-900 text-white text-center">
+          <tr>
+            <th class="p-3 border border-slate-800">Roll No</th>
+            <th class="p-3 border border-slate-800 text-left pl-4">Student Name</th>
+            <th class="p-3 border border-slate-800 text-left pl-4">Father Name</th>
+            <th class="p-3 border border-slate-800">Class</th>
+            <th class="p-3 border border-slate-800">Urdu</th>
+            <th class="p-3 border border-slate-800">English</th>
+            <th class="p-3 border border-slate-800">Math</th>
+            <th class="p-3 border border-slate-800">Science</th>
+            <th class="p-3 border border-slate-800">G.K</th>
+            <th class="p-3 border border-slate-800">Total</th>
+            <th class="p-3 border border-slate-800">%</th>
+            <th class="p-3 border border-slate-800">Grade</th>
+          </tr>
+        </thead>
+        <tbody id="reportTableBody" class="text-center">
+          <tr><td colspan="12" class="p-10 text-slate-400 font-medium">Please select an examination and class above</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<!-- Firebase Core & Script Logic -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA4CamdJGCWGMjO-uR3_WOvvq2RwSMnHZc",
+    authDomain: "ggps-jheran-wali-91e0c.firebaseapp.com",
+    projectId: "ggps-jheran-wali-91e0c",
+    storageBucket: "ggps-jheran-wali-91e0c.firebasestorage.app",
+    messagingSenderId: "703458166473",
+    appId: "1:703458166473:web:cedabf9fddb16199a66f18"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  let allStudents = [];
+  let allExams = [];
+  let selectedStudentForCard = null;
+  let selectedExamData = null;
+
+  async function initData() {
+    try {
+      const studSnap = await getDocs(collection(db, "students"));
+      allStudents = studSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      
+      const examSnap = await getDocs(collection(db, "exams"));
+      allExams = examSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      
+      populateExamDropdowns();
+    } catch (e) { console.error("Database error:", e); }
+  }
+
+  function populateExamDropdowns() {
+    const opts = allExams.map(e => `<option value="${e.id}">${e.name} (${e.date})</option>`).join('');
+    document.getElementById('searchExam').innerHTML = '<option value="">Select Exam...</option>' + opts;
+    document.getElementById('reportExam').innerHTML = '<option value="">Select Exam...</option>' + opts;
+  }
+
+  window.loadStudentsForEntry = function() {
+    const cls = document.getElementById('entryClass').value;
+    const tbody = document.getElementById('entryTableBody');
+    
+    let filtered = cls === 'All' ? allStudents : allStudents.filter(s => s.class === cls);
+    
+    if(filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" class="p-6 text-center text-red-500 font-bold">No students found in this category!</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map((s, i) => `
+      <tr class="border-b hover:bg-slate-50">
+        <td class="p-2 border"><input type="text" value="${s.rollNo || i+1}" class="w-16 p-1.5 border border-slate-300 rounded text-center font-bold" data-field="rollNo" data-id="${s.id}"></td>
+        <td class="p-2 border text-left pl-4 font-bold text-slate-900">${s.name}</td>
+        <td class="p-2 border text-left pl-4 text-slate-600">${s.father || '-'}</td>
+        <td class="p-2 border font-medium">${s.class}</td>
+        <td class="p-2 border"><input type="number" max="100" min="0" class="w-full p-1.5 border border-slate-300 rounded text-center marks-inp" data-sub="urdu" data-id="${s.id}" placeholder="0"></td>
+        <td class="p-2 border"><input type="number" max="100" min="0" class="w-full p-1.5 border border-slate-300 rounded text-center marks-inp" data-sub="english" data-id="${s.id}" placeholder="0"></td>
+        <td class="p-2 border"><input type="number" max="100" min="0" class="w-full p-1.5 border border-slate-300 rounded text-center marks-inp" data-sub="math" data-id="${s.id}" placeholder="0"></td>
+        <td class="p-2 border"><input type="number" max="100" min="0" class="w-full p-1.5 border border-slate-300 rounded text-center marks-inp" data-sub="science" data-id="${s.id}" placeholder="0"></td>
+        <td class="p-2 border"><input type="number" max="100" min="0" class="w-full p-1.5 border border-slate-300 rounded text-center marks-inp" data-sub="gk" data-id="${s.id}" placeholder="0"></td>
+      </tr>
+    `).join('');
+  }
+
+  window.saveBulkResults = async function() {
+    const examName = document.getElementById('examName').value.trim();
+    const examDate = document.getElementById('examDate').value;
+    if(!examName || !examDate) return alert('Please enter Exam Title and Examination Date!');
+
+    const examId = `exam_${Date.now()}`;
+    const marksInputs = document.querySelectorAll('.marks-inp');
+    const rollInputs = document.querySelectorAll('[data-field="rollNo"]');
+    
+    rollInputs.forEach(inp => {
+      const s = allStudents.find(st => st.id === inp.dataset.id);
+      if(s) s.rollNo = inp.value;
+    });
+
+    const resultsMap = {};
+    marksInputs.forEach(inp => {
+      const sid = inp.dataset.id;
+      const sub = inp.dataset.sub;
+      const val = parseInt(inp.value) || 0;
+      if(!resultsMap[sid]) resultsMap[sid] = { urdu:0, english:0, math:0, science:0, gk:0 };
+      resultsMap[sid][sub] = val;
+    });
+
+    try {
+      await setDoc(doc(db, "exams", examId), {
+        id: examId, name: examName, date: examDate, 
+        class: document.getElementById('entryClass').value,
+        results: resultsMap, timestamp: new Date().toISOString()
+      });
+      alert('✅ Examination Results Saved Successfully to Cloud!');
+      initData();
+    } catch(e) { alert('Error saving results: ' + e.message); }
+  }
+
+  window.filterStudents = function() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const box = document.getElementById('searchSuggestions');
+    if(q.length < 2) { box.classList.add('hidden'); return; }
+
+    const matches = allStudents.filter(s => 
+      s.name.toLowerCase().includes(q) || 
+      (s.father && s.father.toLowerCase().includes(q)) || 
+      (s.rollNo && String(s.rollNo).includes(q))
+    );
+
+    if(matches.length > 0) {
+      box.innerHTML = matches.map(s => `
+        <div class="p-3 hover:bg-emerald-50 cursor-pointer border-b border-slate-100" onclick="selectStudent('${s.id}')">
+          <p class="font-bold text-slate-900">${s.name}</p>
+          <p class="text-xs text-slate-500">Father: ${s.father || '-'} | Class: ${s.class} | Roll No: ${s.rollNo || '-'}</p>
+        </div>
+      `).join('');
+      box.classList.remove('hidden');
+    } else {
+      box.classList.add('hidden');
+    }
+  }
+
+  window.selectStudent = function(id) {
+    selectedStudentForCard = allStudents.find(s => s.id === id);
+    document.getElementById('searchInput').value = selectedStudentForCard.name;
+    document.getElementById('searchSuggestions').classList.add('hidden');
+    generateResultCard();
+  }
+
+  window.generateResultCard = function() {
+    if(!selectedStudentForCard) return;
+    const examId = document.getElementById('searchExam').value;
+    if(!examId) return;
+
+    const exam = allExams.find(e => e.id === examId);
+    if(!exam || !exam.results[selectedStudentForCard.id]) {
+      alert('Result record not found for this student in the selected exam!');
+      return;
+    }
+
+    selectedExamData = exam;
+    const marks = exam.results[selectedStudentForCard.id];
+    const s = selectedStudentForCard;
+
+    document.getElementById('cardExamName').innerText = exam.name;
+    document.getElementById('cardName').innerText = s.name;
+    document.getElementById('cardFather').innerText = s.father || '-';
+    document.getElementById('cardClass').innerText = s.class;
+    document.getElementById('cardRoll').innerText = s.rollNo || '-';
+
+    const subjects = [
+      { key: 'urdu', name: 'Urdu Language' },
+      { key: 'english', name: 'English Language' },
+      { key: 'math', name: 'Mathematics' },
+      { key: 'science', name: 'General Science' },
+      { key: 'gk', name: 'General Knowledge' }
+    ];
+
+    let totalObt = 0;
+    let tbody = '';
+    subjects.forEach(sub => {
+      const m = marks[sub.key] || 0;
+      totalObt += m;
+      const grade = m >= 80 ? 'A+' : m >= 70 ? 'A' : m >= 60 ? 'B' : m >= 50 ? 'C' : m >= 40 ? 'D' : 'F';
+      tbody += `<tr><td class="border border-slate-300 p-3 text-left pl-4 font-bold text-slate-800">${sub.name}</td><td class="border border-slate-300 p-3">100</td><td class="border border-slate-300 p-3 font-extrabold text-emerald-900">${m}</td><td class="border border-slate-300 p-3 font-bold">${grade}</td></tr>`;
+    });
+
+    document.getElementById('cardMarksBody').innerHTML = tbody;
+    document.getElementById('cardTotalObt').innerText = totalObt;
+    const perc = ((totalObt / 500) * 100).toFixed(1);
+    document.getElementById('cardPercentage').innerText = perc + '%';
+    document.getElementById('cardFinalGrade').innerText = perc >= 80 ? 'A+' : perc >= 70 ? 'A' : perc >= 60 ? 'B' : perc >= 50 ? 'C' : perc >= 40 ? 'D' : 'F';
+
+    document.getElementById('printableResult').classList.remove('hidden');
+    document.getElementById('resultActions').classList.remove('hidden');
+    document.getElementById('resultActions').classList.add('flex');
+  }
+
+  window.sendResultWhatsApp = function() {
+    if(!selectedStudentForCard || !selectedExamData) return alert('Please select a student and exam first!');
+    const s = selectedStudentForCard;
+    const m = selectedExamData.results[s.id];
+    const total = (m.urdu||0)+(m.english||0)+(m.math||0)+(m.science||0)+(m.gk||0);
+    const perc = ((total/500)*100).toFixed(1);
+
+    const msg = `📊 *GGPS Jheran Wali - Official Result Card*\n\n📌 *Exam:* ${selectedExamData.name}\n👤 *Student:* ${s.name}\n👨 *Father:* ${s.father || '-'}\n🏫 *Class:* ${s.class} | Roll No: ${s.rollNo || '-'}\n\n📈 *Marks Breakdown:*\n🔹 Urdu: ${m.urdu||0}/100\n🔹 English: ${m.english||0}/100\n🔹 Math: ${m.math||0}/100\n🔹 Science: ${m.science||0}/100\n🔹 G.K: ${m.gk||0}/100\n\n⭐ *Total Score:* ${total}/500 (*${perc}%*)\n${perc >= 60 ? '👍 *Excellent Performance!*' : '💪 *Keep Working Hard!*'}`;
+    
+    const phone = s.phone ? s.phone : '';
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  window.loadReport = function() {
+    const examId = document.getElementById('reportExam').value;
+    const cls = document.getElementById('reportClass').value;
+    const tbody = document.getElementById('reportTableBody');
+
+    if(!examId) { tbody.innerHTML = '<tr><td colspan="12" class="p-6 text-center text-slate-400">Please select an exam</td></tr>'; return; }
+    const exam = allExams.find(e => e.id === examId);
+    if(!exam) return;
+
+    let students = cls === 'All' ? allStudents : allStudents.filter(s => s.class === cls);
+    students.sort((a,b) => {
+      const ra = exam.results[a.id] || {}; const rb = exam.results[b.id] || {};
+      const ta = (ra.urdu||0)+(ra.english||0)+(ra.math||0)+(ra.science||0)+(ra.gk||0);
+      const tb = (rb.urdu||0)+(rb.english||0)+(rb.math||0)+(rb.science||0)+(rb.gk||0);
+      return tb - ta;
+    });
+
+    let html = '';
+    students.forEach((s, i) => {
+      const m = exam.results[s.id];
+      if(!m) return;
+      const total = (m.urdu||0)+(m.english||0)+(m.math||0)+(m.science||0)+(m.gk||0);
+      const perc = ((total/500)*100).toFixed(1);
+      const grade = perc >= 80 ? 'A+' : perc >= 70 ? 'A' : perc >= 60 ? 'B' : perc >= 50 ? 'C' : perc >= 40 ? 'D' : 'F';
+      html += `<tr class="border-b hover:bg-slate-50">
+        <td class="p-2 border text-center font-bold">${s.rollNo || i+1}</td>
+        <td class="p-2 border text-left pl-4 font-bold text-slate-900">${s.name}</td>
+        <td class="p-2 border text-left pl-4 text-slate-600">${s.father || '-'}</td>
+        <td class="p-2 border text-center font-medium">${s.class}</td>
+        <td class="p-2 border text-center">${m.urdu||0}</td>
+        <td class="p-2 border text-center">${m.english||0}</td>
+        <td class="p-2 border text-center">${m.math||0}</td>
+        <td class="p-2 border text-center">${m.science||0}</td>
+        <td class="p-2 border text-center">${m.gk||0}</td>
+        <td class="p-2 border text-center font-extrabold text-slate-900">${total}</td>
+        <td class="p-2 border text-center font-bold text-emerald-700">${perc}%</td>
+        <td class="p-2 border text-center font-bold text-emerald-900">${grade}</td>
+      </tr>`;
+    });
+    tbody.innerHTML = html || '<tr><td colspan="12" class="p-6 text-center text-slate-400">No records available for this selection</td></tr>';
+  }
+
+  window.switchTab = function(tab) {
+    ['entry','search','report'].forEach(t => {
+      document.getElementById('content-'+t).classList.add('hidden');
+      document.getElementById('tab-'+t).classList.remove('text-emerald-900','border-b-4','border-emerald-800','bg-white');
+      document.getElementById('tab-'+t).classList.add('text-slate-500');
+    });
+    document.getElementById('content-'+tab).classList.remove('hidden');
+    document.getElementById('tab-'+tab).classList.add('text-emerald-900','border-b-4','border-emerald-800','bg-white');
+    document.getElementById('tab-'+tab).classList.remove('text-slate-500');
+  }
+
+  initData();
+</script>
+</body>
+</html>
