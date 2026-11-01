@@ -1,150 +1,17 @@
 <!DOCTYPE html>
-<html lang="ur">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GGPS - Debug Login</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #064e3b; color: white; margin: 0; padding: 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .login-box { background: white; color: black; padding: 30px; border-radius: 15px; max-width: 400px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        h1 { color: #064e3b; text-align: center; margin-bottom: 5px; }
-        .subtitle { text-align: center; color: #059669; font-weight: bold; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
-        input:focus { border-color: #059669; outline: none; }
-        button { background: #059669; color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; width: 100%; cursor: pointer; margin-top: 10px; font-weight: bold; }
-        button:hover { background: #047857; }
-        button:disabled { background: #9ca3af; cursor: not-allowed; }
-        #error-msg { color: #dc2626; margin-top: 15px; padding: 10px; background: #fee2e2; border-radius: 8px; display: none; font-size: 14px; }
-        #success-msg { color: #059669; margin-top: 15px; padding: 10px; background: #d1fae5; border-radius: 8px; display: none; font-size: 14px; }
-        #debug-log { margin-top: 20px; padding: 10px; background: #f3f4f6; border-radius: 8px; font-size: 12px; color: #374151; max-height: 200px; overflow-y: auto; }
-        .logo-circle { width: 80px; height: 80px; border: 4px solid #d4af37; border-radius: 50%; margin: 0 auto 15px; }
-    </style>
-</head>
-<body>
-    <div class="login-box">
-        <div class="logo-circle"></div>
-        <h1>GGPS Jheran Wali</h1>
-        <p class="subtitle">Smart School Management System</p>
-        
-        <label style="font-weight: bold; font-size: 14px;">Email Address</label>
-        <input type="email" id="email" placeholder="sqna7676@gmail.com" value="sqna7676@gmail.com">
-        
-        <label style="font-weight: bold; font-size: 14px;">Password</label>
-        <input type="password" id="password" placeholder="اپنا پاس ورڈ لکھیں">
-        
-        <button id="login-btn" onclick="doLogin()">🔓 Secure Sign In</button>
-        
-        <div id="error-msg"></div>
-        <div id="success-msg"></div>
-        
-        <div id="debug-log">
-            <b>🔍 Debug Log:</b><br>
-            <span id="log-content">Waiting...</span>
-        </div>
-        
-        <p style="text-align: center; font-size: 11px; color: #9ca3af; margin-top: 20px;">
-            Protected by Firebase Authentication • EMIS: 34210690
-        </p>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyA4CamdJGCWGMjO-uR3_WOvvq2RwSMnHZc",
-            authDomain: "ggps-jheran-wali-91e0c.firebaseapp.com",
-            projectId: "ggps-jheran-wali-91e0c",
-            storageBucket: "ggps-jheran-wali-91e0c.firebasestorage.app",
-            messagingSenderId: "703458166473",
-            appId: "1:703458166473:web:cedabf9fddb16199a66f18"
-        };
-
-        let app, auth, db;
-        
-        function log(msg) {
-            const logEl = document.getElementById('log-content');
-            const time = new Date().toLocaleTimeString();
-            logEl.innerHTML += `<br>[${time}] ${msg}`;
-            console.log(msg);
+<html>
+<head><title>Button Test</title></head>
+<body style="background:#064e3b; color:white; text-align:center; padding:50px;">
+    <h1>🧪 Button Test</h1>
+    <input type="password" id="p" placeholder="Password" style="padding:10px; font-size:16px;">
+    <button onclick="test()" style="padding:15px 30px; font-size:18px; background:#059669; color:white; border:none; border-radius:8px; margin-top:10px;">
+        Click Me
+    </button>
+    <p id="r" style="margin-top:20px; font-size:18px; color:yellow;"></p>
+    <script>
+        function test() {
+            document.getElementById('r').innerText = '✅ Button works! Password: ' + document.getElementById('p').value;
         }
-
-        try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            log('✅ Firebase initialized successfully');
-        } catch (e) {
-            log('❌ Firebase init error: ' + e.message);
-        }
-
-        window.doLogin = async function() {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const btn = document.getElementById('login-btn');
-            const errorDiv = document.getElementById('error-msg');
-            const successDiv = document.getElementById('success-msg');
-            
-            errorDiv.style.display = 'none';
-            successDiv.style.display = 'none';
-            
-            if (!email || !password) {
-                errorDiv.innerText = '❌ براہ کرم ای میل اور پاس ورڈ لکھیں';
-                errorDiv.style.display = 'block';
-                log('⚠️ Empty fields');
-                return;
-            }
-            
-            btn.disabled = true;
-            btn.innerText = '⏳ لاگ ان ہو رہا ہے...';
-            log('🔄 Attempting login for: ' + email);
-            
-            try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-                log('✅ Login successful! UID: ' + user.uid);
-                successDiv.innerText = '✅ لاگ ان کامیاب! ڈیش بورڈ لوڈ ہو رہا ہے...';
-                successDiv.style.display = 'block';
-                
-                setTimeout(() => {
-                    alert('لاگ ان کامیاب! اب اصل کوڈ لگائیں۔');
-                }, 1000);
-                
-            } catch (error) {
-                log('❌ Login error: ' + error.code);
-                log('❌ Message: ' + error.message);
-                
-                let errorMsg = '❌ ';
-                if (error.code === 'auth/user-not-found') {
-                    errorMsg += 'یہ ای میل Firebase میں رجسٹرڈ نہیں ہے۔ Firebase Console میں Users ٹیب چیک کریں۔';
-                } else if (error.code === 'auth/wrong-password') {
-                    errorMsg += 'پاس ورڈ غلط ہے۔ دوبارہ کوشش کریں۔';
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMsg += 'ای میل کا فارمیٹ غلط ہے۔';
-                } else if (error.code === 'auth/too-many-requests') {
-                    errorMsg += 'بہت زیادہ کوششیں۔ کچھ دیر بعد دوبارہ کوشش کریں۔';
-                } else {
-                    errorMsg += error.message;
-                }
-                
-                errorDiv.innerText = errorMsg;
-                errorDiv.style.display = 'block';
-            } finally {
-                btn.disabled = false;
-                btn.innerText = '🔓 Secure Sign In';
-            }
-        };
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                log('👤 Auth state changed: User logged in - ' + user.email);
-            } else {
-                log('👤 Auth state changed: No user logged in');
-            }
-        });
-
-        log('🚀 Page loaded, ready for login');
     </script>
 </body>
 </html>
