@@ -111,14 +111,13 @@ table.data tr:hover td{background:#f0fdf4}
 
     <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
       
-      <!-- DASHBOARD - BIGGER CARDS -->
+      <!-- DASHBOARD -->
       <section id="content-dashboard" class="space-y-6">
         <div class="gradient-header rounded-2xl p-8 text-white shadow-xl">
           <h2 class="text-2xl font-extrabold urdu text-emerald-100">خوش آمدید — گورنمنٹ گرلز پرائمری سکول جھیورانوالی</h2>
           <p class="text-base text-emerald-200 mt-3">Principal: <b>Shamsa Kanwal</b> (M.A, M.Ed.) • Date: <span id="dash-date" class="font-bold text-amber-300 text-lg"></span></p>
         </div>
         
-        <!-- BIG STAT CARDS -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
           <div class="stat-card" style="border-left-color:#059669">
             <p class="stat-label text-emerald-700">Total Students</p>
@@ -160,7 +159,7 @@ table.data tr:hover td{background:#f0fdf4}
         </div></div>
       </section>
 
-      <!-- CLASS REGISTER - NEW FEATURE -->
+      <!-- CLASS REGISTER -->
       <section id="content-classes" class="hidden space-y-4">
         <div class="card p-6 bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-200">
           <h3 class="text-xl font-extrabold text-emerald-900 mb-2">📚 Class-wise Student Register</h3>
@@ -168,7 +167,6 @@ table.data tr:hover td{background:#f0fdf4}
           <div id="class-cards-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4"></div>
         </div>
         
-        <!-- Class Detail View -->
         <div id="class-detail-view" class="hidden card p-6">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-xl font-extrabold text-slate-900" id="class-detail-title">Class Details</h3>
@@ -382,6 +380,11 @@ table.data tr:hover td{background:#f0fdf4}
     try { await addDoc(collection(db, "activity_logs"), { action, details, userId: window.appState.currentUser?.email || 'system', timestamp: new Date().toISOString() }); } catch(e) {}
   }
 
+  // HELPER: Check if student is active (handles missing or capitalized status)
+  function isActive(s) {
+    return !s.status || s.status.toLowerCase() === 'active';
+  }
+
   // AUTH
   window.handleLogin = async function() {
     const email = document.getElementById('auth-email').value.trim();
@@ -530,7 +533,7 @@ table.data tr:hover td{background:#f0fdf4}
   window.renderStudents = function() {
     const search = (document.getElementById('student-search')?.value || '').toLowerCase();
     const tbody = document.getElementById('students-table-body');
-    const active = window.appState.students.filter(s => s.status === 'active');
+    const active = window.appState.students.filter(isActive);
     const filtered = active.filter(s => {
       if (!search) return true;
       return (s.nameEn || '').toLowerCase().includes(search) || (s.fatherEn || '').toLowerCase().includes(search) || (s.admissionId || '').toLowerCase().includes(search);
@@ -548,7 +551,7 @@ table.data tr:hover td{background:#f0fdf4}
         <td>${s.fatherEn || '-'}</td>
         <td>${s.class || '-'} (${s.section || 'A'})</td>
         <td>${faceBadge}</td>
-        <td><span class="badge ${s.status === 'active' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">${(s.status || 'active').toUpperCase()}</span></td>
+        <td><span class="badge ${isActive(s) ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">${(s.status || 'active').toUpperCase()}</span></td>
         <td>
           <div class="flex gap-1 flex-wrap">
             <button onclick="openStudentModal('${s.id}')" class="btn btn-ghost text-[10px] py-1 px-2">Edit</button>
@@ -559,11 +562,11 @@ table.data tr:hover td{background:#f0fdf4}
     }).join('');
   }
 
-  // CLASS REGISTER - NEW FEATURE
+  // CLASS REGISTER
   window.renderClassCards = function() {
     const grid = document.getElementById('class-cards-grid');
     grid.innerHTML = CLASSES.map(c => {
-      const count = window.appState.students.filter(s => s.class === c && s.status === 'active').length;
+      const count = window.appState.students.filter(s => s.class === c && isActive(s)).length;
       const expected = 25;
       const isLow = count < expected;
       return `<div class="class-card" onclick="openClassDetail('${c}')">
@@ -598,7 +601,7 @@ table.data tr:hover td{background:#f0fdf4}
         <td>${s.fatherEn || '-'}</td>
         <td class="text-[10px]">${s.phone || '-'}</td>
         <td>${faceBadge}</td>
-        <td><span class="badge ${s.status === 'active' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">${(s.status || 'active').toUpperCase()}</span></td>
+        <td><span class="badge ${isActive(s) ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">${(s.status || 'active').toUpperCase()}</span></td>
         <td>
           <div class="flex gap-1">
             <button onclick="openStudentModal('${s.id}')" class="btn btn-ghost text-[10px] py-1 px-2">Edit</button>
@@ -713,7 +716,7 @@ table.data tr:hover td{background:#f0fdf4}
   // FACE ATTENDANCE
   window.startFaceAttendance = async function() {
     if (!window.appState.modelsLoaded) return showToast('⏳ AI Models loading...', true);
-    if (window.appState.students.filter(s => s.status === 'active' && s.faceSamples && s.faceSamples.length > 0).length === 0) {
+    if (window.appState.students.filter(s => isActive(s) && s.faceSamples && s.faceSamples.length > 0).length === 0) {
       return showToast('✗ No students with face enrolled', true);
     }
     try {
@@ -782,7 +785,7 @@ table.data tr:hover td{background:#f0fdf4}
     let bestMatch = null;
     let bestDistance = Infinity;
     for (const s of window.appState.students) {
-      if (s.status !== 'active' || !s.faceSamples) continue;
+      if (!isActive(s) || !s.faceSamples) continue;
       for (const sample of s.faceSamples) {
         const distance = faceapi.euclideanDistance(descriptor, sample.descriptor);
         if (distance < bestDistance) {
@@ -808,7 +811,7 @@ table.data tr:hover td{background:#f0fdf4}
     const t = getPakistanDate();
     const timeStr = getPakistanTime();
     const updates = {};
-    window.appState.students.filter(s => s.status === 'active').forEach(s => {
+    window.appState.students.filter(isActive).forEach(s => {
       updates[s.id] = { status: 'present', time: timeStr, ts: Date.now() };
     });
     await setDoc(doc(db, "attendance", t), updates, { merge: true });
@@ -829,7 +832,7 @@ table.data tr:hover td{background:#f0fdf4}
   window.renderTodayAttendance = function() {
     const t = getPakistanDate();
     const att = window.appState.attendance[t] || {};
-    const activeStudents = window.appState.students.filter(s => s.status === 'active');
+    const activeStudents = window.appState.students.filter(isActive);
     const present = activeStudents.filter(s => att[s.id]?.status === 'present');
     const leave = activeStudents.filter(s => att[s.id]?.status === 'leave');
     const absent = activeStudents.filter(s => !att[s.id] || att[s.id]?.status === 'absent');
@@ -909,7 +912,7 @@ table.data tr:hover td{background:#f0fdf4}
     const text = document.getElementById('msg-text').value.trim();
     if (!text) return showToast('Write a message first', true);
     const aud = document.getElementById('msg-audience').value;
-    let list = window.appState.students.filter(s => s.status === 'active' && s.phone);
+    let list = window.appState.students.filter(s => isActive(s) && s.phone);
     const today = getPakistanDate();
     const att = window.appState.attendance[today] || {};
     if (aud === 'absent_today') list = list.filter(s => !att[s.id] || att[s.id].status === 'absent');
@@ -949,7 +952,7 @@ table.data tr:hover td{background:#f0fdf4}
     let html = `<div style="padding:20px;background:#fff"><div style="display:flex;gap:15px;align-items:center;border-bottom:3px solid #064e3b;padding-bottom:15px;margin-bottom:15px"><div style="width:80px;height:80px;border-radius:50%;border:3px solid #d4af37;display:flex;align-items:center;justify-content:center;font-size:40px;background:#fff">🏫</div><div style="flex:1"><h3 style="margin:0;font-size:18px;font-weight:800;color:#064e3b">Government Girls Primary School Jheran Wali</h3><p style="margin:4px 0 0;font-size:12px;font-weight:600" class="urdu">گورنمنٹ گرلز پرائمری سکول جھیورانوالی</p><p style="margin:4px 0 0;font-size:11px;color:#64748b">EMIS: 34210690 • Gujrat, Punjab • Principal: Shamsa Kanwal</p><p style="margin:4px 0 0;font-size:11px;color:#64748b">Date: ${t}</p></div></div><table class="data"><thead><tr><th>Sr</th><th>Class</th><th>Total</th><th>Present</th><th>Absent</th><th>Leave</th></tr></thead><tbody>`;
     let gTotal = 0, gPresent = 0, gAbsent = 0, gLeave = 0;
     CLASSES.forEach((c, i) => {
-      const inCl = window.appState.students.filter(s => s.class === c && s.status === 'active');
+      const inCl = window.appState.students.filter(s => s.class === c && isActive(s));
       const p = inCl.filter(s => att[s.id]?.status === 'present').length;
       const l = inCl.filter(s => att[s.id]?.status === 'leave').length;
       const a = inCl.length - p - l;
@@ -1010,7 +1013,7 @@ table.data tr:hover td{background:#f0fdf4}
   window.renderDashboard = function() {
     const t = getPakistanDate();
     const att = window.appState.attendance[t] || {};
-    const active = window.appState.students.filter(s => s.status === 'active');
+    const active = window.appState.students.filter(isActive);
     const p = active.filter(s => att[s.id]?.status === 'present').length;
     const l = active.filter(s => att[s.id]?.status === 'leave').length;
     const a = active.length - p - l;
