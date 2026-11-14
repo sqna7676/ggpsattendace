@@ -3,198 +3,241 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GGPS Jheran Wali - Smart School Management</title>
+<title>GGPS Jheran Wali - Smart School Management System</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:#f8fafc;margin:0;color:#0f172a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#f0f9ff;color:#0f172a;min-height:100vh}
 .urdu{font-family:'Cairo',sans-serif;direction:rtl}
-.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.lbl{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px}
-.inp{width:100%;border:1.5px solid #cbd5e1;border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;background:#fff}
-.inp:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,.1)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:700;font-size:12px;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;transition:.15s;font-family:inherit}
-.btn:active{transform:scale(.97)}
-.btn-primary{background:linear-gradient(135deg,#059669,#047857);color:#fff}
-.btn-danger{background:#fee2e2;color:#b91c1c;border:1px solid #fecaca}
+.card{background:#fff;border-radius:16px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);border:1px solid #e2e8f0;transition:all .3s}
+.card:hover{transform:translateY(-2px);box-shadow:0 10px 15px -3px rgba(0,0,0,.1)}
+.lbl{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.inp{width:100%;border:2px solid #e2e8f0;border-radius:10px;padding:11px 14px;font-size:14px;font-family:inherit;background:#fff;transition:all .2s}
+.inp:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,.15)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:13px;border:none;border-radius:10px;padding:12px 20px;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn:active{transform:scale(.96)}
+.btn-primary{background:linear-gradient(135deg,#059669,#047857);color:#fff;box-shadow:0 4px 14px rgba(5,150,105,.35)}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-danger{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}
 .btn-ghost{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}
-.btn-wa{background:#25D366;color:#fff}
-.btn-blue{background:#2563eb;color:#fff}
-.sidebar-link{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;transition:.15s}
-.sidebar-link:hover{background:#f1f5f9;color:#0f172a}
-.sidebar-link.active{background:#ecfdf5;color:#047857;font-weight:700}
-.stat-card{border-radius:12px;padding:16px;border:1px solid #e2e8f0;background:#fff}
-.badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;padding:3px 8px;border-radius:99px}
+.btn-wa{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff}
+.btn-blue{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff}
+.btn-gold{background:linear-gradient(135deg,#d4af37,#b8962e);color:#fff}
+.sidebar{background:linear-gradient(180deg,#064e3b 0%,#065f46 100%);min-height:100vh}
+.sidebar-link{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;font-size:14px;font-weight:600;color:#d1fae5;cursor:pointer;transition:all .2s;margin:2px 0}
+.sidebar-link:hover{background:rgba(255,255,255,.1);color:#fff}
+.sidebar-link.active{background:rgba(255,255,255,.2);color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.stat-card{background:#fff;border-radius:16px;padding:20px;border-left:5px solid;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);transition:all .3s}
+.stat-card:hover{transform:translateY(-3px);box-shadow:0 10px 20px rgba(0,0,0,.1)}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;padding:4px 10px;border-radius:99px}
 .hidden{display:none!important}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;animation:up .3s ease}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:14px 28px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;animation:up .3s ease;box-shadow:0 10px 30px rgba(0,0,0,.3)}
 @keyframes up{from{opacity:0;transform:translateX(-50%) translateY(60px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-table.reg{width:100%;border-collapse:collapse;font-size:11px;background:#fff}
-table.reg th,table.reg td{border:1px solid #cbd5e1;padding:6px 8px;text-align:center;font-weight:600}
-table.reg th{background:#f8fafc;font-weight:800}
+table.data{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;background:#fff;border-radius:12px;overflow:hidden}
+table.data th{background:linear-gradient(135deg,#064e3b,#065f46);color:#fff;padding:12px;text-align:left;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+table.data td{padding:12px;border-bottom:1px solid #e2e8f0}
+table.data tr:hover td{background:#f0fdf4}
+.gradient-header{background:linear-gradient(135deg,#064e3b 0%,#059669 50%,#0d9488 100%)}
+.chart-container{position:relative;height:300px}
+@media(max-width:768px){.sidebar{position:fixed;left:-100%;top:0;bottom:0;width:280px;z-index:40;transition:.3s}.sidebar.open{left:0}}
 </style>
 </head>
 <body>
 
-<div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="background:linear-gradient(135deg,#022c22 0%,#064e3b 55%,#065f46 100%)">
+<!-- LOGIN SCREEN -->
+<div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 gradient-header">
   <div class="w-full max-w-md">
-    <div class="card p-8 text-center" style="border-top:5px solid #d4af37">
-      <div class="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden shadow-lg flex items-center justify-center text-4xl" style="border:4px solid #d4af37;background:#fff">🏫</div>
-      <h1 class="text-xl font-extrabold text-slate-900">GGPS Jheran Wali</h1>
-      <p class="text-emerald-800 text-xs font-bold mt-1">Government Girls Primary School Jheran Wali</p>
-      <p class="text-[10px] text-amber-700 mt-1 font-extrabold tracking-wider">SMART SCHOOL MANAGEMENT SYSTEM</p>
-      <div class="mt-6 text-left">
-        <label class="lbl">Email Address</label>
-        <input type="email" id="auth-email" class="inp mb-3" value="sqna7676@gmail.com">
-        <label class="lbl">Password</label>
-        <input type="password" id="auth-password" class="inp mb-4" placeholder="اپنا پاس ورڈ لکھیں">
-        <button onclick="handleLogin()" class="btn btn-primary w-full py-3">🔓 Secure Sign In</button>
-        <p id="auth-error" class="text-red-600 text-xs font-bold mt-3 text-center hidden"></p>
+    <div class="card p-8 text-center">
+      <div class="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden shadow-lg flex items-center justify-center text-5xl bg-gradient-to-br from-emerald-100 to-emerald-200 border-4 border-amber-400">🏫</div>
+      <h1 class="text-2xl font-extrabold text-slate-900">GGPS Jheran Wali</h1>
+      <p class="text-emerald-700 text-sm font-bold mt-1 urdu">گورنمنٹ گرلز پرائمری سکول جھیورانوالی</p>
+      <p class="text-[11px] text-amber-700 mt-2 font-extrabold tracking-wider">SMART SCHOOL MANAGEMENT SYSTEM</p>
+      <p class="text-[10px] text-slate-500 mt-1">EMIS: 34210690 • Gujrat, Punjab</p>
+      <div class="mt-6 text-left space-y-3">
+        <div>
+          <label class="lbl">Email Address</label>
+          <input type="email" id="auth-email" class="inp" value="sqna7676@gmail.com">
+        </div>
+        <div>
+          <label class="lbl">Password</label>
+          <input type="password" id="auth-password" class="inp" placeholder="Enter password">
+        </div>
+        <button onclick="handleLogin()" class="btn btn-primary w-full py-3 text-base">🔓 Secure Sign In</button>
+        <p id="auth-error" class="text-red-600 text-xs font-bold text-center hidden"></p>
       </div>
-      <p class="text-[10px] text-slate-400 mt-6">Protected by Firebase Authentication • EMIS: 34210690</p>
+      <p class="text-[10px] text-slate-400 mt-6">🔒 Protected by Firebase Authentication</p>
     </div>
   </div>
 </div>
 
+<!-- MAIN APP -->
 <div id="main-dashboard" class="hidden flex min-h-screen">
-  <aside id="sidebar" class="w-64 bg-white border-r border-slate-200 flex flex-col h-screen sticky top-0">
-    <div class="p-4 border-b border-slate-100 flex items-center gap-3">
-      <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border-2 border-amber-500 bg-white flex items-center justify-center">🏫</div>
-      <div>
-        <h1 class="text-xs font-extrabold text-slate-900 leading-tight">GGPS Jheran Wali</h1>
-        <p class="text-[9px] text-slate-500 font-semibold">EMIS: 34210690</p>
+  
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar w-64 flex flex-col sticky top-0 h-screen">
+    <div class="p-4 border-b border-emerald-700/50">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-2xl shadow-lg">🏫</div>
+        <div>
+          <h1 class="text-sm font-extrabold text-white leading-tight">GGPS Jheran Wali</h1>
+          <p class="text-[9px] text-emerald-200">EMIS: 34210690</p>
+          <p class="text-[8px] text-emerald-300">Gujrat, Punjab</p>
+        </div>
       </div>
     </div>
     <nav class="flex-1 overflow-y-auto p-3 space-y-1">
       <div onclick="switchTab('dashboard')" class="sidebar-link active" data-tab="dashboard">📊 Dashboard</div>
       <div onclick="switchTab('students')" class="sidebar-link" data-tab="students">👨‍🎓 Students</div>
-      <div onclick="switchTab('register')" class="sidebar-link" data-tab="register">📚 Class Registers</div>
       <div onclick="switchTab('attendance')" class="sidebar-link" data-tab="attendance">📷 Attendance</div>
       <div onclick="switchTab('teachers')" class="sidebar-link" data-tab="teachers">👩‍🏫 Teachers</div>
+      <div onclick="switchTab('register')" class="sidebar-link" data-tab="register">📚 Class Register</div>
       <div onclick="switchTab('messages')" class="sidebar-link" data-tab="messages">📢 WhatsApp</div>
       <div onclick="switchTab('reports')" class="sidebar-link" data-tab="reports">📑 Reports</div>
       <div onclick="switchTab('backup')" class="sidebar-link" data-tab="backup">💾 Backup</div>
       <div onclick="switchTab('settings')" class="sidebar-link" data-tab="settings">⚙️ Settings</div>
     </nav>
-    <div class="p-3 border-t border-slate-100">
-      <button onclick="handleLogout()" class="btn btn-danger w-full text-xs">🔒 Lock System</button>
+    <div class="p-3 border-t border-emerald-700/50">
+      <div class="text-[10px] text-emerald-200 mb-2 px-2">Signed in as:</div>
+      <div id="user-email" class="text-xs text-white font-semibold px-2 mb-2 truncate"></div>
+      <button onclick="handleLogout()" class="btn btn-danger w-full text-xs">🔒 Logout</button>
     </div>
   </aside>
 
-  <main class="flex-1 flex flex-col min-w-0">
-    <header class="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 flex flex-col min-w-0 bg-slate-50">
+    <header class="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm">
       <div class="flex items-center gap-3">
-        <button onclick="document.getElementById('sidebar').classList.toggle('hidden')" class="md:hidden btn btn-ghost p-2">☰</button>
-        <h2 id="page-title" class="text-sm font-extrabold text-slate-800">Dashboard</h2>
+        <button onclick="document.getElementById('sidebar').classList.toggle('open')" class="md:hidden btn btn-ghost p-2">☰</button>
+        <h2 id="page-title" class="text-lg font-extrabold text-slate-800">Dashboard</h2>
       </div>
       <div class="flex items-center gap-3">
-        <div id="modelStatus" class="badge bg-amber-100 text-amber-800 cursor-pointer" onclick="loadFaceModels()">⏳ AI Loading</div>
-        <span id="user-email" class="text-xs font-semibold text-slate-600 hidden sm:block"></span>
+        <span id="current-date" class="text-xs font-semibold text-slate-600 hidden sm:block"></span>
       </div>
     </header>
 
     <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
-      <section id="content-dashboard" class="space-y-4">
-        <div class="bg-gradient-to-r from-emerald-800 to-teal-900 rounded-xl p-5 text-white shadow-md">
-          <h2 class="text-base font-extrabold urdu text-emerald-100">خوش آمدید — گورنمنٹ گرلز پرائمری سکول جھیورانوالی</h2>
-          <p class="text-xs text-emerald-200 mt-1">Date: <span id="current-date" class="font-bold text-white"></span> • Time: <span id="current-time" class="font-bold text-amber-300"></span></p>
+      
+      <!-- DASHBOARD -->
+      <section id="content-dashboard" class="space-y-6">
+        <div class="gradient-header rounded-2xl p-6 text-white shadow-xl">
+          <h2 class="text-xl font-extrabold urdu text-emerald-100">خوش آمدید — گورنمنٹ گرلز پرائمری سکول جھیورانوالی</h2>
+          <p class="text-sm text-emerald-200 mt-2">Principal: <b>Shamsa Kanwal</b> (M.A, M.Ed.) • Date: <span id="dash-date" class="font-bold text-amber-300"></span></p>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div class="stat-card border-l-4 border-emerald-500"><p class="lbl text-emerald-700">Total Students</p><p id="stat-total" class="text-2xl font-extrabold text-slate-900">0</p></div>
-          <div class="stat-card border-l-4 border-blue-500"><p class="lbl text-blue-700">Present Today</p><p id="stat-present" class="text-2xl font-extrabold text-slate-900">0</p></div>
-          <div class="stat-card border-l-4 border-red-500"><p class="lbl text-red-700">Absent Today</p><p id="stat-absent" class="text-2xl font-extrabold text-slate-900">0</p></div>
-          <div class="stat-card border-l-4 border-amber-500"><p class="lbl text-amber-700">Teachers Present</p><p id="stat-teachers" class="text-2xl font-extrabold text-slate-900">0/0</p></div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="stat-card" style="border-left-color:#059669">
+            <p class="lbl text-emerald-700">Total Students</p>
+            <p id="stat-total" class="text-3xl font-extrabold text-slate-900">0</p>
+            <p class="text-[10px] text-slate-400 mt-1">Active Enrollments</p>
+          </div>
+          <div class="stat-card" style="border-left-color:#2563eb">
+            <p class="lbl text-blue-700">Present Today</p>
+            <p id="stat-present" class="text-3xl font-extrabold text-slate-900">0</p>
+            <p class="text-[10px] text-slate-400 mt-1">In Attendance</p>
+          </div>
+          <div class="stat-card" style="border-left-color:#ef4444">
+            <p class="lbl text-red-700">Absent Today</p>
+            <p id="stat-absent" class="text-3xl font-extrabold text-slate-900">0</p>
+            <p class="text-[10px] text-slate-400 mt-1">Need Follow-up</p>
+          </div>
+          <div class="stat-card" style="border-left-color:#d4af37">
+            <p class="lbl text-amber-700">Teachers</p>
+            <p id="stat-teachers" class="text-3xl font-extrabold text-slate-900">0/0</p>
+            <p class="text-[10px] text-slate-400 mt-1">Staff Attendance</p>
+          </div>
         </div>
-        <div class="card p-4">
-          <h3 class="text-xs font-extrabold text-slate-800 mb-3">⚡ Quick Actions</h3>
-          <div class="grid grid-cols-2 gap-2">
-            <button onclick="switchTab('attendance')" class="btn btn-primary text-xs py-3">📷 Start Attendance</button>
-            <button onclick="switchTab('messages')" class="btn btn-wa text-xs py-3">📢 Send Alerts</button>
-            <button onclick="switchTab('register')" class="btn btn-blue text-xs py-3">📚 Class Register</button>
-            <button onclick="switchTab('backup')" class="btn btn-ghost text-xs py-3">💾 Backup Data</button>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="card p-5">
+            <h3 class="text-sm font-extrabold text-slate-800 mb-4">📊 Class-wise Strength</h3>
+            <div class="chart-container"><canvas id="chart-class"></canvas></div>
+          </div>
+          <div class="card p-5">
+            <h3 class="text-sm font-extrabold text-slate-800 mb-4">🥧 Today's Attendance</h3>
+            <div class="chart-container"><canvas id="chart-attendance"></canvas></div>
+          </div>
+        </div>
+
+        <div class="card p-5">
+          <h3 class="text-sm font-extrabold text-slate-800 mb-4">⚡ Quick Actions</h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <button onclick="switchTab('attendance')" class="btn btn-primary text-xs py-4">📷 Take Attendance</button>
+            <button onclick="switchTab('students')" class="btn btn-blue text-xs py-4">➕ Add Student</button>
+            <button onclick="switchTab('messages')" class="btn btn-wa text-xs py-4">📢 Send Alerts</button>
+            <button onclick="switchTab('reports')" class="btn btn-gold text-xs py-4">📑 Reports</button>
           </div>
         </div>
       </section>
 
+      <!-- STUDENTS -->
       <section id="content-students" class="hidden space-y-4">
-        <div class="flex justify-between items-center">
-          <h3 class="text-sm font-extrabold text-slate-800">👨‍🎓 Student Management</h3>
-          <button onclick="openStudentModal()" class="btn btn-primary text-xs">➕ Add New Student</button>
+        <div class="flex flex-wrap justify-between items-center gap-3">
+          <input type="text" id="student-search" placeholder="🔍 Search by name, ID, or father..." class="inp max-w-md" oninput="renderStudents()">
+          <button onclick="openStudentModal()" class="btn btn-primary">➕ Add New Student</button>
         </div>
         <div class="card overflow-hidden">
           <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-slate-50 border-b border-slate-200">
-                <tr><th class="p-3 font-extrabold">Admission ID</th><th class="p-3 font-extrabold">Student Name</th><th class="p-3 font-extrabold">Father's Name</th><th class="p-3 font-extrabold">Class</th><th class="p-3 font-extrabold">Contact</th><th class="p-3 font-extrabold">Status</th><th class="p-3 font-extrabold">Actions</th></tr>
-              </thead>
-              <tbody id="students-table-body" class="divide-y divide-slate-100"></tbody>
+            <table class="data">
+              <thead><tr><th>ID</th><th>Name</th><th>Father</th><th>Class</th><th>Contact</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="students-table-body"></tbody>
             </table>
           </div>
         </div>
       </section>
 
+      <!-- ATTENDANCE -->
+      <section id="content-attendance" class="hidden space-y-4">
+        <div class="card p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-sm font-extrabold text-slate-800">📅 Today's Attendance (<span id="att-date-display"></span>)</h3>
+            <button onclick="markAllPresent()" class="btn btn-primary text-xs">✓ Mark All Present</button>
+          </div>
+          <div id="today-attendance-list" class="space-y-2 max-h-[600px] overflow-y-auto"></div>
+        </div>
+      </section>
+
+      <!-- TEACHERS -->
+      <section id="content-teachers" class="hidden space-y-4">
+        <div class="flex justify-between items-center">
+          <h3 class="text-sm font-extrabold text-slate-800">👩‍🏫 Teaching Staff</h3>
+          <button onclick="openTeacherModal()" class="btn btn-primary text-xs">➕ Add Teacher</button>
+        </div>
+        <div id="teachers-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </section>
+
+      <!-- CLASS REGISTER -->
       <section id="content-register" class="hidden space-y-4">
-        <div class="card p-4 bg-blue-50 border-blue-200">
-          <h3 class="text-sm font-extrabold text-blue-900 mb-2">📊 Class Strength Verification</h3>
+        <div class="card p-5 bg-blue-50 border-2 border-blue-200">
+          <h3 class="text-sm font-extrabold text-blue-900 mb-4">📊 Class Strength Verification</h3>
           <div class="overflow-x-auto">
-            <table class="w-full text-xs bg-white rounded-lg">
-              <thead class="bg-blue-100"><tr><th class="p-2 text-left">Class</th><th class="p-2 text-center">Expected</th><th class="p-2 text-center">Registered</th><th class="p-2 text-center">Difference</th><th class="p-2 text-center">Status</th></tr></thead>
+            <table class="data">
+              <thead><tr><th>Class</th><th>Expected</th><th>Actual</th><th>Difference</th><th>Status</th></tr></thead>
               <tbody id="class-strength-body"></tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <section id="content-attendance" class="hidden space-y-4">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div class="lg:col-span-1 card p-4">
-            <h3 class="text-xs font-extrabold text-slate-800 mb-2">📷 Face Recognition</h3>
-            <div class="relative bg-slate-900 rounded-lg overflow-hidden mb-3" style="aspect-ratio:4/3">
-              <video id="attendance-video" autoplay muted playsinline class="w-full h-full object-cover"></video>
-              <div id="camera-placeholder" class="absolute inset-0 flex items-center justify-center text-white">
-                <div class="text-center"><div class="text-4xl mb-2">📷</div><p class="text-xs font-bold">Camera Off</p></div>
-              </div>
-            </div>
-            <div class="flex gap-2">
-              <button onclick="startFaceAttendance()" id="start-cam-btn" class="btn btn-primary flex-1 text-xs">▶ Start</button>
-              <button onclick="stopFaceAttendance()" id="stop-cam-btn" class="btn btn-danger flex-1 text-xs hidden">⏹ Stop</button>
-            </div>
-          </div>
-          <div class="lg:col-span-2 card p-4">
-            <h3 class="text-xs font-extrabold text-slate-800 mb-3">📅 Today's Register (<span id="att-date-display"></span>)</h3>
-            <div id="today-attendance-list" class="space-y-2 max-h-[500px] overflow-y-auto"></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="content-teachers" class="hidden space-y-4">
-        <div class="flex justify-between items-center">
-          <h3 class="text-sm font-extrabold text-slate-800">👩‍🏫 Teaching Staff</h3>
-          <button onclick="openTeacherModal()" class="btn btn-primary text-xs">➕ Add Teacher</button>
-        </div>
-        <div id="teachers-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
-      </section>
-
+      <!-- MESSAGES -->
       <section id="content-messages" class="hidden space-y-4">
-        <div class="card p-5 border-t-4 border-[#25D366]">
+        <div class="card p-6 border-t-4 border-[#25D366]">
           <h3 class="text-sm font-extrabold text-slate-900 mb-1">📢 WhatsApp Message Center</h3>
-          <p class="text-xs text-slate-500 mb-4">Prepare messages for parents via WhatsApp.</p>
+          <p class="text-xs text-slate-500 mb-4">Send messages to parents via WhatsApp</p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label class="lbl">Message Template</label>
+            <div><label class="lbl">Message Template</label>
               <select id="msg-type" class="inp" onchange="applyTemplate()">
                 <option value="custom">Custom Message</option>
                 <option value="absent">❤️ Absence Warning</option>
-                <option value="present">💖 Present Appreciation</option>
-                <option value="meeting">👥 Parent-Teacher Meeting</option>
+                <option value="present">💖 Present Alert</option>
+                <option value="meeting">👥 Meeting Notice</option>
               </select>
             </div>
-            <div>
-              <label class="lbl">Recipients</label>
+            <div><label class="lbl">Recipients</label>
               <select id="msg-audience" class="inp">
                 <option value="absent_today">Absent Today</option>
                 <option value="present_today">Present Today</option>
@@ -203,65 +246,82 @@ table.reg th{background:#f8fafc;font-weight:800}
             </div>
           </div>
           <label class="lbl">Message (Use {name}, {class}, {date}, {days})</label>
-          <textarea id="msg-text" class="inp mb-4" rows="6"></textarea>
+          <textarea id="msg-text" class="inp mb-4" rows="5"></textarea>
           <button onclick="startMessageQueue()" class="btn btn-wa w-full py-3 text-sm font-bold">📤 Prepare WhatsApp Queue</button>
         </div>
       </section>
 
+      <!-- REPORTS -->
       <section id="content-reports" class="hidden space-y-4">
-        <div class="card p-4">
+        <div class="card p-5">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-sm font-extrabold text-slate-900">📑 Daily Register</h3>
-            <button onclick="generateDailyPDF()" class="btn btn-danger text-xs">📄 PDF Download</button>
+            <button onclick="generateDailyPDF()" class="btn btn-danger text-xs">📄 Download PDF</button>
           </div>
           <div id="report-content" class="overflow-x-auto"></div>
         </div>
       </section>
 
+      <!-- BACKUP -->
       <section id="content-backup" class="hidden space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="card p-5 border-t-4 border-emerald-500">
+          <div class="card p-6 border-t-4 border-emerald-500">
             <h3 class="text-sm font-extrabold text-slate-900 mb-2">💾 Create Backup</h3>
-            <p class="text-xs text-slate-500 mb-4">Download complete JSON backup of all data.</p>
-            <button onclick="createBackup()" class="btn btn-primary w-full py-3">⬇️ Download Full Backup</button>
+            <p class="text-xs text-slate-500 mb-4">Download complete JSON backup</p>
+            <button onclick="createBackup()" class="btn btn-primary w-full py-3">⬇️ Download Backup</button>
           </div>
-          <div class="card p-5 border-t-4 border-red-500">
-            <h3 class="text-sm font-extrabold text-slate-900 mb-2">⚠️ Restore from Backup</h3>
-            <p class="text-xs text-slate-500 mb-4">Upload a previously downloaded JSON file.</p>
+          <div class="card p-6 border-t-4 border-red-500">
+            <h3 class="text-sm font-extrabold text-slate-900 mb-2">⚠️ Restore Backup</h3>
+            <p class="text-xs text-slate-500 mb-4">Upload previously saved backup</p>
             <input type="file" id="restore-file" accept=".json" class="inp mb-3 text-xs">
             <button onclick="handleRestore()" class="btn btn-danger w-full py-3">⬆️ Restore Data</button>
           </div>
         </div>
       </section>
 
+      <!-- SETTINGS -->
       <section id="content-settings" class="hidden space-y-4">
-        <div class="card p-5 max-w-2xl mx-auto">
-          <h3 class="text-sm font-extrabold text-slate-900 mb-4 text-center">⚙️ Settings</h3>
-          <h4 class="text-xs font-bold text-slate-700 mb-2 border-b pb-1">Expected Class Strength</h4>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4" id="expected-strength-inputs"></div>
-          <button onclick="saveSettings()" class="btn btn-primary w-full">💾 Save Settings</button>
+        <div class="card p-6 max-w-2xl mx-auto">
+          <h3 class="text-sm font-extrabold text-slate-900 mb-4 text-center">⚙️ School Settings</h3>
+          <div class="space-y-3">
+            <div><label class="lbl">School Name</label><input type="text" id="set-school" class="inp" value="Government Girls Primary School Jheran Wali"></div>
+            <div><label class="lbl">Principal Name</label><input type="text" id="set-principal" class="inp" value="Shamsa Kanwal"></div>
+            <div><label class="lbl">EMIS Code</label><input type="text" id="set-emis" class="inp" value="34210690" readonly></div>
+            <div><label class="lbl">Contact Number</label><input type="tel" id="set-contact" class="inp" placeholder="03001234567"></div>
+          </div>
+          <button onclick="saveSettings()" class="btn btn-primary w-full mt-4">💾 Save Settings</button>
         </div>
       </section>
     </div>
   </main>
 </div>
 
+<!-- STUDENT MODAL -->
 <div id="student-modal" class="modal-overlay hidden">
-  <div class="bg-white rounded-xl p-5 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
-    <h3 class="text-sm font-extrabold text-slate-900 mb-4" id="student-modal-title">Add New Student</h3>
+  <div class="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
+    <h3 class="text-lg font-extrabold text-slate-900 mb-4" id="student-modal-title">Add New Student</h3>
     <input type="hidden" id="edit-student-id">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
       <div><label class="lbl">Admission ID</label><input type="text" id="s-adm-id" class="inp bg-slate-50" readonly></div>
       <div><label class="lbl">Admission Date</label><input type="date" id="s-adm-date" class="inp"></div>
       <div><label class="lbl">Student Name (English)</label><input type="text" id="s-name-en" class="inp"></div>
       <div><label class="lbl urdu">Student Name (Urdu)</label><input type="text" id="s-name-ur" class="inp urdu"></div>
-      <div><label class="lbl">Father's Name (English)</label><input type="text" id="s-father-en" class="inp"></div>
+      <div><label class="lbl">Father's Name</label><input type="text" id="s-father-en" class="inp"></div>
       <div><label class="lbl urdu">Father's Name (Urdu)</label><input type="text" id="s-father-ur" class="inp urdu"></div>
-      <div><label class="lbl">Class</label><select id="s-class" class="inp"><option>Nursery</option><option>Prep</option><option>One</option><option>Two</option><option>Three</option><option>Four</option><option>Five</option></select></div>
-      <div><label class="lbl">Section</label><select id="s-section" class="inp"><option>A</option><option>B</option><option>C</option></select></div>
-      <div><label class="lbl">Gender</label><select id="s-gender" class="inp"><option value="girl">Girl</option><option value="boy">Boy</option></select></div>
+      <div><label class="lbl">Class</label>
+        <select id="s-class" class="inp"><option>Nursery</option><option>Prep</option><option>One</option><option>Two</option><option>Three</option><option>Four</option><option>Five</option></select>
+      </div>
+      <div><label class="lbl">Section</label>
+        <select id="s-section" class="inp"><option>A</option><option>B</option><option>C</option></select>
+      </div>
+      <div><label class="lbl">Gender</label>
+        <select id="s-gender" class="inp"><option value="girl">Girl</option><option value="boy">Boy</option></select>
+      </div>
       <div><label class="lbl">Parent Contact</label><input type="tel" id="s-phone" class="inp" placeholder="03001234567"></div>
-      <div><label class="lbl">Status</label><select id="s-status" class="inp"><option value="active">Active</option><option value="withdrawn">Withdrawn</option><option value="transferred">Transferred</option></select></div>
+      <div><label class="lbl">B-Form Number</label><input type="text" id="s-bform" class="inp"></div>
+      <div><label class="lbl">Status</label>
+        <select id="s-status" class="inp"><option value="active">Active</option><option value="withdrawn">Withdrawn</option><option value="transferred">Transferred</option></select>
+      </div>
     </div>
     <div class="flex gap-2 mt-5">
       <button onclick="saveStudent()" class="btn btn-primary flex-1">💾 Save Record</button>
@@ -270,23 +330,41 @@ table.reg th{background:#f8fafc;font-weight:800}
   </div>
 </div>
 
+<!-- TEACHER MODAL -->
+<div id="teacher-modal" class="modal-overlay hidden">
+  <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
+    <h3 class="text-lg font-extrabold text-slate-900 mb-4">Add Teacher</h3>
+    <div class="space-y-3">
+      <input type="text" id="t-name" class="inp" placeholder="Teacher Name">
+      <input type="text" id="t-desig" class="inp" placeholder="Designation (e.g., Head Teacher)">
+      <input type="tel" id="t-phone" class="inp" placeholder="Mobile Number">
+      <input type="text" id="t-qual" class="inp" placeholder="Qualification">
+    </div>
+    <div class="flex gap-2 mt-5">
+      <button onclick="saveTeacher()" class="btn btn-primary flex-1">Save</button>
+      <button onclick="document.getElementById('teacher-modal').classList.add('hidden')" class="btn btn-ghost flex-1">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- WHATSAPP MODAL -->
 <div id="wa-modal" class="modal-overlay hidden">
-  <div class="bg-white rounded-xl p-5 w-full max-w-md text-center shadow-2xl">
-    <h3 class="text-sm font-extrabold text-slate-900 mb-1">📤 WhatsApp Queue</h3>
+  <div class="bg-white rounded-2xl p-6 w-full max-w-md text-center shadow-2xl">
+    <h3 class="text-lg font-extrabold text-slate-900 mb-1">📤 WhatsApp Queue</h3>
     <p id="wa-progress" class="text-xs font-bold text-slate-500 mb-4"></p>
     <div id="wa-current" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 text-left">
-      <p class="font-extrabold text-slate-900 text-xs" id="wa-student"></p>
-      <p class="text-[10px] text-slate-600 mt-1" id="wa-parent"></p>
-      <p class="text-[10px] text-slate-500 mt-2 whitespace-pre-line border-t border-red-100 pt-2" id="wa-preview"></p>
+      <p class="font-extrabold text-slate-900 text-sm" id="wa-student"></p>
+      <p class="text-[11px] text-slate-600 mt-1" id="wa-parent"></p>
+      <p class="text-[11px] text-slate-500 mt-2 whitespace-pre-line border-t border-red-100 pt-2" id="wa-preview"></p>
     </div>
-    <button onclick="sendNextWa()" id="wa-send-btn" class="btn btn-wa w-full mb-2 text-xs">Open WhatsApp & Send</button>
-    <button onclick="closeWaModal()" class="btn btn-ghost w-full text-xs">✖ Close</button>
+    <button onclick="sendNextWa()" id="wa-send-btn" class="btn btn-wa w-full mb-2 text-sm">Open WhatsApp & Send</button>
+    <button onclick="closeWaModal()" class="btn btn-ghost w-full text-sm">✖ Close</button>
   </div>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, onSnapshot, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
   import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
   const firebaseConfig = {
@@ -302,8 +380,9 @@ table.reg th{background:#f8fafc;font-weight:800}
   const db = getFirestore(app);
   const auth = getAuth(app);
 
-  window.appState = { students: [], teachers: [], attendance: {}, settings: { expectedStrength: { 'Nursery': 20, 'Prep': 20, 'One': 25, 'Two': 25, 'Three': 25, 'Four': 25, 'Five': 25 } }, modelsLoaded: false, currentUser: null };
+  window.appState = { students: [], teachers: [], attendance: {}, currentUser: null };
   const CLASSES = ['Nursery','Prep','One','Two','Three','Four','Five'];
+  let classChart = null, attChart = null;
 
   function getPakistanDate() { return new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Karachi' }); }
   function getPakistanTime() { return new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit' }); }
@@ -320,6 +399,7 @@ table.reg th{background:#f8fafc;font-weight:800}
     try { await addDoc(collection(db, "activity_logs"), { action, details, userId: window.appState.currentUser?.email || 'system', timestamp: new Date().toISOString() }); } catch(e) {}
   }
 
+  // AUTH
   window.handleLogin = async function() {
     const email = document.getElementById('auth-email').value.trim();
     const pass = document.getElementById('auth-password').value;
@@ -351,7 +431,6 @@ table.reg th{background:#f8fafc;font-weight:800}
 
   async function startSystem() {
     updateDateTime();
-    await loadSettings();
     await loadStateFromCloud();
     renderDashboard();
     showToast('✅ Database Synced Successfully');
@@ -376,29 +455,14 @@ table.reg th{background:#f8fafc;font-weight:800}
     } catch (e) { console.error("DB Error:", e); }
   }
 
-  async function loadSettings() {
-    const snap = await getDocs(collection(db, "settings"));
-    if (!snap.empty) window.appState.settings = snap.docs[0].data();
-    const container = document.getElementById('expected-strength-inputs');
-    container.innerHTML = CLASSES.map(c => `<div><label class="lbl">Expected ${c}</label><input type="number" id="exp-${c}" class="inp" value="${window.appState.settings.expectedStrength?.[c] || 20}"></div>`).join('');
-  }
-
-  window.saveSettings = async function() {
-    const newExp = {};
-    CLASSES.forEach(c => { newExp[c] = parseInt(document.getElementById(`exp-${c}`).value) || 20; });
-    await setDoc(doc(db, "settings", "main"), { expectedStrength: newExp }, { merge: true });
-    window.appState.settings.expectedStrength = newExp;
-    showToast('✓ Settings saved');
-    await logActivity("Settings Updated", "Expected strength updated");
-  }
-
   window.switchTab = function(tab) {
     document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
     document.querySelectorAll('.sidebar-link').forEach(b => b.classList.remove('active'));
     document.getElementById('content-' + tab).classList.remove('hidden');
     document.querySelector(`.sidebar-link[data-tab="${tab}"]`)?.classList.add('active');
-    const titles = { dashboard: 'Dashboard', students: 'Student Management', register: 'Class Registers', attendance: 'Attendance', teachers: 'Teachers', messages: 'WhatsApp Messages', reports: 'Reports', backup: 'Backup & Restore', settings: 'Settings' };
+    const titles = { dashboard: 'Dashboard', students: 'Student Management', attendance: 'Attendance', teachers: 'Teachers', register: 'Class Register', messages: 'WhatsApp Messages', reports: 'Reports', backup: 'Backup & Restore', settings: 'Settings' };
     document.getElementById('page-title').textContent = titles[tab] || 'Dashboard';
+    document.getElementById('sidebar').classList.remove('open');
     if (tab === 'dashboard') renderDashboard();
     if (tab === 'students') renderStudents();
     if (tab === 'register') renderClassRegister();
@@ -408,11 +472,13 @@ table.reg th{background:#f8fafc;font-weight:800}
   }
 
   function updateDateTime() {
-    document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Karachi' });
-    document.getElementById('current-time').textContent = getPakistanTime();
+    const d = new Date().toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Karachi' });
+    document.getElementById('current-date').textContent = d;
+    document.getElementById('dash-date').textContent = d;
     setTimeout(updateDateTime, 1000);
   }
 
+  // STUDENTS
   window.openStudentModal = function(id = null) {
     document.getElementById('student-modal').classList.remove('hidden');
     if (id) {
@@ -429,13 +495,14 @@ table.reg th{background:#f8fafc;font-weight:800}
       document.getElementById('s-section').value = s.section || 'A';
       document.getElementById('s-gender').value = s.gender || 'girl';
       document.getElementById('s-phone').value = s.phone || '';
+      document.getElementById('s-bform').value = s.bForm || '';
       document.getElementById('s-status').value = s.status || 'active';
     } else {
       document.getElementById('student-modal-title').textContent = 'Add New Student';
       document.getElementById('edit-student-id').value = '';
       document.getElementById('s-adm-id').value = generateAdmissionId();
       document.getElementById('s-adm-date').value = getPakistanDate();
-      ['s-name-en','s-name-ur','s-father-en','s-father-ur','s-phone'].forEach(x => document.getElementById(x).value = '');
+      ['s-name-en','s-name-ur','s-father-en','s-father-ur','s-phone','s-bform'].forEach(x => document.getElementById(x).value = '');
       document.getElementById('s-status').value = 'active';
     }
   }
@@ -454,6 +521,7 @@ table.reg th{background:#f8fafc;font-weight:800}
       section: document.getElementById('s-section').value,
       gender: document.getElementById('s-gender').value,
       phone: normalizePhone(document.getElementById('s-phone').value),
+      bForm: document.getElementById('s-bform').value.trim(),
       status: document.getElementById('s-status').value,
       name: document.getElementById('s-name-en').value.trim() || document.getElementById('s-name-ur').value.trim(),
       father: document.getElementById('s-father-en').value.trim() || document.getElementById('s-father-ur').value.trim()
@@ -464,7 +532,7 @@ table.reg th{background:#f8fafc;font-weight:800}
         await updateDoc(doc(db, "students", id), data);
         await logActivity("Student Updated", `Updated ${data.nameEn}`);
       } else {
-        const ref = await addDoc(collection(db, "students"), { ...data, faceSamples: [], createdAt: new Date().toISOString() });
+        const ref = await addDoc(collection(db, "students"), { ...data, createdAt: new Date().toISOString() });
         data.id = ref.id;
         window.appState.students.push(data);
         await logActivity("Student Added", `Added ${data.nameEn} (ID: ${data.admissionId})`);
@@ -478,22 +546,27 @@ table.reg th{background:#f8fafc;font-weight:800}
   }
 
   window.renderStudents = function() {
+    const search = (document.getElementById('student-search')?.value || '').toLowerCase();
     const tbody = document.getElementById('students-table-body');
     const active = window.appState.students.filter(s => s.status === 'active');
-    if (active.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-400">No students registered yet.</td></tr>';
+    const filtered = active.filter(s => {
+      if (!search) return true;
+      return (s.nameEn || '').toLowerCase().includes(search) || (s.fatherEn || '').toLowerCase().includes(search) || (s.admissionId || '').toLowerCase().includes(search);
+    });
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">No students found. Click "Add New Student" to begin.</td></tr>';
       return;
     }
-    tbody.innerHTML = active.map(s => {
+    tbody.innerHTML = filtered.map(s => {
       const statusColor = s.status === 'active' ? 'bg-emerald-100 text-emerald-800' : (s.status === 'withdrawn' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800');
-      return `<tr class="hover:bg-slate-50">
-        <td class="p-3 font-mono text-[10px]">${s.admissionId || '-'}</td>
-        <td class="p-3 font-bold">${s.nameEn || '-'}<br><span class="text-[10px] font-normal text-slate-500 urdu">${s.nameUr || ''}</span></td>
-        <td class="p-3">${s.fatherEn || '-'}<br><span class="text-[10px] text-slate-500 urdu">${s.fatherUr || ''}</span></td>
-        <td class="p-3">${s.class || '-'} (${s.section || 'A'})</td>
-        <td class="p-3 text-[10px]">${s.phone || '-'}</td>
-        <td class="p-3"><span class="badge ${statusColor}">${(s.status || 'active').toUpperCase()}</span></td>
-        <td class="p-3">
+      return `<tr>
+        <td class="font-mono text-[10px]">${s.admissionId || '-'}</td>
+        <td class="font-bold">${s.nameEn || '-'}<br><span class="text-[10px] font-normal text-slate-500 urdu">${s.nameUr || ''}</span></td>
+        <td>${s.fatherEn || '-'}<br><span class="text-[10px] text-slate-500 urdu">${s.fatherUr || ''}</span></td>
+        <td>${s.class || '-'} (${s.section || 'A'})</td>
+        <td class="text-[10px]">${s.phone || '-'}</td>
+        <td><span class="badge ${statusColor}">${(s.status || 'active').toUpperCase()}</span></td>
+        <td>
           <div class="flex gap-1">
             <button onclick="openStudentModal('${s.id}')" class="btn btn-ghost text-[10px] py-1 px-2">Edit</button>
             <button onclick="changeStudentStatus('${s.id}', 'withdrawn')" class="btn btn-danger text-[10px] py-1 px-2">Withdraw</button>
@@ -513,42 +586,68 @@ table.reg th{background:#f8fafc;font-weight:800}
     showToast(`✓ Student marked as ${status}`);
   }
 
-  window.renderClassRegister = function() {
-    const tbody = document.getElementById('class-strength-body');
-    tbody.innerHTML = CLASSES.map(c => {
-      const expected = window.appState.settings.expectedStrength?.[c] || 20;
-      const actual = window.appState.students.filter(s => s.class === c && s.status === 'active').length;
-      const diff = expected - actual;
-      const isLow = actual < expected;
-      return `<tr class="${isLow ? 'bg-red-50' : ''}">
-        <td class="p-2 font-bold">${c}</td>
-        <td class="p-2 text-center">${expected}</td>
-        <td class="p-2 text-center font-bold">${actual}</td>
-        <td class="p-2 text-center ${isLow ? 'text-red-600 font-bold' : 'text-emerald-600'}">${diff > 0 ? '-' + diff : 0}</td>
-        <td class="p-2 text-center">${isLow ? '<span class="badge bg-red-100 text-red-800">Missing</span>' : '<span class="badge bg-emerald-100 text-emerald-800">OK</span>'}</td>
-      </tr>`;
-    }).join('');
-  }
-
-  window.startFaceAttendance = async function() {
-    if (!window.appState.modelsLoaded) return showToast('⏳ AI Models still loading...', true);
+  // TEACHERS
+  window.openTeacherModal = function() { document.getElementById('teacher-modal').classList.remove('hidden'); }
+  window.saveTeacher = async function() {
+    const name = document.getElementById('t-name').value.trim();
+    if (!name) return showToast('✗ Name required', true);
+    const data = {
+      name, designation: document.getElementById('t-desig').value.trim() || 'Teacher',
+      phone: normalizePhone(document.getElementById('t-phone').value),
+      qualification: document.getElementById('t-qual').value.trim(),
+      status: 'present', joiningDate: getPakistanDate()
+    };
     try {
-      const v = document.getElementById('attendance-video');
-      window.appState.cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
-      v.srcObject = window.appState.cameraStream;
-      await v.play();
-      document.getElementById('camera-placeholder').classList.add('hidden');
-      document.getElementById('start-cam-btn').classList.add('hidden');
-      document.getElementById('stop-cam-btn').classList.remove('hidden');
-      showToast('✓ Camera started');
-    } catch (e) { showToast('✗ Camera access denied', true); }
+      await addDoc(collection(db, "teachers"), data);
+      document.getElementById('teacher-modal').classList.add('hidden');
+      ['t-name','t-desig','t-phone','t-qual'].forEach(x => document.getElementById(x).value = '');
+      await loadStateFromCloud();
+      renderTeachers();
+      renderDashboard();
+      showToast('✓ Teacher added');
+      await logActivity("Teacher Added", `Added ${name}`);
+    } catch (e) { showToast('✗ Save failed', true); }
   }
 
-  window.stopFaceAttendance = function() {
-    if (window.appState.cameraStream) { window.appState.cameraStream.getTracks().forEach(t => t.stop()); window.appState.cameraStream = null; }
-    document.getElementById('camera-placeholder').classList.remove('hidden');
-    document.getElementById('start-cam-btn').classList.remove('hidden');
-    document.getElementById('stop-cam-btn').classList.add('hidden');
+  window.toggleTeacher = async function(id) {
+    const t = window.appState.teachers.find(x => x.id === id);
+    const order = ['present', 'absent', 'leave'];
+    const newStatus = order[(order.indexOf(t.status) + 1) % 3];
+    await updateDoc(doc(db, "teachers", id), { status: newStatus });
+    t.status = newStatus;
+    renderTeachers(); renderDashboard();
+  }
+
+  window.renderTeachers = function() {
+    const c = document.getElementById('teachers-list');
+    const M = { present: ['✓ Present', 'btn-primary', '#10b981'], absent: ['✗ Absent', 'btn-danger', '#ef4444'], leave: ['🌙 On Leave', 'btn-gold', '#d4af37'] };
+    c.innerHTML = window.appState.teachers.map(t => {
+      const m = M[t.status] || M.present;
+      return `<div class="card p-4" style="border-top:4px solid ${m[2]}">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-xl text-white font-bold">${t.name.charAt(0)}</div>
+          <div>
+            <p class="font-extrabold text-slate-900 text-sm">${t.name}</p>
+            <p class="text-[10px] font-bold text-emerald-700">${t.designation || 'Teacher'}</p>
+          </div>
+        </div>
+        <button onclick="toggleTeacher('${t.id}')" class="btn flex-1 ${m[1]}" style="padding:8px;font-size:11px">${m[0]}</button>
+      </div>`;
+    }).join('') || '<p class="text-slate-400 text-center col-span-full py-8">No teachers registered yet.</p>';
+  }
+
+  // ATTENDANCE
+  window.markAllPresent = async function() {
+    if(!confirm("Mark all active students as PRESENT?")) return;
+    const t = getPakistanDate();
+    const timeStr = getPakistanTime();
+    const updates = {};
+    window.appState.students.filter(s => s.status === 'active').forEach(s => {
+      updates[s.id] = { status: 'present', time: timeStr, ts: Date.now() };
+    });
+    await setDoc(doc(db, "attendance", t), updates, { merge: true });
+    await loadStateFromCloud();
+    showToast('✓ All students marked present');
   }
 
   window.markStudentAttendance = async function(studentId, status, timeStr) {
@@ -573,10 +672,10 @@ table.reg th{background:#f8fafc;font-weight:800}
     container.innerHTML = list.map(s => {
       const color = s.status === 'present' ? 'bg-emerald-50 border-emerald-200' : (s.status === 'leave' ? 'bg-amber-50 border-amber-200' : 'bg-red-50 border-red-200');
       const icon = s.status === 'present' ? '✓' : (s.status === 'leave' ? '🌙' : '✗');
-      return `<div class="flex items-center gap-3 ${color} border rounded-lg p-2">
-        <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center font-bold text-sm shadow-sm">${icon}</div>
+      return `<div class="flex items-center gap-3 ${color} border rounded-lg p-3">
+        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center font-bold text-lg shadow-sm">${icon}</div>
         <div class="flex-1 min-w-0">
-          <p class="text-xs font-bold text-slate-800 truncate">${s.nameEn}</p>
+          <p class="text-sm font-bold text-slate-800 truncate">${s.nameEn}</p>
           <p class="text-[10px] text-slate-500">Class ${s.class} • ${s.time}</p>
         </div>
         <div class="flex gap-1">
@@ -588,47 +687,32 @@ table.reg th{background:#f8fafc;font-weight:800}
     }).join('');
   }
 
-  window.openTeacherModal = function() {
-    const name = prompt("Enter Teacher Name:");
-    if (!name) return;
-    const desig = prompt("Designation (e.g., Head Teacher, Teacher):", "Teacher");
-    addDoc(collection(db, "teachers"), { name, designation: desig, status: 'present' }).then(() => {
-      loadStateFromCloud().then(() => { renderTeachers(); renderDashboard(); });
-      showToast('✓ Teacher added');
-    });
+  // CLASS REGISTER
+  window.renderClassRegister = function() {
+    const tbody = document.getElementById('class-strength-body');
+    tbody.innerHTML = CLASSES.map(c => {
+      const expected = 25;
+      const actual = window.appState.students.filter(s => s.class === c && s.status === 'active').length;
+      const diff = expected - actual;
+      const isLow = actual < expected;
+      return `<tr class="${isLow ? 'bg-red-50' : ''}">
+        <td class="font-bold">${c}</td>
+        <td class="text-center">${expected}</td>
+        <td class="text-center font-bold">${actual}</td>
+        <td class="text-center ${isLow ? 'text-red-600 font-bold' : 'text-emerald-600'}">${diff > 0 ? '-' + diff : 0}</td>
+        <td class="text-center">${isLow ? '<span class="badge bg-red-100 text-red-800">Missing</span>' : '<span class="badge bg-emerald-100 text-emerald-800">OK</span>'}</td>
+      </tr>`;
+    }).join('');
   }
 
-  window.toggleTeacher = async function(id) {
-    const t = window.appState.teachers.find(x => x.id === id);
-    const order = ['present', 'absent', 'leave'];
-    const newStatus = order[(order.indexOf(t.status) + 1) % 3];
-    await updateDoc(doc(db, "teachers", id), { status: newStatus });
-    t.status = newStatus;
-    renderTeachers(); renderDashboard();
-  }
-
-  window.renderTeachers = function() {
-    const c = document.getElementById('teachers-list');
-    const M = { present: ['✓ Present', 'btn-primary', '#10b981'], absent: ['✗ Absent', 'btn-danger', '#ef4444'], leave: ['🌙 On Leave', 'btn-ghost', '#d4af37'] };
-    c.innerHTML = window.appState.teachers.map(t => {
-      const m = M[t.status] || M.present;
-      return `<div class="card p-4" style="border-top:3px solid ${m[2]}">
-        <p class="font-extrabold text-slate-900 text-sm">${t.name}</p>
-        <p class="text-[10px] font-bold text-slate-600 bg-slate-100 rounded-full px-2 py-0.5 inline-block mt-1">${t.designation || 'Teacher'}</p>
-        <div class="flex gap-2 mt-3">
-          <button onclick="toggleTeacher('${t.id}')" class="btn flex-1 ${m[1]}" style="padding:6px;font-size:11px">${m[0]}</button>
-        </div>
-      </div>`;
-    }).join('') || '<p class="text-slate-400 text-center col-span-full py-8">No teachers registered yet.</p>';
-  }
-
+  // MESSAGES
   window.applyTemplate = function() {
     const t = document.getElementById('msg-type').value; 
     const box = document.getElementById('msg-text');
     const school = "GGPS Jheran Wali";
-    if (t === 'absent') box.value = `❤️ ${school} — WE MISS YOUR CHILD\n\nDear Parent,\nYour child {name}'s empty seat reminds us how much joy they bring. They have been absent for {days} days. Regular attendance is the secret to a bright future. Please send them to school! 🌸`;
-    else if (t === 'present') box.value = `💖 MashaAllah! ${school} — PRESENT ALERT\n\nDear Parent,\nAlhamdulillah! Your beloved child {name} (Class {class}) is present in school today. Every day of attendance is a step towards a bright future. Keep shining! 🌟`;
-    else if (t === 'meeting') box.value = `👥 ${school} — PARENT-TEACHER MEETING\n\nDear Parent,\nA meeting will be held on {date} at 9:00 AM. Your presence is their biggest motivation. We look forward to seeing you! 💝`;
+    if (t === 'absent') box.value = `❤️ ${school} — WE MISS YOUR CHILD\n\nDear Parent,\nYour child {name}'s empty seat reminds us how much joy they bring. They have been absent for {days} days. Regular attendance is the secret to a bright future. Please send them to school! 🌸\n\n${school}\nEMIS: 34210690`;
+    else if (t === 'present') box.value = `💖 MashaAllah! ${school} — PRESENT ALERT\n\nDear Parent,\nAlhamdulillah! Your beloved child {name} (Class {class}) is present in school today (${date}). Every day of attendance is a step towards a bright future. Keep shining! 🌟\n\n${school}\nEMIS: 34210690`;
+    else if (t === 'meeting') box.value = `👥 ${school} — PARENT-TEACHER MEETING\n\nDear Parent,\nA meeting will be held on {date} at 9:00 AM. Your presence is their biggest motivation. We look forward to seeing you! 💝\n\n${school}\nEMIS: 34210690`;
     else box.value = "";
   }
 
@@ -673,10 +757,11 @@ table.reg th{background:#f8fafc;font-weight:800}
   }
   window.closeWaModal = function() { document.getElementById('wa-modal').classList.add('hidden'); }
 
+  // REPORTS
   window.renderDailyReport = function() {
     const t = getPakistanDate();
     const att = window.appState.attendance[t] || {};
-    let html = `<div class="reg-page" style="padding:16px"><div style="display:flex;gap:12px;align-items:center;border-bottom:2px solid #0f172a;padding-bottom:10px;margin-bottom:10px"><div style="width:64px;height:64px;border-radius:50%;border:2px solid #d4af37;display:flex;align-items:center;justify-content:center;font-size:32px;background:#fff">🏫</div><div style="flex:1"><h3 style="margin:0;font-size:15px;font-weight:800">Government Girls Primary School Jheran Wali</h3><p style="margin:2px 0 0;font-size:10px;font-weight:600">EMIS Code: 34210690 • Shift 1 • Date: ${t}</p></div></div><table class="reg"><thead><tr><th>Sr</th><th>Class</th><th>Total</th><th>Present</th><th>Absent</th><th>Leave</th></tr></thead><tbody>`;
+    let html = `<div style="padding:20px;background:#fff"><div style="display:flex;gap:15px;align-items:center;border-bottom:3px solid #064e3b;padding-bottom:15px;margin-bottom:15px"><div style="width:80px;height:80px;border-radius:50%;border:3px solid #d4af37;display:flex;align-items:center;justify-content:center;font-size:40px;background:#fff">🏫</div><div style="flex:1"><h3 style="margin:0;font-size:18px;font-weight:800;color:#064e3b">Government Girls Primary School Jheran Wali</h3><p style="margin:4px 0 0;font-size:12px;font-weight:600" class="urdu">گورنمنٹ گرلز پرائمری سکول جھیورانوالی</p><p style="margin:4px 0 0;font-size:11px;color:#64748b">EMIS Code: 34210690 • Tehsil & District: Gujrat • Punjab, Pakistan</p><p style="margin:4px 0 0;font-size:11px;color:#64748b">Principal: Shamsa Kanwal (M.A, M.Ed.) • Date: ${t}</p></div></div><table class="data"><thead><tr><th>Sr</th><th>Class</th><th>Total</th><th>Present</th><th>Absent</th><th>Leave</th></tr></thead><tbody>`;
     let gTotal = 0, gPresent = 0, gAbsent = 0, gLeave = 0;
     CLASSES.forEach((c, i) => {
       const inCl = window.appState.students.filter(s => s.class === c && s.status === 'active');
@@ -686,7 +771,7 @@ table.reg th{background:#f8fafc;font-weight:800}
       gTotal += inCl.length; gPresent += p; gAbsent += a; gLeave += l;
       html += `<tr><td>${i+1}</td><td>${c}</td><td>${inCl.length}</td><td>${p}</td><td>${a}</td><td>${l}</td></tr>`;
     });
-    html += `<tr style="font-weight:800;background:#f1f5f9"><td colspan="2">TOTAL</td><td>${gTotal}</td><td>${gPresent}</td><td>${gAbsent}</td><td>${gLeave}</td></tr></tbody></table></div>`;
+    html += `<tr style="font-weight:800;background:#f0fdf4"><td colspan="2">TOTAL</td><td>${gTotal}</td><td>${gPresent}</td><td>${gAbsent}</td><td>${gLeave}</td></tr></tbody></table><div style="margin-top:40px;display:flex;justify-content:space-between"><div style="border-top:2px solid #0f172a;padding-top:5px;width:150px;text-align:center;font-size:11px;font-weight:700">Class Teacher</div><div style="border-top:2px solid #0f172a;padding-top:5px;width:150px;text-align:center;font-size:11px;font-weight:700">Principal</div></div></div>`;
     document.getElementById('report-content').innerHTML = html;
   }
 
@@ -699,9 +784,11 @@ table.reg th{background:#f8fafc;font-weight:800}
       pdf.addImage(c.toDataURL('image/png'), 'PNG', m, m, iw, ih);
       pdf.save(`GGPS_Daily_Register_${getPakistanDate()}.pdf`); 
       showToast('✓ PDF downloaded');
+      await logActivity("Report Generated", "Daily PDF Register downloaded");
     } catch (e) { showToast('✗ PDF failed', true); }
   }
 
+  // BACKUP
   window.createBackup = async function() {
     showToast("Creating backup...");
     try {
@@ -709,7 +796,6 @@ table.reg th{background:#f8fafc;font-weight:800}
         students: (await getDocs(collection(db, "students"))).docs.map(d => ({id: d.id, ...d.data()})),
         teachers: (await getDocs(collection(db, "teachers"))).docs.map(d => ({id: d.id, ...d.data()})),
         attendance: (await getDocs(collection(db, "attendance"))).docs.map(d => ({id: d.id, ...d.data()})),
-        settings: (await getDocs(collection(db, "settings"))).docs.map(d => ({id: d.id, ...d.data()})),
         backupDate: new Date().toISOString()
       };
       const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
@@ -738,6 +824,22 @@ table.reg th{background:#f8fafc;font-weight:800}
     } catch (e) { showToast('✗ Restore failed', true); }
   }
 
+  // SETTINGS
+  window.saveSettings = async function() {
+    const data = {
+      schoolName: document.getElementById('set-school').value,
+      principal: document.getElementById('set-principal').value,
+      emis: document.getElementById('set-emis').value,
+      contact: document.getElementById('set-contact').value
+    };
+    try {
+      await setDoc(doc(db, "settings", "main"), data, { merge: true });
+      showToast('✓ Settings saved');
+      await logActivity("Settings Updated", "School settings updated");
+    } catch (e) { showToast('✗ Save failed', true); }
+  }
+
+  // DASHBOARD
   window.renderDashboard = function() {
     const t = getPakistanDate();
     const att = window.appState.attendance[t] || {};
@@ -749,28 +851,32 @@ table.reg th{background:#f8fafc;font-weight:800}
     document.getElementById('stat-total').textContent = active.length;
     document.getElementById('stat-present').textContent = p;
     document.getElementById('stat-absent').textContent = a;
-    document.getElementById('stat-leave').textContent = l;
     document.getElementById('stat-teachers').textContent = `${tp}/${window.appState.teachers.length}`;
+    renderCharts(active, p, l, a);
   }
 
-  const MODEL_URLS = ['https://justadudewhohacks.github.io/face-api.js/models'];
-  window.loadFaceModels = async function() {
-    if (typeof faceapi === 'undefined') return;
-    if (window.appState.modelsLoaded) return;
-    for (const u of MODEL_URLS) {
-      document.getElementById('modelStatus').textContent = '⏳ Loading AI...';
-      try {
-        await faceapi.nets.tinyFaceDetector.loadFromUri(u);
-        await faceapi.nets.faceLandmark68Net.loadFromUri(u);
-        await faceapi.nets.faceRecognitionNet.loadFromUri(u);
-        window.appState.modelsLoaded = true;
-        document.getElementById('modelStatus').className = 'badge bg-emerald-100 text-emerald-800 cursor-pointer';
-        document.getElementById('modelStatus').textContent = '✓ AI Ready';
-        showToast('✓ AI Models Loaded!');
-        return;
-      } catch (e) { }
+  function renderCharts(active, p, l, a) {
+    // Class chart
+    const classData = CLASSES.map(c => active.filter(s => s.class === c).length);
+    if (classChart) classChart.destroy();
+    const ctx1 = document.getElementById('chart-class');
+    if (ctx1) {
+      classChart = new Chart(ctx1, {
+        type: 'bar',
+        data: { labels: CLASSES, datasets: [{ label: 'Students', data: classData, backgroundColor: ['#059669','#2563eb','#d4af37','#ef4444','#8b5cf6','#ec4899','#14b8a6'], borderRadius: 8 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+      });
     }
-    document.getElementById('modelStatus').textContent = '✗ AI Failed';
+    // Attendance pie chart
+    if (attChart) attChart.destroy();
+    const ctx2 = document.getElementById('chart-attendance');
+    if (ctx2) {
+      attChart = new Chart(ctx2, {
+        type: 'doughnut',
+        data: { labels: ['Present', 'Absent', 'Leave'], datasets: [{ data: [p, a, l], backgroundColor: ['#059669','#ef4444','#d4af37'], borderWidth: 0 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+      });
+    }
   }
 </script>
 </body>
