@@ -225,13 +225,39 @@ table.data tr:hover td{background:#f0fdf4}
       <section id="content-messages" class="hidden space-y-4">
         <div class="card p-6 border-t-4 border-[#25D366]">
           <h3 class="text-sm font-extrabold mb-1">📢 WhatsApp Message Center</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div><label class="lbl">Template</label><select id="msg-type" class="inp" onchange="applyTemplate()"><option value="custom">Custom</option><option value="absent">❤️ Absence</option><option value="present">💖 Present</option></select></div>
-            <div><label class="lbl">Recipients</label><select id="msg-audience" class="inp"><option value="absent_today">Absent Today</option><option value="present_today">Present Today</option><option value="all_active">All Active</option></select></div>
+          <p class="text-xs text-slate-500 mb-4">پیغام کی زبان اور قسم منتخب کریں</p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label class="lbl">🌐 Language / زبان</label>
+              <select id="msg-language" class="inp" onchange="applyTemplate()">
+                <option value="english">🇬🇧 English</option>
+                <option value="urdu">🇵🇰 اردو</option>
+              </select>
+            </div>
+            <div>
+              <label class="lbl">📝 Message Type / پیغام کی قسم</label>
+              <select id="msg-type" class="inp" onchange="applyTemplate()">
+                <option value="custom">✏️ Custom / اپنی مرضی کا</option>
+                <option value="absent">❤️ Absence Warning / غیر حاضری</option>
+                <option value="present">💖 Present Alert / حاضری</option>
+                <option value="meeting">👥 Meeting Notice / میٹنگ</option>
+              </select>
+            </div>
+            <div>
+              <label class="lbl">👥 Recipients / وصول کنندگان</label>
+              <select id="msg-audience" class="inp">
+                <option value="absent_today">🚫 Absent Today / آج غیر حاضر</option>
+                <option value="present_today">✅ Present Today / آج حاضر</option>
+                <option value="all_active">👨‍👩‍👧 All Active / تمام فعال</option>
+              </select>
+            </div>
           </div>
-          <label class="lbl">Message (Use {name}, {class}, {date})</label>
-          <textarea id="msg-text" class="inp mb-4" rows="5"></textarea>
-          <button onclick="startMessageQueue()" class="btn btn-wa w-full py-3">📤 Prepare Queue</button>
+          
+          <label class="lbl">✉️ Message / پیغام (Use {name}, {class}, {date}, {days})</label>
+          <textarea id="msg-text" class="inp mb-4" rows="6" placeholder="میسج یہاں لکھیں یا اوپر سے ٹیمپلیٹ منتخب کریں..."></textarea>
+          
+          <button onclick="startMessageQueue()" class="btn btn-wa w-full py-3">📤 Prepare WhatsApp Queue / واٹس ایپ کیو تیار کریں</button>
         </div>
       </section>
 
@@ -338,7 +364,7 @@ table.data tr:hover td{background:#f0fdf4}
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, onSnapshot, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
   import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
   const firebaseConfig = {
@@ -556,10 +582,30 @@ table.data tr:hover td{background:#f0fdf4}
           <div class="flex gap-1 flex-wrap">
             <button onclick="openStudentModal('${s.id}')" class="btn btn-ghost text-[10px] py-1 px-2">Edit</button>
             <button onclick="openFaceEnrollment('${s.id}')" class="btn btn-blue text-[10px] py-1 px-2">📸 Face</button>
+            <button onclick="deleteStudent('${s.id}')" class="btn btn-danger text-[10px] py-1 px-2">🗑️ Delete</button>
           </div>
         </td>
       </tr>`;
     }).join('');
+  }
+
+  window.deleteStudent = async function(id) {
+    const s = window.appState.students.find(x => x.id === id);
+    if (!s) return;
+    const confirmMsg = `⚠️ Are you sure you want to DELETE ${s.nameEn}?\n\nThis will permanently remove the student from the database.\n\nClick OK to confirm, Cancel to keep the student.`;
+    if (!confirm(confirmMsg)) return;
+    
+    try {
+      await deleteDoc(doc(db, "students", id));
+      window.appState.students = window.appState.students.filter(x => x.id !== id);
+      showToast('✓ ' + s.nameEn + ' deleted successfully');
+      await logActivity("Student Deleted", `Deleted ${s.nameEn} (ID: ${s.admissionId})`);
+      renderStudents();
+      renderDashboard();
+      if (currentViewClass) renderClassDetail(currentViewClass);
+    } catch (e) {
+      showToast('✗ Delete failed: ' + e.message, true);
+    }
   }
 
   // CLASS REGISTER
@@ -606,6 +652,7 @@ table.data tr:hover td{background:#f0fdf4}
           <div class="flex gap-1">
             <button onclick="openStudentModal('${s.id}')" class="btn btn-ghost text-[10px] py-1 px-2">Edit</button>
             <button onclick="openFaceEnrollment('${s.id}')" class="btn btn-blue text-[10px] py-1 px-2">📸</button>
+            <button onclick="deleteStudent('${s.id}')" class="btn btn-danger text-[10px] py-1 px-2">🗑️</button>
           </div>
         </td>
       </tr>`;
@@ -794,7 +841,7 @@ table.data tr:hover td{background:#f0fdf4}
         }
       }
     }
-    return (bestMatch && bestMatch.distance <= 0.5) ? bestMatch : null;
+    return (bestMatch && bestDistance <= 0.5) ? bestMatch : null;
   }
 
   window.stopFaceAttendance = function() {
@@ -882,6 +929,24 @@ table.data tr:hover td{background:#f0fdf4}
     renderTeachers(); renderDashboard();
   }
 
+  window.deleteTeacher = async function(id) {
+    const t = window.appState.teachers.find(x => x.id === id);
+    if (!t) return;
+    const confirmMsg = `⚠️ Are you sure you want to DELETE ${t.name}?\n\nThis will permanently remove the teacher from the database.\n\nClick OK to confirm, Cancel to keep the teacher.`;
+    if (!confirm(confirmMsg)) return;
+    
+    try {
+      await deleteDoc(doc(db, "teachers", id));
+      window.appState.teachers = window.appState.teachers.filter(x => x.id !== id);
+      showToast('✓ ' + t.name + ' deleted successfully');
+      await logActivity("Teacher Deleted", `Deleted ${t.name}`);
+      renderTeachers();
+      renderDashboard();
+    } catch (e) {
+      showToast('✗ Delete failed: ' + e.message, true);
+    }
+  }
+
   window.renderTeachers = function() {
     const c = document.getElementById('teachers-list');
     const M = { present: ['✓ Present', 'btn-primary', '#10b981'], absent: ['✗ Absent', 'btn-danger', '#ef4444'], leave: ['🌙 Leave', 'btn-gold', '#d4af37'] };
@@ -892,19 +957,43 @@ table.data tr:hover td{background:#f0fdf4}
           <div class="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-xl text-white font-bold">${t.name.charAt(0)}</div>
           <div><p class="font-extrabold text-slate-900 text-sm">${t.name}</p><p class="text-[10px] font-bold text-emerald-700">${t.designation || 'Teacher'}</p></div>
         </div>
-        <button onclick="toggleTeacher('${t.id}')" class="btn flex-1 ${m[1]}" style="padding:8px;font-size:11px">${m[0]}</button>
+        <div class="flex gap-2">
+          <button onclick="toggleTeacher('${t.id}')" class="btn flex-1 ${m[1]}" style="padding:8px;font-size:11px">${m[0]}</button>
+          <button onclick="deleteTeacher('${t.id}')" class="btn btn-danger" style="padding:8px;font-size:11px">🗑️</button>
+        </div>
       </div>`;
     }).join('') || '<p class="text-slate-400 text-center col-span-full py-8">No teachers yet.</p>';
   }
 
   // MESSAGES
   window.applyTemplate = function() {
-    const t = document.getElementById('msg-type').value; 
+    const lang = document.getElementById('msg-language').value;
+    const type = document.getElementById('msg-type').value; 
     const box = document.getElementById('msg-text');
     const school = "GGPS Jheran Wali";
-    if (t === 'absent') box.value = `❤️ ${school} — ABSENCE NOTICE\n\nDear Parent,\nYour child {name} has been absent today. Regular attendance is important for their future. Please ensure they attend school regularly.\n\n${school}\nEMIS: 34210690`;
-    else if (t === 'present') box.value = `💖 ${school} — PRESENT ALERT\n\nDear Parent,\nYour child {name} (Class {class}) is present today. Thank you for ensuring regular attendance!\n\n${school}\nEMIS: 34210690`;
-    else box.value = "";
+    const schoolUr = "گورنمنٹ گرلز پرائمری سکول جھیورانوالی";
+    
+    if (lang === 'english') {
+      if (type === 'absent') {
+        box.value = `❤️ ${school} — ABSENCE NOTICE\n\nDear Parent,\nAssalam-o-Alaikum!\n\nYour child {name} (Class {class}) has been absent today ({date}). Regular attendance is very important for your child's bright future.\n\nKindly ensure your child attends school regularly. If there is any genuine reason, please inform the school.\n\nThank you for your cooperation.\n\n${school}\nEMIS: 34210690\nPrincipal: Shamsa Kanwal`;
+      } else if (type === 'present') {
+        box.value = `💖 MashaAllah! ${school} — PRESENT ALERT\n\nDear Parent,\nAssalam-o-Alaikum!\n\nWe are happy to inform you that your child {name} (Class {class}) is present in school today ({date}).\n\nThank you for ensuring regular attendance. Your child's consistent presence is a step towards a bright future.\n\nKeep shining! 🌟\n\n${school}\nEMIS: 34210690`;
+      } else if (type === 'meeting') {
+        box.value = `👥 ${school} — PARENT-TEACHER MEETING\n\nDear Parent,\nAssalam-o-Alaikum!\n\nYou are cordially invited to attend a Parent-Teacher Meeting on {date} at 9:00 AM.\n\nYour presence is very important for discussing your child's progress. Please make it convenient to attend.\n\nLooking forward to seeing you.\n\n${school}\nEMIS: 34210690\nPrincipal: Shamsa Kanwal`;
+      } else {
+        box.value = "";
+      }
+    } else if (lang === 'urdu') {
+      if (type === 'absent') {
+        box.value = `❤️ ${schoolUr} — غیر حاضری کا نوٹس\n\nمحترم والدین!\nالسلام علیکم!\n\nآپ کے بچے {name} (کلاس {class}) کی آج ({date}) غیر حاضری درج کی گئی ہے۔\n\nباقاعدہ حاضری آپ کے بچے کے روشن مستقبل کے لیے بہت ضروری ہے۔ براہ کرم یقینی بنائیں کہ آپ کا بچہ باقاعدگی سے اسکول آئے۔\n\nاگر کوئی جائز وجہ ہے تو براہ کرم اسکول کو اطلاع دیں۔\n\nآپ کے تعاون کا شکریہ۔\n\n${schoolUr}\nای ایم آئی ایس: 34210690\nپرنسپل: شمسہ کنول`;
+      } else if (type === 'present') {
+        box.value = `💖 ماشاءاللہ! ${schoolUr} — حاضری کی اطلاع\n\nمحترم والدین!\nالسلام علیکم!\n\nآپ کو خوشی سے مطلع کیا جاتا ہے کہ آپ کا بچہ {name} (کلاس {class}) آج ({date}) اسکول میں حاضر ہے۔\n\nباقاعدہ حاضری یقینی بنانے کا آپ کا بہت شکریہ۔ آپ کے بچے کی مستقل حاضری روشن مستقبل کی طرف ایک قدم ہے۔\n\nیونہی چمکتے رہیں! 🌟\n\n${schoolUr}\nای ایم آئی ایس: 34210690`;
+      } else if (type === 'meeting') {
+        box.value = `👥 ${schoolUr} — والدین اساتذہ میٹنگ\n\nمحترم والدین!\nالسلام علیکم!\n\nآپ کو بتاریخ {date} صبح 9 بجے والدین اساتذہ میٹنگ میں شرکت کی پرخلوص دعوت دی جاتی ہے۔\n\nآپ کے بچے کی تعلیمی پیشرفت پر بات چیت کے لیے آپ کی موجودگی بہت ضروری ہے۔ براہ کرم تشریف لائیں۔\n\nآپ سے ملاقات کے منتظر۔\n\n${schoolUr}\nای ایم آئی ایس: 34210690\nپرنسپل: شمسہ کنول`;
+      } else {
+        box.value = "";
+      }
+    }
   }
 
   let waQueue = [], waIdx = 0;
