@@ -16,10 +16,10 @@ body{font-family:'Inter',sans-serif;background:#f0f9ff;color:#0f172a;min-height:
 .urdu{font-family:'Cairo',sans-serif;direction:rtl}
 .card{background:#fff;border-radius:16px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);border:1px solid #e2e8f0;transition:all .3s}
 .card:hover{transform:translateY(-2px);box-shadow:0 10px 15px -3px rgba(0,0,0,.1)}
-.lbl{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
-.inp{width:100%;border:2px solid #e2e8f0;border-radius:10px;padding:11px 14px;font-size:14px;font-family:inherit;background:#fff;transition:all .2s}
+.lbl{display:block;font-size:12px;font-weight:700;color:#475569;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.inp{width:100%;border:2px solid #e2e8f0;border-radius:10px;padding:12px 14px;font-size:14px;font-family:inherit;background:#fff;transition:all .2s}
 .inp:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,.15)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:13px;border:none;border-radius:10px;padding:12px 20px;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:14px;border:none;border-radius:10px;padding:14px 24px;cursor:pointer;transition:all .2s;font-family:inherit}
 .btn:active{transform:scale(.96)}
 .btn-primary{background:linear-gradient(135deg,#059669,#047857);color:#fff;box-shadow:0 4px 14px rgba(5,150,105,.35)}
 .btn-danger{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}
@@ -28,26 +28,31 @@ body{font-family:'Inter',sans-serif;background:#f0f9ff;color:#0f172a;min-height:
 .btn-blue{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff}
 .btn-gold{background:linear-gradient(135deg,#d4af37,#b8962e);color:#fff}
 .sidebar{background:linear-gradient(180deg,#064e3b 0%,#065f46 100%);min-height:100vh}
-.sidebar-link{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;font-size:14px;font-weight:600;color:#d1fae5;cursor:pointer;transition:all .2s;margin:2px 0}
+.sidebar-link{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:10px;font-size:15px;font-weight:600;color:#d1fae5;cursor:pointer;transition:all .2s;margin:3px 0}
 .sidebar-link:hover{background:rgba(255,255,255,.1);color:#fff}
 .sidebar-link.active{background:rgba(255,255,255,.2);color:#fff;font-weight:700}
-.stat-card{background:#fff;border-radius:16px;padding:20px;border-left:5px solid;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);transition:all .3s}
-.stat-card:hover{transform:translateY(-3px)}
-.badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;padding:4px 10px;border-radius:99px}
+.stat-card{background:#fff;border-radius:20px;padding:28px;border-left:6px solid;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);transition:all .3s}
+.stat-card:hover{transform:translateY(-4px);box-shadow:0 12px 20px rgba(0,0,0,.15)}
+.stat-card .stat-number{font-size:42px;font-weight:900;line-height:1}
+.stat-card .stat-label{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.stat-card .stat-sub{font-size:11px;color:#64748b;margin-top:8px}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:800;padding:5px 12px;border-radius:99px}
 .hidden{display:none!important}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:14px 28px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;animation:up .3s ease}
 @keyframes up{from{opacity:0;transform:translateX(-50%) translateY(60px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-table.data{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;background:#fff;border-radius:12px;overflow:hidden}
-table.data th{background:linear-gradient(135deg,#064e3b,#065f46);color:#fff;padding:12px;text-align:left;font-weight:700;font-size:11px}
-table.data td{padding:12px;border-bottom:1px solid #e2e8f0}
+table.data{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;background:#fff;border-radius:12px;overflow:hidden}
+table.data th{background:linear-gradient(135deg,#064e3b,#065f46);color:#fff;padding:14px;text-align:left;font-weight:700;font-size:12px}
+table.data td{padding:14px;border-bottom:1px solid #e2e8f0}
 table.data tr:hover td{background:#f0fdf4}
 .gradient-header{background:linear-gradient(135deg,#064e3b 0%,#059669 50%,#0d9488 100%)}
 .camera-box{position:relative;background:#000;border-radius:12px;overflow:hidden;aspect-ratio:4/3}
 .camera-box video,.camera-box canvas{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
-.face-box{position:absolute;border:3px solid #059669;border-radius:8px;animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(5,150,105,.7)}50%{box-shadow:0 0 0 10px rgba(5,150,105,0)}}
-@media(max-width:768px){.sidebar{position:fixed;left:-100%;top:0;bottom:0;width:280px;z-index:40;transition:.3s}.sidebar.open{left:0}}
+.class-card{background:linear-gradient(135deg,#fff 0%,#f0fdf4 100%);border:2px solid #059669;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s}
+.class-card:hover{transform:scale(1.02);box-shadow:0 8px 20px rgba(5,150,105,.2)}
+.class-card .class-name{font-size:20px;font-weight:900;color:#064e3b}
+.class-card .class-count{font-size:36px;font-weight:900;color:#059669}
+@media(max-width:768px){.sidebar{position:fixed;left:-100%;top:0;bottom:0;width:280px;z-index:40;transition:.3s}.sidebar.open{left:0}.stat-card .stat-number{font-size:32px}}
 </style>
 </head>
 <body>
@@ -82,9 +87,9 @@ table.data tr:hover td{background:#f0fdf4}
     <nav class="flex-1 overflow-y-auto p-3 space-y-1">
       <div onclick="switchTab('dashboard')" class="sidebar-link active" data-tab="dashboard">📊 Dashboard</div>
       <div onclick="switchTab('students')" class="sidebar-link" data-tab="students">👨‍🎓 Students</div>
+      <div onclick="switchTab('classes')" class="sidebar-link" data-tab="classes">📚 Class Register</div>
       <div onclick="switchTab('attendance')" class="sidebar-link" data-tab="attendance">📷 Face Attendance</div>
       <div onclick="switchTab('teachers')" class="sidebar-link" data-tab="teachers">👩‍🏫 Teachers</div>
-      <div onclick="switchTab('register')" class="sidebar-link" data-tab="register">📚 Class Register</div>
       <div onclick="switchTab('messages')" class="sidebar-link" data-tab="messages">📢 WhatsApp</div>
       <div onclick="switchTab('reports')" class="sidebar-link" data-tab="reports">📑 Reports</div>
       <div onclick="switchTab('backup')" class="sidebar-link" data-tab="backup">💾 Backup</div>
@@ -106,34 +111,79 @@ table.data tr:hover td{background:#f0fdf4}
 
     <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
       
-      <!-- DASHBOARD -->
+      <!-- DASHBOARD - BIGGER CARDS -->
       <section id="content-dashboard" class="space-y-6">
-        <div class="gradient-header rounded-2xl p-6 text-white shadow-xl">
-          <h2 class="text-xl font-extrabold urdu text-emerald-100">خوش آمدید — گورنمنٹ گرلز پرائمری سکول جھیورانوالی</h2>
-          <p class="text-sm text-emerald-200 mt-2">Principal: <b>Shamsa Kanwal</b> (M.A, M.Ed.) • Date: <span id="dash-date" class="font-bold text-amber-300"></span></p>
+        <div class="gradient-header rounded-2xl p-8 text-white shadow-xl">
+          <h2 class="text-2xl font-extrabold urdu text-emerald-100">خوش آمدید — گورنمنٹ گرلز پرائمری سکول جھیورانوالی</h2>
+          <p class="text-base text-emerald-200 mt-3">Principal: <b>Shamsa Kanwal</b> (M.A, M.Ed.) • Date: <span id="dash-date" class="font-bold text-amber-300 text-lg"></span></p>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="stat-card" style="border-left-color:#059669"><p class="lbl text-emerald-700">Total Students</p><p id="stat-total" class="text-3xl font-extrabold">0</p></div>
-          <div class="stat-card" style="border-left-color:#2563eb"><p class="lbl text-blue-700">Present Today</p><p id="stat-present" class="text-3xl font-extrabold">0</p></div>
-          <div class="stat-card" style="border-left-color:#ef4444"><p class="lbl text-red-700">Absent Today</p><p id="stat-absent" class="text-3xl font-extrabold">0</p></div>
-          <div class="stat-card" style="border-left-color:#d4af37"><p class="lbl text-amber-700">Teachers</p><p id="stat-teachers" class="text-3xl font-extrabold">0/0</p></div>
+        
+        <!-- BIG STAT CARDS -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div class="stat-card" style="border-left-color:#059669">
+            <p class="stat-label text-emerald-700">Total Students</p>
+            <p id="stat-total" class="stat-number text-emerald-600">0</p>
+            <p class="stat-sub">Active Enrollments</p>
+          </div>
+          <div class="stat-card" style="border-left-color:#2563eb">
+            <p class="stat-label text-blue-700">Present Today</p>
+            <p id="stat-present" class="stat-number text-blue-600">0</p>
+            <p class="stat-sub">In Attendance</p>
+          </div>
+          <div class="stat-card" style="border-left-color:#ef4444">
+            <p class="stat-label text-red-700">Absent Today</p>
+            <p id="stat-absent" class="stat-number text-red-600">0</p>
+            <p class="stat-sub">Need Follow-up</p>
+          </div>
+          <div class="stat-card" style="border-left-color:#d4af37">
+            <p class="stat-label text-amber-700">Teachers</p>
+            <p id="stat-teachers" class="stat-number text-amber-600">0/0</p>
+            <p class="stat-sub">Staff Attendance</p>
+          </div>
         </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="card p-5"><h3 class="text-sm font-extrabold mb-4">📊 Class-wise Strength</h3><div style="height:300px"><canvas id="chart-class"></canvas></div></div>
-          <div class="card p-5"><h3 class="text-sm font-extrabold mb-4">🥧 Today's Attendance</h3><div style="height:300px"><canvas id="chart-attendance"></canvas></div></div>
+          <div class="card p-6"><h3 class="text-lg font-extrabold mb-4">📊 Class-wise Strength</h3><div style="height:350px"><canvas id="chart-class"></canvas></div></div>
+          <div class="card p-6"><h3 class="text-lg font-extrabold mb-4">🥧 Today's Attendance</h3><div style="height:350px"><canvas id="chart-attendance"></canvas></div></div>
         </div>
       </section>
 
       <!-- STUDENTS -->
       <section id="content-students" class="hidden space-y-4">
         <div class="flex flex-wrap justify-between items-center gap-3">
-          <input type="text" id="student-search" placeholder="🔍 Search..." class="inp max-w-md" oninput="renderStudents()">
+          <input type="text" id="student-search" placeholder="🔍 Search by name, ID, or father..." class="inp max-w-md" oninput="renderStudents()">
           <button onclick="openStudentModal()" class="btn btn-primary">➕ Add New Student</button>
         </div>
         <div class="card overflow-hidden"><div class="overflow-x-auto">
           <table class="data"><thead><tr><th>ID</th><th>Name</th><th>Father</th><th>Class</th><th>Face</th><th>Status</th><th>Actions</th></tr></thead>
           <tbody id="students-table-body"></tbody></table>
         </div></div>
+      </section>
+
+      <!-- CLASS REGISTER - NEW FEATURE -->
+      <section id="content-classes" class="hidden space-y-4">
+        <div class="card p-6 bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-200">
+          <h3 class="text-xl font-extrabold text-emerald-900 mb-2">📚 Class-wise Student Register</h3>
+          <p class="text-sm text-emerald-700 mb-6">ہر کلاس پر کلک کریں اس کلاس کے تمام طلبہ دیکھنے کے لیے</p>
+          <div id="class-cards-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4"></div>
+        </div>
+        
+        <!-- Class Detail View -->
+        <div id="class-detail-view" class="hidden card p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-extrabold text-slate-900" id="class-detail-title">Class Details</h3>
+            <div class="flex gap-2">
+              <button onclick="exportClassCSV()" class="btn btn-blue text-xs">📊 Export CSV</button>
+              <button onclick="closeClassDetail()" class="btn btn-ghost text-xs">✖ Close</button>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="data">
+              <thead><tr><th>ID</th><th>Name</th><th>Father</th><th>Contact</th><th>Face</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="class-detail-body"></tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
       <!-- ATTENDANCE -->
@@ -171,14 +221,6 @@ table.data tr:hover td{background:#f0fdf4}
           <button onclick="openTeacherModal()" class="btn btn-primary text-xs">➕ Add Teacher</button>
         </div>
         <div id="teachers-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-      </section>
-
-      <!-- CLASS REGISTER -->
-      <section id="content-register" class="hidden space-y-4">
-        <div class="card p-5 bg-blue-50 border-2 border-blue-200">
-          <h3 class="text-sm font-extrabold text-blue-900 mb-4">📊 Class Strength Verification</h3>
-          <div class="overflow-x-auto"><table class="data"><thead><tr><th>Class</th><th>Expected</th><th>Actual</th><th>Difference</th><th>Status</th></tr></thead><tbody id="class-strength-body"></tbody></table></div>
-        </div>
       </section>
 
       <!-- MESSAGES -->
@@ -319,6 +361,7 @@ table.data tr:hover td{background:#f0fdf4}
   let classChart = null, attChart = null;
   let faceStream = null, faceLoopOn = false, faceSamples = [], currentFaceStudentId = null;
   let attStream = null, attLoopOn = false, attCooldown = {};
+  let currentViewClass = null;
 
   function getPakistanDate() { return new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Karachi' }); }
   function getPakistanTime() { return new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit' }); }
@@ -368,18 +411,22 @@ table.data tr:hover td{background:#f0fdf4}
     updateDateTime();
     await loadStateFromCloud();
     renderDashboard();
-    showToast('✅ Database Synced');
+    showToast('✅ Database Synced - ' + window.appState.students.length + ' students loaded');
   }
 
   async function loadStateFromCloud() {
     try {
       const studentsSnap = await getDocs(collection(db, "students"));
       window.appState.students = studentsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      console.log('Students loaded:', window.appState.students.length);
+      
       const teachersSnap = await getDocs(collection(db, "teachers"));
       window.appState.teachers = teachersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      
       const today = getPakistanDate();
       const attSnap = await getDocs(collection(db, "attendance"));
       attSnap.forEach(d => { if(d.id === today) window.appState.attendance[today] = d.data(); });
+      
       onSnapshot(doc(db, "attendance", today), (snap) => {
         if(snap.exists()) {
           window.appState.attendance[today] = snap.data();
@@ -387,7 +434,7 @@ table.data tr:hover td{background:#f0fdf4}
           renderDashboard();
         }
       });
-    } catch (e) { console.error("DB Error:", e); }
+    } catch (e) { console.error("DB Error:", e); showToast('✗ Database error', true); }
   }
 
   window.switchTab = function(tab) {
@@ -395,12 +442,12 @@ table.data tr:hover td{background:#f0fdf4}
     document.querySelectorAll('.sidebar-link').forEach(b => b.classList.remove('active'));
     document.getElementById('content-' + tab).classList.remove('hidden');
     document.querySelector(`.sidebar-link[data-tab="${tab}"]`)?.classList.add('active');
-    const titles = { dashboard: 'Dashboard', students: 'Students', attendance: 'Face Attendance', teachers: 'Teachers', register: 'Class Register', messages: 'WhatsApp', reports: 'Reports', backup: 'Backup' };
+    const titles = { dashboard: 'Dashboard', students: 'Students', classes: 'Class Register', attendance: 'Face Attendance', teachers: 'Teachers', messages: 'WhatsApp', reports: 'Reports', backup: 'Backup' };
     document.getElementById('page-title').textContent = titles[tab] || 'Dashboard';
     document.getElementById('sidebar').classList.remove('open');
     if (tab === 'dashboard') renderDashboard();
     if (tab === 'students') renderStudents();
-    if (tab === 'register') renderClassRegister();
+    if (tab === 'classes') renderClassCards();
     if (tab === 'attendance') { document.getElementById('att-date-display').textContent = getPakistanDate(); renderTodayAttendance(); }
     if (tab === 'teachers') renderTeachers();
     if (tab === 'reports') renderDailyReport();
@@ -476,6 +523,7 @@ table.data tr:hover td{background:#f0fdf4}
       showToast('✓ Student saved');
       renderStudents();
       renderDashboard();
+      if (currentViewClass) renderClassDetail(currentViewClass);
     } catch (e) { showToast('✗ Save failed', true); }
   }
 
@@ -509,6 +557,77 @@ table.data tr:hover td{background:#f0fdf4}
         </td>
       </tr>`;
     }).join('');
+  }
+
+  // CLASS REGISTER - NEW FEATURE
+  window.renderClassCards = function() {
+    const grid = document.getElementById('class-cards-grid');
+    grid.innerHTML = CLASSES.map(c => {
+      const count = window.appState.students.filter(s => s.class === c && s.status === 'active').length;
+      const expected = 25;
+      const isLow = count < expected;
+      return `<div class="class-card" onclick="openClassDetail('${c}')">
+        <div class="class-name">${c}</div>
+        <div class="class-count">${count}</div>
+        <div class="text-xs text-slate-600 mt-2">Students</div>
+        ${isLow ? `<div class="badge bg-red-100 text-red-800 mt-2">-${expected - count} Missing</div>` : '<div class="badge bg-emerald-100 text-emerald-800 mt-2">✓ Full</div>'}
+      </div>`;
+    }).join('');
+  }
+
+  window.openClassDetail = function(className) {
+    currentViewClass = className;
+    document.getElementById('class-detail-view').classList.remove('hidden');
+    document.getElementById('class-detail-title').textContent = `Class ${className} - Student List`;
+    renderClassDetail(className);
+  }
+
+  window.renderClassDetail = function(className) {
+    const students = window.appState.students.filter(s => s.class === className);
+    const tbody = document.getElementById('class-detail-body');
+    if (students.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">No students in this class. Click "Add New Student" to add.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = students.map(s => {
+      const hasFace = s.faceSamples && s.faceSamples.length > 0;
+      const faceBadge = hasFace ? '<span class="badge bg-emerald-100 text-emerald-800">✓</span>' : '<span class="badge bg-amber-100 text-amber-800">⚠</span>';
+      return `<tr>
+        <td class="font-mono text-[10px]">${s.admissionId || '-'}</td>
+        <td class="font-bold">${s.nameEn || '-'}<br><span class="text-[10px] font-normal text-slate-500 urdu">${s.nameUr || ''}</span></td>
+        <td>${s.fatherEn || '-'}</td>
+        <td class="text-[10px]">${s.phone || '-'}</td>
+        <td>${faceBadge}</td>
+        <td><span class="badge ${s.status === 'active' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">${(s.status || 'active').toUpperCase()}</span></td>
+        <td>
+          <div class="flex gap-1">
+            <button onclick="openStudentModal('${s.id}')" class="btn btn-ghost text-[10px] py-1 px-2">Edit</button>
+            <button onclick="openFaceEnrollment('${s.id}')" class="btn btn-blue text-[10px] py-1 px-2">📸</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  window.closeClassDetail = function() {
+    document.getElementById('class-detail-view').classList.add('hidden');
+    currentViewClass = null;
+  }
+
+  window.exportClassCSV = function() {
+    if (!currentViewClass) return;
+    const students = window.appState.students.filter(s => s.class === currentViewClass);
+    let csv = 'ID,Name,Father,Class,Section,Contact,Status\n';
+    students.forEach(s => {
+      csv += `${s.admissionId || ''},"${s.nameEn || ''}","${s.fatherEn || ''}",${s.class || ''},${s.section || 'A'},${s.phone || ''},${s.status || 'active'}\n`;
+    });
+    const blob = new Blob([csv], {type: 'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Class_${currentViewClass}_Register.csv`;
+    a.click();
+    showToast('✓ CSV exported');
   }
 
   // FACE ENROLLMENT
@@ -580,6 +699,7 @@ table.data tr:hover td{background:#f0fdf4}
       showToast('✓ Face enrolled for ' + s.nameEn);
       await logActivity("Face Enrolled", `Enrolled face for ${s.nameEn}`);
       renderStudents();
+      if (currentViewClass) renderClassDetail(currentViewClass);
     } catch (e) { showToast('✗ Save failed', true); }
   }
 
@@ -774,22 +894,6 @@ table.data tr:hover td{background:#f0fdf4}
     }).join('') || '<p class="text-slate-400 text-center col-span-full py-8">No teachers yet.</p>';
   }
 
-  // CLASS REGISTER
-  window.renderClassRegister = function() {
-    const tbody = document.getElementById('class-strength-body');
-    tbody.innerHTML = CLASSES.map(c => {
-      const expected = 25;
-      const actual = window.appState.students.filter(s => s.class === c && s.status === 'active').length;
-      const diff = expected - actual;
-      const isLow = actual < expected;
-      return `<tr class="${isLow ? 'bg-red-50' : ''}">
-        <td class="font-bold">${c}</td><td class="text-center">${expected}</td><td class="text-center font-bold">${actual}</td>
-        <td class="text-center ${isLow ? 'text-red-600 font-bold' : 'text-emerald-600'}">${diff > 0 ? '-' + diff : 0}</td>
-        <td class="text-center">${isLow ? '<span class="badge bg-red-100 text-red-800">Missing</span>' : '<span class="badge bg-emerald-100 text-emerald-800">OK</span>'}</td>
-      </tr>`;
-    }).join('');
-  }
-
   // MESSAGES
   window.applyTemplate = function() {
     const t = document.getElementById('msg-type').value; 
@@ -960,7 +1064,6 @@ table.data tr:hover td{background:#f0fdf4}
     }
   }
 
-  // Auto-load models on start
   setTimeout(() => window.loadFaceModels(), 2000);
 </script>
 </body>
