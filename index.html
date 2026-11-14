@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GGPS Jheran Wali - Smart School Management System</title>
+<title>GGPS Jheran Wali - Smart School Management</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:#f0f9ff;color:#0f172a;min-height:100vh}
 .urdu{font-family:'Cairo',sans-serif;direction:rtl}
-.card{background:#fff;border-radius:16px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);border:1px solid #e2e8f0;transition:all .3s}
+.card{background:#fff;border-radius:16px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);border:1px solid #e2e8f0;transition:all .3s}
 .card:hover{transform:translateY(-2px);box-shadow:0 10px 15px -3px rgba(0,0,0,.1)}
 .lbl{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
 .inp{width:100%;border:2px solid #e2e8f0;border-radius:10px;padding:11px 14px;font-size:14px;font-family:inherit;background:#fff;transition:all .2s}
@@ -21,7 +22,6 @@ body{font-family:'Inter',sans-serif;background:#f0f9ff;color:#0f172a;min-height:
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:13px;border:none;border-radius:10px;padding:12px 20px;cursor:pointer;transition:all .2s;font-family:inherit}
 .btn:active{transform:scale(.96)}
 .btn-primary{background:linear-gradient(135deg,#059669,#047857);color:#fff;box-shadow:0 4px 14px rgba(5,150,105,.35)}
-.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
 .btn-danger{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}
 .btn-ghost{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}
 .btn-wa{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff}
@@ -30,94 +30,78 @@ body{font-family:'Inter',sans-serif;background:#f0f9ff;color:#0f172a;min-height:
 .sidebar{background:linear-gradient(180deg,#064e3b 0%,#065f46 100%);min-height:100vh}
 .sidebar-link{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;font-size:14px;font-weight:600;color:#d1fae5;cursor:pointer;transition:all .2s;margin:2px 0}
 .sidebar-link:hover{background:rgba(255,255,255,.1);color:#fff}
-.sidebar-link.active{background:rgba(255,255,255,.2);color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.sidebar-link.active{background:rgba(255,255,255,.2);color:#fff;font-weight:700}
 .stat-card{background:#fff;border-radius:16px;padding:20px;border-left:5px solid;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);transition:all .3s}
-.stat-card:hover{transform:translateY(-3px);box-shadow:0 10px 20px rgba(0,0,0,.1)}
+.stat-card:hover{transform:translateY(-3px)}
 .badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;padding:4px 10px;border-radius:99px}
 .hidden{display:none!important}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:14px 28px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;animation:up .3s ease;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:14px 28px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;animation:up .3s ease}
 @keyframes up{from{opacity:0;transform:translateX(-50%) translateY(60px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 table.data{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;background:#fff;border-radius:12px;overflow:hidden}
-table.data th{background:linear-gradient(135deg,#064e3b,#065f46);color:#fff;padding:12px;text-align:left;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+table.data th{background:linear-gradient(135deg,#064e3b,#065f46);color:#fff;padding:12px;text-align:left;font-weight:700;font-size:11px}
 table.data td{padding:12px;border-bottom:1px solid #e2e8f0}
 table.data tr:hover td{background:#f0fdf4}
 .gradient-header{background:linear-gradient(135deg,#064e3b 0%,#059669 50%,#0d9488 100%)}
-.chart-container{position:relative;height:300px}
+.camera-box{position:relative;background:#000;border-radius:12px;overflow:hidden;aspect-ratio:4/3}
+.camera-box video,.camera-box canvas{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
+.face-box{position:absolute;border:3px solid #059669;border-radius:8px;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(5,150,105,.7)}50%{box-shadow:0 0 0 10px rgba(5,150,105,0)}}
 @media(max-width:768px){.sidebar{position:fixed;left:-100%;top:0;bottom:0;width:280px;z-index:40;transition:.3s}.sidebar.open{left:0}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 gradient-header">
   <div class="w-full max-w-md">
     <div class="card p-8 text-center">
       <div class="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden shadow-lg flex items-center justify-center text-5xl bg-gradient-to-br from-emerald-100 to-emerald-200 border-4 border-amber-400">🏫</div>
       <h1 class="text-2xl font-extrabold text-slate-900">GGPS Jheran Wali</h1>
       <p class="text-emerald-700 text-sm font-bold mt-1 urdu">گورنمنٹ گرلز پرائمری سکول جھیورانوالی</p>
-      <p class="text-[11px] text-amber-700 mt-2 font-extrabold tracking-wider">SMART SCHOOL MANAGEMENT SYSTEM</p>
-      <p class="text-[10px] text-slate-500 mt-1">EMIS: 34210690 • Gujrat, Punjab</p>
+      <p class="text-[11px] text-amber-700 mt-2 font-extrabold">SMART SCHOOL MANAGEMENT SYSTEM</p>
       <div class="mt-6 text-left space-y-3">
-        <div>
-          <label class="lbl">Email Address</label>
-          <input type="email" id="auth-email" class="inp" value="sqna7676@gmail.com">
-        </div>
-        <div>
-          <label class="lbl">Password</label>
-          <input type="password" id="auth-password" class="inp" placeholder="Enter password">
-        </div>
-        <button onclick="handleLogin()" class="btn btn-primary w-full py-3 text-base">🔓 Secure Sign In</button>
+        <div><label class="lbl">Email</label><input type="email" id="auth-email" class="inp" value="sqna7676@gmail.com"></div>
+        <div><label class="lbl">Password</label><input type="password" id="auth-password" class="inp" placeholder="Enter password"></div>
+        <button onclick="handleLogin()" class="btn btn-primary w-full py-3">🔓 Sign In</button>
         <p id="auth-error" class="text-red-600 text-xs font-bold text-center hidden"></p>
       </div>
-      <p class="text-[10px] text-slate-400 mt-6">🔒 Protected by Firebase Authentication</p>
     </div>
   </div>
 </div>
 
 <!-- MAIN APP -->
 <div id="main-dashboard" class="hidden flex min-h-screen">
-  
-  <!-- SIDEBAR -->
   <aside id="sidebar" class="sidebar w-64 flex flex-col sticky top-0 h-screen">
     <div class="p-4 border-b border-emerald-700/50">
       <div class="flex items-center gap-3">
         <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-2xl shadow-lg">🏫</div>
-        <div>
-          <h1 class="text-sm font-extrabold text-white leading-tight">GGPS Jheran Wali</h1>
-          <p class="text-[9px] text-emerald-200">EMIS: 34210690</p>
-          <p class="text-[8px] text-emerald-300">Gujrat, Punjab</p>
-        </div>
+        <div><h1 class="text-sm font-extrabold text-white">GGPS Jheran Wali</h1><p class="text-[9px] text-emerald-200">EMIS: 34210690</p></div>
       </div>
     </div>
     <nav class="flex-1 overflow-y-auto p-3 space-y-1">
       <div onclick="switchTab('dashboard')" class="sidebar-link active" data-tab="dashboard">📊 Dashboard</div>
       <div onclick="switchTab('students')" class="sidebar-link" data-tab="students">👨‍🎓 Students</div>
-      <div onclick="switchTab('attendance')" class="sidebar-link" data-tab="attendance">📷 Attendance</div>
+      <div onclick="switchTab('attendance')" class="sidebar-link" data-tab="attendance">📷 Face Attendance</div>
       <div onclick="switchTab('teachers')" class="sidebar-link" data-tab="teachers">👩‍🏫 Teachers</div>
       <div onclick="switchTab('register')" class="sidebar-link" data-tab="register">📚 Class Register</div>
       <div onclick="switchTab('messages')" class="sidebar-link" data-tab="messages">📢 WhatsApp</div>
       <div onclick="switchTab('reports')" class="sidebar-link" data-tab="reports">📑 Reports</div>
       <div onclick="switchTab('backup')" class="sidebar-link" data-tab="backup">💾 Backup</div>
-      <div onclick="switchTab('settings')" class="sidebar-link" data-tab="settings">⚙️ Settings</div>
     </nav>
     <div class="p-3 border-t border-emerald-700/50">
-      <div class="text-[10px] text-emerald-200 mb-2 px-2">Signed in as:</div>
       <div id="user-email" class="text-xs text-white font-semibold px-2 mb-2 truncate"></div>
       <button onclick="handleLogout()" class="btn btn-danger w-full text-xs">🔒 Logout</button>
     </div>
   </aside>
 
-  <!-- MAIN CONTENT -->
   <main class="flex-1 flex flex-col min-w-0 bg-slate-50">
     <header class="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm">
       <div class="flex items-center gap-3">
         <button onclick="document.getElementById('sidebar').classList.toggle('open')" class="md:hidden btn btn-ghost p-2">☰</button>
         <h2 id="page-title" class="text-lg font-extrabold text-slate-800">Dashboard</h2>
       </div>
-      <div class="flex items-center gap-3">
-        <span id="current-date" class="text-xs font-semibold text-slate-600 hidden sm:block"></span>
-      </div>
+      <div id="model-status" class="badge bg-amber-100 text-amber-800 cursor-pointer" onclick="loadFaceModels()">⏳ AI Loading</div>
     </header>
 
     <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
@@ -128,83 +112,62 @@ table.data tr:hover td{background:#f0fdf4}
           <h2 class="text-xl font-extrabold urdu text-emerald-100">خوش آمدید — گورنمنٹ گرلز پرائمری سکول جھیورانوالی</h2>
           <p class="text-sm text-emerald-200 mt-2">Principal: <b>Shamsa Kanwal</b> (M.A, M.Ed.) • Date: <span id="dash-date" class="font-bold text-amber-300"></span></p>
         </div>
-
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="stat-card" style="border-left-color:#059669">
-            <p class="lbl text-emerald-700">Total Students</p>
-            <p id="stat-total" class="text-3xl font-extrabold text-slate-900">0</p>
-            <p class="text-[10px] text-slate-400 mt-1">Active Enrollments</p>
-          </div>
-          <div class="stat-card" style="border-left-color:#2563eb">
-            <p class="lbl text-blue-700">Present Today</p>
-            <p id="stat-present" class="text-3xl font-extrabold text-slate-900">0</p>
-            <p class="text-[10px] text-slate-400 mt-1">In Attendance</p>
-          </div>
-          <div class="stat-card" style="border-left-color:#ef4444">
-            <p class="lbl text-red-700">Absent Today</p>
-            <p id="stat-absent" class="text-3xl font-extrabold text-slate-900">0</p>
-            <p class="text-[10px] text-slate-400 mt-1">Need Follow-up</p>
-          </div>
-          <div class="stat-card" style="border-left-color:#d4af37">
-            <p class="lbl text-amber-700">Teachers</p>
-            <p id="stat-teachers" class="text-3xl font-extrabold text-slate-900">0/0</p>
-            <p class="text-[10px] text-slate-400 mt-1">Staff Attendance</p>
-          </div>
+          <div class="stat-card" style="border-left-color:#059669"><p class="lbl text-emerald-700">Total Students</p><p id="stat-total" class="text-3xl font-extrabold">0</p></div>
+          <div class="stat-card" style="border-left-color:#2563eb"><p class="lbl text-blue-700">Present Today</p><p id="stat-present" class="text-3xl font-extrabold">0</p></div>
+          <div class="stat-card" style="border-left-color:#ef4444"><p class="lbl text-red-700">Absent Today</p><p id="stat-absent" class="text-3xl font-extrabold">0</p></div>
+          <div class="stat-card" style="border-left-color:#d4af37"><p class="lbl text-amber-700">Teachers</p><p id="stat-teachers" class="text-3xl font-extrabold">0/0</p></div>
         </div>
-
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="card p-5">
-            <h3 class="text-sm font-extrabold text-slate-800 mb-4">📊 Class-wise Strength</h3>
-            <div class="chart-container"><canvas id="chart-class"></canvas></div>
-          </div>
-          <div class="card p-5">
-            <h3 class="text-sm font-extrabold text-slate-800 mb-4">🥧 Today's Attendance</h3>
-            <div class="chart-container"><canvas id="chart-attendance"></canvas></div>
-          </div>
-        </div>
-
-        <div class="card p-5">
-          <h3 class="text-sm font-extrabold text-slate-800 mb-4">⚡ Quick Actions</h3>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <button onclick="switchTab('attendance')" class="btn btn-primary text-xs py-4">📷 Take Attendance</button>
-            <button onclick="switchTab('students')" class="btn btn-blue text-xs py-4">➕ Add Student</button>
-            <button onclick="switchTab('messages')" class="btn btn-wa text-xs py-4">📢 Send Alerts</button>
-            <button onclick="switchTab('reports')" class="btn btn-gold text-xs py-4">📑 Reports</button>
-          </div>
+          <div class="card p-5"><h3 class="text-sm font-extrabold mb-4">📊 Class-wise Strength</h3><div style="height:300px"><canvas id="chart-class"></canvas></div></div>
+          <div class="card p-5"><h3 class="text-sm font-extrabold mb-4">🥧 Today's Attendance</h3><div style="height:300px"><canvas id="chart-attendance"></canvas></div></div>
         </div>
       </section>
 
       <!-- STUDENTS -->
       <section id="content-students" class="hidden space-y-4">
         <div class="flex flex-wrap justify-between items-center gap-3">
-          <input type="text" id="student-search" placeholder="🔍 Search by name, ID, or father..." class="inp max-w-md" oninput="renderStudents()">
+          <input type="text" id="student-search" placeholder="🔍 Search..." class="inp max-w-md" oninput="renderStudents()">
           <button onclick="openStudentModal()" class="btn btn-primary">➕ Add New Student</button>
         </div>
-        <div class="card overflow-hidden">
-          <div class="overflow-x-auto">
-            <table class="data">
-              <thead><tr><th>ID</th><th>Name</th><th>Father</th><th>Class</th><th>Contact</th><th>Status</th><th>Actions</th></tr></thead>
-              <tbody id="students-table-body"></tbody>
-            </table>
-          </div>
-        </div>
+        <div class="card overflow-hidden"><div class="overflow-x-auto">
+          <table class="data"><thead><tr><th>ID</th><th>Name</th><th>Father</th><th>Class</th><th>Face</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="students-table-body"></tbody></table>
+        </div></div>
       </section>
 
       <!-- ATTENDANCE -->
       <section id="content-attendance" class="hidden space-y-4">
-        <div class="card p-5">
-          <div class="flex justify-between items-center mb-4">
-            <h3 class="text-sm font-extrabold text-slate-800">📅 Today's Attendance (<span id="att-date-display"></span>)</h3>
-            <button onclick="markAllPresent()" class="btn btn-primary text-xs">✓ Mark All Present</button>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="card p-5">
+            <h3 class="text-sm font-extrabold mb-3">📷 Face Recognition Camera</h3>
+            <div class="camera-box mb-3">
+              <video id="att-video" autoplay muted playsinline></video>
+              <canvas id="att-canvas"></canvas>
+              <div id="camera-placeholder" class="absolute inset-0 flex items-center justify-center text-white bg-slate-900">
+                <div class="text-center"><div class="text-5xl mb-2">📷</div><p class="text-sm font-bold">Camera Off</p></div>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="startFaceAttendance()" id="start-cam-btn" class="btn btn-primary flex-1 text-xs">▶ Start Camera</button>
+              <button onclick="stopFaceAttendance()" id="stop-cam-btn" class="btn btn-danger flex-1 text-xs hidden">⏹ Stop</button>
+            </div>
+            <p id="att-status" class="text-xs font-bold text-center text-slate-500 mt-3">💡 Click "Start Camera" to begin face recognition</p>
           </div>
-          <div id="today-attendance-list" class="space-y-2 max-h-[600px] overflow-y-auto"></div>
+          <div class="card p-5">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-sm font-extrabold">📅 Today (<span id="att-date-display"></span>)</h3>
+              <button onclick="markAllPresent()" class="btn btn-primary text-xs">✓ Mark All Present</button>
+            </div>
+            <div id="today-attendance-list" class="space-y-2 max-h-[500px] overflow-y-auto"></div>
+          </div>
         </div>
       </section>
 
       <!-- TEACHERS -->
       <section id="content-teachers" class="hidden space-y-4">
         <div class="flex justify-between items-center">
-          <h3 class="text-sm font-extrabold text-slate-800">👩‍🏫 Teaching Staff</h3>
+          <h3 class="text-sm font-extrabold">👩‍🏫 Teaching Staff</h3>
           <button onclick="openTeacherModal()" class="btn btn-primary text-xs">➕ Add Teacher</button>
         </div>
         <div id="teachers-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
@@ -214,40 +177,21 @@ table.data tr:hover td{background:#f0fdf4}
       <section id="content-register" class="hidden space-y-4">
         <div class="card p-5 bg-blue-50 border-2 border-blue-200">
           <h3 class="text-sm font-extrabold text-blue-900 mb-4">📊 Class Strength Verification</h3>
-          <div class="overflow-x-auto">
-            <table class="data">
-              <thead><tr><th>Class</th><th>Expected</th><th>Actual</th><th>Difference</th><th>Status</th></tr></thead>
-              <tbody id="class-strength-body"></tbody>
-            </table>
-          </div>
+          <div class="overflow-x-auto"><table class="data"><thead><tr><th>Class</th><th>Expected</th><th>Actual</th><th>Difference</th><th>Status</th></tr></thead><tbody id="class-strength-body"></tbody></table></div>
         </div>
       </section>
 
       <!-- MESSAGES -->
       <section id="content-messages" class="hidden space-y-4">
         <div class="card p-6 border-t-4 border-[#25D366]">
-          <h3 class="text-sm font-extrabold text-slate-900 mb-1">📢 WhatsApp Message Center</h3>
-          <p class="text-xs text-slate-500 mb-4">Send messages to parents via WhatsApp</p>
+          <h3 class="text-sm font-extrabold mb-1">📢 WhatsApp Message Center</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div><label class="lbl">Message Template</label>
-              <select id="msg-type" class="inp" onchange="applyTemplate()">
-                <option value="custom">Custom Message</option>
-                <option value="absent">❤️ Absence Warning</option>
-                <option value="present">💖 Present Alert</option>
-                <option value="meeting">👥 Meeting Notice</option>
-              </select>
-            </div>
-            <div><label class="lbl">Recipients</label>
-              <select id="msg-audience" class="inp">
-                <option value="absent_today">Absent Today</option>
-                <option value="present_today">Present Today</option>
-                <option value="all_active">All Active Students</option>
-              </select>
-            </div>
+            <div><label class="lbl">Template</label><select id="msg-type" class="inp" onchange="applyTemplate()"><option value="custom">Custom</option><option value="absent">❤️ Absence</option><option value="present">💖 Present</option></select></div>
+            <div><label class="lbl">Recipients</label><select id="msg-audience" class="inp"><option value="absent_today">Absent Today</option><option value="present_today">Present Today</option><option value="all_active">All Active</option></select></div>
           </div>
-          <label class="lbl">Message (Use {name}, {class}, {date}, {days})</label>
+          <label class="lbl">Message (Use {name}, {class}, {date})</label>
           <textarea id="msg-text" class="inp mb-4" rows="5"></textarea>
-          <button onclick="startMessageQueue()" class="btn btn-wa w-full py-3 text-sm font-bold">📤 Prepare WhatsApp Queue</button>
+          <button onclick="startMessageQueue()" class="btn btn-wa w-full py-3">📤 Prepare Queue</button>
         </div>
       </section>
 
@@ -255,7 +199,7 @@ table.data tr:hover td{background:#f0fdf4}
       <section id="content-reports" class="hidden space-y-4">
         <div class="card p-5">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="text-sm font-extrabold text-slate-900">📑 Daily Register</h3>
+            <h3 class="text-sm font-extrabold">📑 Daily Register</h3>
             <button onclick="generateDailyPDF()" class="btn btn-danger text-xs">📄 Download PDF</button>
           </div>
           <div id="report-content" class="overflow-x-auto"></div>
@@ -265,31 +209,8 @@ table.data tr:hover td{background:#f0fdf4}
       <!-- BACKUP -->
       <section id="content-backup" class="hidden space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="card p-6 border-t-4 border-emerald-500">
-            <h3 class="text-sm font-extrabold text-slate-900 mb-2">💾 Create Backup</h3>
-            <p class="text-xs text-slate-500 mb-4">Download complete JSON backup</p>
-            <button onclick="createBackup()" class="btn btn-primary w-full py-3">⬇️ Download Backup</button>
-          </div>
-          <div class="card p-6 border-t-4 border-red-500">
-            <h3 class="text-sm font-extrabold text-slate-900 mb-2">⚠️ Restore Backup</h3>
-            <p class="text-xs text-slate-500 mb-4">Upload previously saved backup</p>
-            <input type="file" id="restore-file" accept=".json" class="inp mb-3 text-xs">
-            <button onclick="handleRestore()" class="btn btn-danger w-full py-3">⬆️ Restore Data</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- SETTINGS -->
-      <section id="content-settings" class="hidden space-y-4">
-        <div class="card p-6 max-w-2xl mx-auto">
-          <h3 class="text-sm font-extrabold text-slate-900 mb-4 text-center">⚙️ School Settings</h3>
-          <div class="space-y-3">
-            <div><label class="lbl">School Name</label><input type="text" id="set-school" class="inp" value="Government Girls Primary School Jheran Wali"></div>
-            <div><label class="lbl">Principal Name</label><input type="text" id="set-principal" class="inp" value="Shamsa Kanwal"></div>
-            <div><label class="lbl">EMIS Code</label><input type="text" id="set-emis" class="inp" value="34210690" readonly></div>
-            <div><label class="lbl">Contact Number</label><input type="tel" id="set-contact" class="inp" placeholder="03001234567"></div>
-          </div>
-          <button onclick="saveSettings()" class="btn btn-primary w-full mt-4">💾 Save Settings</button>
+          <div class="card p-6 border-t-4 border-emerald-500"><h3 class="text-sm font-extrabold mb-2">💾 Create Backup</h3><button onclick="createBackup()" class="btn btn-primary w-full py-3">⬇️ Download Backup</button></div>
+          <div class="card p-6 border-t-4 border-red-500"><h3 class="text-sm font-extrabold mb-2">⚠️ Restore Backup</h3><input type="file" id="restore-file" accept=".json" class="inp mb-3 text-xs"><button onclick="handleRestore()" class="btn btn-danger w-full py-3">⬆️ Restore</button></div>
         </div>
       </section>
     </div>
@@ -299,7 +220,7 @@ table.data tr:hover td{background:#f0fdf4}
 <!-- STUDENT MODAL -->
 <div id="student-modal" class="modal-overlay hidden">
   <div class="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
-    <h3 class="text-lg font-extrabold text-slate-900 mb-4" id="student-modal-title">Add New Student</h3>
+    <h3 class="text-lg font-extrabold mb-4" id="student-modal-title">Add New Student</h3>
     <input type="hidden" id="edit-student-id">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
       <div><label class="lbl">Admission ID</label><input type="text" id="s-adm-id" class="inp bg-slate-50" readonly></div>
@@ -308,20 +229,12 @@ table.data tr:hover td{background:#f0fdf4}
       <div><label class="lbl urdu">Student Name (Urdu)</label><input type="text" id="s-name-ur" class="inp urdu"></div>
       <div><label class="lbl">Father's Name</label><input type="text" id="s-father-en" class="inp"></div>
       <div><label class="lbl urdu">Father's Name (Urdu)</label><input type="text" id="s-father-ur" class="inp urdu"></div>
-      <div><label class="lbl">Class</label>
-        <select id="s-class" class="inp"><option>Nursery</option><option>Prep</option><option>One</option><option>Two</option><option>Three</option><option>Four</option><option>Five</option></select>
-      </div>
-      <div><label class="lbl">Section</label>
-        <select id="s-section" class="inp"><option>A</option><option>B</option><option>C</option></select>
-      </div>
-      <div><label class="lbl">Gender</label>
-        <select id="s-gender" class="inp"><option value="girl">Girl</option><option value="boy">Boy</option></select>
-      </div>
+      <div><label class="lbl">Class</label><select id="s-class" class="inp"><option>Nursery</option><option>Prep</option><option>One</option><option>Two</option><option>Three</option><option>Four</option><option>Five</option></select></div>
+      <div><label class="lbl">Section</label><select id="s-section" class="inp"><option>A</option><option>B</option><option>C</option></select></div>
+      <div><label class="lbl">Gender</label><select id="s-gender" class="inp"><option value="girl">Girl</option><option value="boy">Boy</option></select></div>
       <div><label class="lbl">Parent Contact</label><input type="tel" id="s-phone" class="inp" placeholder="03001234567"></div>
       <div><label class="lbl">B-Form Number</label><input type="text" id="s-bform" class="inp"></div>
-      <div><label class="lbl">Status</label>
-        <select id="s-status" class="inp"><option value="active">Active</option><option value="withdrawn">Withdrawn</option><option value="transferred">Transferred</option></select>
-      </div>
+      <div><label class="lbl">Status</label><select id="s-status" class="inp"><option value="active">Active</option><option value="withdrawn">Withdrawn</option><option value="transferred">Transferred</option></select></div>
     </div>
     <div class="flex gap-2 mt-5">
       <button onclick="saveStudent()" class="btn btn-primary flex-1">💾 Save Record</button>
@@ -330,15 +243,36 @@ table.data tr:hover td{background:#f0fdf4}
   </div>
 </div>
 
+<!-- FACE ENROLLMENT MODAL -->
+<div id="face-modal" class="modal-overlay hidden">
+  <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
+    <h3 class="text-lg font-extrabold text-center mb-1">📸 Face Enrollment</h3>
+    <p class="text-xs text-slate-500 text-center mb-3" id="face-student-name">Student Name</p>
+    <div class="camera-box mb-3">
+      <video id="face-video" autoplay muted playsinline></video>
+      <canvas id="face-canvas"></canvas>
+    </div>
+    <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-center mb-3">
+      <p class="text-[11px] font-bold text-emerald-800">Auto-Capture: 3 photos required</p>
+      <p id="face-count" class="text-2xl font-extrabold text-emerald-700">0 / 3</p>
+    </div>
+    <div id="face-samples" class="flex gap-2 justify-center mb-3"></div>
+    <div class="flex gap-2 mb-2">
+      <button onclick="captureFace()" class="btn btn-blue flex-1 text-xs">📸 Capture</button>
+      <button onclick="closeFaceModal()" class="btn btn-ghost flex-1 text-xs">✖ Close</button>
+    </div>
+    <button onclick="saveFaceData()" class="btn btn-primary w-full text-xs">💾 Save Face Data</button>
+  </div>
+</div>
+
 <!-- TEACHER MODAL -->
 <div id="teacher-modal" class="modal-overlay hidden">
   <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
-    <h3 class="text-lg font-extrabold text-slate-900 mb-4">Add Teacher</h3>
+    <h3 class="text-lg font-extrabold mb-4">Add Teacher</h3>
     <div class="space-y-3">
       <input type="text" id="t-name" class="inp" placeholder="Teacher Name">
-      <input type="text" id="t-desig" class="inp" placeholder="Designation (e.g., Head Teacher)">
+      <input type="text" id="t-desig" class="inp" placeholder="Designation">
       <input type="tel" id="t-phone" class="inp" placeholder="Mobile Number">
-      <input type="text" id="t-qual" class="inp" placeholder="Qualification">
     </div>
     <div class="flex gap-2 mt-5">
       <button onclick="saveTeacher()" class="btn btn-primary flex-1">Save</button>
@@ -350,14 +284,14 @@ table.data tr:hover td{background:#f0fdf4}
 <!-- WHATSAPP MODAL -->
 <div id="wa-modal" class="modal-overlay hidden">
   <div class="bg-white rounded-2xl p-6 w-full max-w-md text-center shadow-2xl">
-    <h3 class="text-lg font-extrabold text-slate-900 mb-1">📤 WhatsApp Queue</h3>
+    <h3 class="text-lg font-extrabold mb-1">📤 WhatsApp Queue</h3>
     <p id="wa-progress" class="text-xs font-bold text-slate-500 mb-4"></p>
     <div id="wa-current" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 text-left">
       <p class="font-extrabold text-slate-900 text-sm" id="wa-student"></p>
       <p class="text-[11px] text-slate-600 mt-1" id="wa-parent"></p>
       <p class="text-[11px] text-slate-500 mt-2 whitespace-pre-line border-t border-red-100 pt-2" id="wa-preview"></p>
     </div>
-    <button onclick="sendNextWa()" id="wa-send-btn" class="btn btn-wa w-full mb-2 text-sm">Open WhatsApp & Send</button>
+    <button onclick="sendNextWa()" id="wa-send-btn" class="btn btn-wa w-full mb-2 text-sm">Open WhatsApp</button>
     <button onclick="closeWaModal()" class="btn btn-ghost w-full text-sm">✖ Close</button>
   </div>
 </div>
@@ -380,9 +314,11 @@ table.data tr:hover td{background:#f0fdf4}
   const db = getFirestore(app);
   const auth = getAuth(app);
 
-  window.appState = { students: [], teachers: [], attendance: {}, currentUser: null };
+  window.appState = { students: [], teachers: [], attendance: {}, currentUser: null, modelsLoaded: false };
   const CLASSES = ['Nursery','Prep','One','Two','Three','Four','Five'];
   let classChart = null, attChart = null;
+  let faceStream = null, faceLoopOn = false, faceSamples = [], currentFaceStudentId = null;
+  let attStream = null, attLoopOn = false, attCooldown = {};
 
   function getPakistanDate() { return new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Karachi' }); }
   function getPakistanTime() { return new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit' }); }
@@ -395,6 +331,10 @@ table.data tr:hover td{background:#f0fdf4}
     document.body.appendChild(t); setTimeout(() => t.remove(), 3500);
   }
 
+  function beep(f = 880, d = .15) {
+    try { const A = new (window.AudioContext || window.webkitAudioContext)(); const o = A.createOscillator(), g = A.createGain(); o.frequency.value = f; o.connect(g); g.connect(A.destination); g.gain.setValueAtTime(.12, A.currentTime); g.gain.exponentialRampToValueAtTime(.0001, A.currentTime + d); o.start(); o.stop(A.currentTime + d); } catch (e) {}
+  }
+
   async function logActivity(action, details) {
     try { await addDoc(collection(db, "activity_logs"), { action, details, userId: window.appState.currentUser?.email || 'system', timestamp: new Date().toISOString() }); } catch(e) {}
   }
@@ -405,14 +345,9 @@ table.data tr:hover td{background:#f0fdf4}
     const pass = document.getElementById('auth-password').value;
     const errEl = document.getElementById('auth-error');
     errEl.classList.add('hidden');
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-    } catch (e) {
-      errEl.textContent = "Invalid email or password. Please check Firebase Console.";
-      errEl.classList.remove('hidden');
-    }
+    try { await signInWithEmailAndPassword(auth, email, pass); } 
+    catch (e) { errEl.textContent = "Invalid email or password."; errEl.classList.remove('hidden'); }
   }
-
   window.handleLogout = async function() { await signOut(auth); }
 
   onAuthStateChanged(auth, (user) => {
@@ -433,7 +368,7 @@ table.data tr:hover td{background:#f0fdf4}
     updateDateTime();
     await loadStateFromCloud();
     renderDashboard();
-    showToast('✅ Database Synced Successfully');
+    showToast('✅ Database Synced');
   }
 
   async function loadStateFromCloud() {
@@ -460,7 +395,7 @@ table.data tr:hover td{background:#f0fdf4}
     document.querySelectorAll('.sidebar-link').forEach(b => b.classList.remove('active'));
     document.getElementById('content-' + tab).classList.remove('hidden');
     document.querySelector(`.sidebar-link[data-tab="${tab}"]`)?.classList.add('active');
-    const titles = { dashboard: 'Dashboard', students: 'Student Management', attendance: 'Attendance', teachers: 'Teachers', register: 'Class Register', messages: 'WhatsApp Messages', reports: 'Reports', backup: 'Backup & Restore', settings: 'Settings' };
+    const titles = { dashboard: 'Dashboard', students: 'Students', attendance: 'Face Attendance', teachers: 'Teachers', register: 'Class Register', messages: 'WhatsApp', reports: 'Reports', backup: 'Backup' };
     document.getElementById('page-title').textContent = titles[tab] || 'Dashboard';
     document.getElementById('sidebar').classList.remove('open');
     if (tab === 'dashboard') renderDashboard();
@@ -473,7 +408,6 @@ table.data tr:hover td{background:#f0fdf4}
 
   function updateDateTime() {
     const d = new Date().toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Karachi' });
-    document.getElementById('current-date').textContent = d;
     document.getElementById('dash-date').textContent = d;
     setTimeout(updateDateTime, 1000);
   }
@@ -526,23 +460,23 @@ table.data tr:hover td{background:#f0fdf4}
       name: document.getElementById('s-name-en').value.trim() || document.getElementById('s-name-ur').value.trim(),
       father: document.getElementById('s-father-en').value.trim() || document.getElementById('s-father-ur').value.trim()
     };
-    if (!data.nameEn && !data.nameUr) return showToast('✗ Name is required', true);
+    if (!data.nameEn && !data.nameUr) return showToast('✗ Name required', true);
     try {
       if (id) {
         await updateDoc(doc(db, "students", id), data);
         await logActivity("Student Updated", `Updated ${data.nameEn}`);
       } else {
-        const ref = await addDoc(collection(db, "students"), { ...data, createdAt: new Date().toISOString() });
+        const ref = await addDoc(collection(db, "students"), { ...data, faceSamples: [], createdAt: new Date().toISOString() });
         data.id = ref.id;
         window.appState.students.push(data);
-        await logActivity("Student Added", `Added ${data.nameEn} (ID: ${data.admissionId})`);
+        await logActivity("Student Added", `Added ${data.nameEn}`);
       }
       closeStudentModal();
       await loadStateFromCloud();
-      showToast('✓ Student record saved');
+      showToast('✓ Student saved');
       renderStudents();
       renderDashboard();
-    } catch (e) { showToast('✗ Save failed: ' + e.message, true); }
+    } catch (e) { showToast('✗ Save failed', true); }
   }
 
   window.renderStudents = function() {
@@ -554,89 +488,201 @@ table.data tr:hover td{background:#f0fdf4}
       return (s.nameEn || '').toLowerCase().includes(search) || (s.fatherEn || '').toLowerCase().includes(search) || (s.admissionId || '').toLowerCase().includes(search);
     });
     if (filtered.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">No students found. Click "Add New Student" to begin.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">No students found.</td></tr>';
       return;
     }
     tbody.innerHTML = filtered.map(s => {
-      const statusColor = s.status === 'active' ? 'bg-emerald-100 text-emerald-800' : (s.status === 'withdrawn' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800');
+      const hasFace = s.faceSamples && s.faceSamples.length > 0;
+      const faceBadge = hasFace ? '<span class="badge bg-emerald-100 text-emerald-800">✓ Face</span>' : '<span class="badge bg-amber-100 text-amber-800">⚠ No Face</span>';
       return `<tr>
         <td class="font-mono text-[10px]">${s.admissionId || '-'}</td>
         <td class="font-bold">${s.nameEn || '-'}<br><span class="text-[10px] font-normal text-slate-500 urdu">${s.nameUr || ''}</span></td>
-        <td>${s.fatherEn || '-'}<br><span class="text-[10px] text-slate-500 urdu">${s.fatherUr || ''}</span></td>
+        <td>${s.fatherEn || '-'}</td>
         <td>${s.class || '-'} (${s.section || 'A'})</td>
-        <td class="text-[10px]">${s.phone || '-'}</td>
-        <td><span class="badge ${statusColor}">${(s.status || 'active').toUpperCase()}</span></td>
+        <td>${faceBadge}</td>
+        <td><span class="badge ${s.status === 'active' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">${(s.status || 'active').toUpperCase()}</span></td>
         <td>
-          <div class="flex gap-1">
+          <div class="flex gap-1 flex-wrap">
             <button onclick="openStudentModal('${s.id}')" class="btn btn-ghost text-[10px] py-1 px-2">Edit</button>
-            <button onclick="changeStudentStatus('${s.id}', 'withdrawn')" class="btn btn-danger text-[10px] py-1 px-2">Withdraw</button>
+            <button onclick="openFaceEnrollment('${s.id}')" class="btn btn-blue text-[10px] py-1 px-2">📸 Face</button>
           </div>
         </td>
       </tr>`;
     }).join('');
   }
 
-  window.changeStudentStatus = async function(id, status) {
-    if (!confirm(`Mark this student as ${status}?`)) return;
-    await updateDoc(doc(db, "students", id), { status });
-    await logActivity("Student Status Changed", `Marked as ${status}`);
-    await loadStateFromCloud();
-    renderStudents();
-    renderDashboard();
-    showToast(`✓ Student marked as ${status}`);
+  // FACE ENROLLMENT
+  window.openFaceEnrollment = async function(id) {
+    if (!window.appState.modelsLoaded) return showToast('⏳ AI Models loading...', true);
+    currentFaceStudentId = id;
+    faceSamples = [];
+    const s = window.appState.students.find(x => x.id === id);
+    document.getElementById('face-student-name').textContent = s.nameEn;
+    document.getElementById('face-count').textContent = '0 / 3';
+    document.getElementById('face-samples').innerHTML = '';
+    document.getElementById('face-modal').classList.remove('hidden');
+    
+    try {
+      faceStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 } } });
+      const v = document.getElementById('face-video');
+      v.srcObject = faceStream;
+      await v.play();
+      faceLoopOn = true;
+      faceLoop();
+    } catch (e) { showToast('✗ Camera access denied', true); closeFaceModal(); }
   }
 
-  // TEACHERS
-  window.openTeacherModal = function() { document.getElementById('teacher-modal').classList.remove('hidden'); }
-  window.saveTeacher = async function() {
-    const name = document.getElementById('t-name').value.trim();
-    if (!name) return showToast('✗ Name required', true);
-    const data = {
-      name, designation: document.getElementById('t-desig').value.trim() || 'Teacher',
-      phone: normalizePhone(document.getElementById('t-phone').value),
-      qualification: document.getElementById('t-qual').value.trim(),
-      status: 'present', joiningDate: getPakistanDate()
-    };
+  async function faceLoop() {
+    if (!faceLoopOn) return;
+    const v = document.getElementById('face-video');
+    if (v.readyState >= 2 && faceSamples.length < 3) {
+      try {
+        const detection = await faceapi.detectSingleFace(v, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 }));
+        if (detection) {
+          const canvas = document.getElementById('face-canvas');
+          if (v.videoWidth && canvas.width !== v.videoWidth) { canvas.width = v.videoWidth; canvas.height = v.videoHeight; }
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          const box = detection.box;
+          ctx.strokeStyle = '#059669';
+          ctx.lineWidth = 4;
+          ctx.strokeRect(box.x, box.y, box.width, box.height);
+        }
+      } catch (e) {}
+    }
+    setTimeout(faceLoop, 100);
+  }
+
+  window.captureFace = async function() {
+    const v = document.getElementById('face-video');
     try {
-      await addDoc(collection(db, "teachers"), data);
-      document.getElementById('teacher-modal').classList.add('hidden');
-      ['t-name','t-desig','t-phone','t-qual'].forEach(x => document.getElementById(x).value = '');
-      await loadStateFromCloud();
-      renderTeachers();
-      renderDashboard();
-      showToast('✓ Teacher added');
-      await logActivity("Teacher Added", `Added ${name}`);
+      const detection = await faceapi.detectSingleFace(v, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 })).withFaceLandmarks().withFaceDescriptor();
+      if (!detection) return showToast('✗ No face detected', true);
+      const box = detection.detection.box;
+      const thumb = document.createElement('canvas');
+      thumb.width = 80; thumb.height = 80;
+      thumb.getContext('2d').drawImage(v, Math.max(0, box.x), Math.max(0, box.y), box.width, box.height, 0, 0, 80, 80);
+      faceSamples.push({ descriptor: Array.from(detection.descriptor), thumbnail: thumb.toDataURL('image/jpeg', 0.7) });
+      document.getElementById('face-count').textContent = faceSamples.length + ' / 3';
+      document.getElementById('face-samples').innerHTML = faceSamples.map(x => `<img src="${x.thumbnail}" style="width:60px;height:60px;border-radius:8px;border:2px solid #059669">`).join('');
+      beep(740, .1);
+      if (faceSamples.length === 3) showToast('✓ 3/3 Captured!');
+    } catch (e) { showToast('✗ Capture failed', true); }
+  }
+
+  window.saveFaceData = async function() {
+    if (faceSamples.length === 0) return showToast('✗ Capture at least 1 photo', true);
+    try {
+      await updateDoc(doc(db, "students", currentFaceStudentId), { faceSamples: faceSamples });
+      const s = window.appState.students.find(x => x.id === currentFaceStudentId);
+      s.faceSamples = faceSamples;
+      closeFaceModal();
+      showToast('✓ Face enrolled for ' + s.nameEn);
+      await logActivity("Face Enrolled", `Enrolled face for ${s.nameEn}`);
+      renderStudents();
     } catch (e) { showToast('✗ Save failed', true); }
   }
 
-  window.toggleTeacher = async function(id) {
-    const t = window.appState.teachers.find(x => x.id === id);
-    const order = ['present', 'absent', 'leave'];
-    const newStatus = order[(order.indexOf(t.status) + 1) % 3];
-    await updateDoc(doc(db, "teachers", id), { status: newStatus });
-    t.status = newStatus;
-    renderTeachers(); renderDashboard();
+  window.closeFaceModal = function() {
+    faceLoopOn = false;
+    if (faceStream) { faceStream.getTracks().forEach(t => t.stop()); faceStream = null; }
+    document.getElementById('face-video').srcObject = null;
+    document.getElementById('face-modal').classList.add('hidden');
   }
 
-  window.renderTeachers = function() {
-    const c = document.getElementById('teachers-list');
-    const M = { present: ['✓ Present', 'btn-primary', '#10b981'], absent: ['✗ Absent', 'btn-danger', '#ef4444'], leave: ['🌙 On Leave', 'btn-gold', '#d4af37'] };
-    c.innerHTML = window.appState.teachers.map(t => {
-      const m = M[t.status] || M.present;
-      return `<div class="card p-4" style="border-top:4px solid ${m[2]}">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-xl text-white font-bold">${t.name.charAt(0)}</div>
-          <div>
-            <p class="font-extrabold text-slate-900 text-sm">${t.name}</p>
-            <p class="text-[10px] font-bold text-emerald-700">${t.designation || 'Teacher'}</p>
-          </div>
-        </div>
-        <button onclick="toggleTeacher('${t.id}')" class="btn flex-1 ${m[1]}" style="padding:8px;font-size:11px">${m[0]}</button>
-      </div>`;
-    }).join('') || '<p class="text-slate-400 text-center col-span-full py-8">No teachers registered yet.</p>';
+  // FACE ATTENDANCE
+  window.startFaceAttendance = async function() {
+    if (!window.appState.modelsLoaded) return showToast('⏳ AI Models loading...', true);
+    if (window.appState.students.filter(s => s.status === 'active' && s.faceSamples && s.faceSamples.length > 0).length === 0) {
+      return showToast('✗ No students with face enrolled', true);
+    }
+    try {
+      const v = document.getElementById('att-video');
+      attStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 } } });
+      v.srcObject = attStream;
+      await v.play();
+      const canvas = document.getElementById('att-canvas');
+      v.onloadedmetadata = () => { canvas.width = v.videoWidth; canvas.height = v.videoHeight; };
+      document.getElementById('camera-placeholder').classList.add('hidden');
+      document.getElementById('start-cam-btn').classList.add('hidden');
+      document.getElementById('stop-cam-btn').classList.remove('hidden');
+      attLoopOn = true;
+      attLoop();
+      showToast('✓ Camera started');
+    } catch (e) { showToast('✗ Camera access denied', true); }
   }
 
-  // ATTENDANCE
+  async function attLoop() {
+    if (!attLoopOn) return;
+    const v = document.getElementById('att-video');
+    const canvas = document.getElementById('att-canvas');
+    const ctx = canvas.getContext('2d');
+    const statusEl = document.getElementById('att-status');
+    
+    if (v.readyState >= 2) {
+      try {
+        const detection = await faceapi.detectSingleFace(v, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 })).withFaceLandmarks().withFaceDescriptor();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        if (detection) {
+          const descriptor = Array.from(detection.descriptor);
+          const match = findBestMatch(descriptor);
+          const box = detection.detection.box;
+          
+          ctx.strokeStyle = match ? '#059669' : '#ef4444';
+          ctx.lineWidth = 4;
+          ctx.strokeRect(box.x, box.y, box.width, box.height);
+          ctx.font = 'bold 16px Inter';
+          ctx.fillStyle = match ? '#059669' : '#ef4444';
+          ctx.fillText(match ? match.student.nameEn : 'Unknown', box.x, Math.max(20, box.y - 10));
+          
+          if (match) {
+            statusEl.innerHTML = `<span class="text-emerald-600 font-bold">✓ Recognized: ${match.student.nameEn}</span>`;
+            const now = Date.now();
+            if (!attCooldown[match.student.id] || now - attCooldown[match.student.id] > 5000) {
+              attCooldown[match.student.id] = now;
+              if (await markStudentAttendance(match.student.id, 'present')) {
+                beep(660, .12);
+                setTimeout(() => beep(990, .2), 130);
+                showToast('✓ ' + match.student.nameEn + ' marked PRESENT');
+              }
+            }
+          } else {
+            statusEl.innerHTML = '<span class="text-red-600 font-bold">✗ Unknown Face</span>';
+          }
+        } else {
+          statusEl.textContent = 'Scanning for faces...';
+        }
+      } catch (e) {}
+    }
+    setTimeout(attLoop, 400);
+  }
+
+  function findBestMatch(descriptor) {
+    let bestMatch = null;
+    let bestDistance = Infinity;
+    for (const s of window.appState.students) {
+      if (s.status !== 'active' || !s.faceSamples) continue;
+      for (const sample of s.faceSamples) {
+        const distance = faceapi.euclideanDistance(descriptor, sample.descriptor);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestMatch = { student: s, distance: distance };
+        }
+      }
+    }
+    return (bestMatch && bestMatch.distance <= 0.5) ? bestMatch : null;
+  }
+
+  window.stopFaceAttendance = function() {
+    attLoopOn = false;
+    if (attStream) { attStream.getTracks().forEach(t => t.stop()); attStream = null; }
+    document.getElementById('camera-placeholder').classList.remove('hidden');
+    document.getElementById('start-cam-btn').classList.remove('hidden');
+    document.getElementById('stop-cam-btn').classList.add('hidden');
+    document.getElementById('att-status').textContent = '💡 Click "Start Camera" to begin face recognition';
+  }
+
   window.markAllPresent = async function() {
     if(!confirm("Mark all active students as PRESENT?")) return;
     const t = getPakistanDate();
@@ -647,7 +693,7 @@ table.data tr:hover td{background:#f0fdf4}
     });
     await setDoc(doc(db, "attendance", t), updates, { merge: true });
     await loadStateFromCloud();
-    showToast('✓ All students marked present');
+    showToast('✓ All marked present');
   }
 
   window.markStudentAttendance = async function(studentId, status, timeStr) {
@@ -687,6 +733,47 @@ table.data tr:hover td{background:#f0fdf4}
     }).join('');
   }
 
+  // TEACHERS
+  window.openTeacherModal = function() { document.getElementById('teacher-modal').classList.remove('hidden'); }
+  window.saveTeacher = async function() {
+    const name = document.getElementById('t-name').value.trim();
+    if (!name) return showToast('✗ Name required', true);
+    const data = { name, designation: document.getElementById('t-desig').value.trim() || 'Teacher', phone: normalizePhone(document.getElementById('t-phone').value), status: 'present', joiningDate: getPakistanDate() };
+    try {
+      await addDoc(collection(db, "teachers"), data);
+      document.getElementById('teacher-modal').classList.add('hidden');
+      ['t-name','t-desig','t-phone'].forEach(x => document.getElementById(x).value = '');
+      await loadStateFromCloud();
+      renderTeachers();
+      renderDashboard();
+      showToast('✓ Teacher added');
+    } catch (e) { showToast('✗ Save failed', true); }
+  }
+
+  window.toggleTeacher = async function(id) {
+    const t = window.appState.teachers.find(x => x.id === id);
+    const order = ['present', 'absent', 'leave'];
+    const newStatus = order[(order.indexOf(t.status) + 1) % 3];
+    await updateDoc(doc(db, "teachers", id), { status: newStatus });
+    t.status = newStatus;
+    renderTeachers(); renderDashboard();
+  }
+
+  window.renderTeachers = function() {
+    const c = document.getElementById('teachers-list');
+    const M = { present: ['✓ Present', 'btn-primary', '#10b981'], absent: ['✗ Absent', 'btn-danger', '#ef4444'], leave: ['🌙 Leave', 'btn-gold', '#d4af37'] };
+    c.innerHTML = window.appState.teachers.map(t => {
+      const m = M[t.status] || M.present;
+      return `<div class="card p-4" style="border-top:4px solid ${m[2]}">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-xl text-white font-bold">${t.name.charAt(0)}</div>
+          <div><p class="font-extrabold text-slate-900 text-sm">${t.name}</p><p class="text-[10px] font-bold text-emerald-700">${t.designation || 'Teacher'}</p></div>
+        </div>
+        <button onclick="toggleTeacher('${t.id}')" class="btn flex-1 ${m[1]}" style="padding:8px;font-size:11px">${m[0]}</button>
+      </div>`;
+    }).join('') || '<p class="text-slate-400 text-center col-span-full py-8">No teachers yet.</p>';
+  }
+
   // CLASS REGISTER
   window.renderClassRegister = function() {
     const tbody = document.getElementById('class-strength-body');
@@ -696,9 +783,7 @@ table.data tr:hover td{background:#f0fdf4}
       const diff = expected - actual;
       const isLow = actual < expected;
       return `<tr class="${isLow ? 'bg-red-50' : ''}">
-        <td class="font-bold">${c}</td>
-        <td class="text-center">${expected}</td>
-        <td class="text-center font-bold">${actual}</td>
+        <td class="font-bold">${c}</td><td class="text-center">${expected}</td><td class="text-center font-bold">${actual}</td>
         <td class="text-center ${isLow ? 'text-red-600 font-bold' : 'text-emerald-600'}">${diff > 0 ? '-' + diff : 0}</td>
         <td class="text-center">${isLow ? '<span class="badge bg-red-100 text-red-800">Missing</span>' : '<span class="badge bg-emerald-100 text-emerald-800">OK</span>'}</td>
       </tr>`;
@@ -710,27 +795,23 @@ table.data tr:hover td{background:#f0fdf4}
     const t = document.getElementById('msg-type').value; 
     const box = document.getElementById('msg-text');
     const school = "GGPS Jheran Wali";
-    if (t === 'absent') box.value = `❤️ ${school} — WE MISS YOUR CHILD\n\nDear Parent,\nYour child {name}'s empty seat reminds us how much joy they bring. They have been absent for {days} days. Regular attendance is the secret to a bright future. Please send them to school! 🌸\n\n${school}\nEMIS: 34210690`;
-    else if (t === 'present') box.value = `💖 MashaAllah! ${school} — PRESENT ALERT\n\nDear Parent,\nAlhamdulillah! Your beloved child {name} (Class {class}) is present in school today (${date}). Every day of attendance is a step towards a bright future. Keep shining! 🌟\n\n${school}\nEMIS: 34210690`;
-    else if (t === 'meeting') box.value = `👥 ${school} — PARENT-TEACHER MEETING\n\nDear Parent,\nA meeting will be held on {date} at 9:00 AM. Your presence is their biggest motivation. We look forward to seeing you! 💝\n\n${school}\nEMIS: 34210690`;
+    if (t === 'absent') box.value = `❤️ ${school} — ABSENCE NOTICE\n\nDear Parent,\nYour child {name} has been absent today. Regular attendance is important for their future. Please ensure they attend school regularly.\n\n${school}\nEMIS: 34210690`;
+    else if (t === 'present') box.value = `💖 ${school} — PRESENT ALERT\n\nDear Parent,\nYour child {name} (Class {class}) is present today. Thank you for ensuring regular attendance!\n\n${school}\nEMIS: 34210690`;
     else box.value = "";
   }
 
   let waQueue = [], waIdx = 0;
   window.startMessageQueue = function() {
     const text = document.getElementById('msg-text').value.trim();
-    if (!text) return showToast('Please write a message first', true);
+    if (!text) return showToast('Write a message first', true);
     const aud = document.getElementById('msg-audience').value;
     let list = window.appState.students.filter(s => s.status === 'active' && s.phone);
     const today = getPakistanDate();
     const att = window.appState.attendance[today] || {};
     if (aud === 'absent_today') list = list.filter(s => !att[s.id] || att[s.id].status === 'absent');
     else if (aud === 'present_today') list = list.filter(s => att[s.id]?.status === 'present');
-    if (!list.length) return showToast('No recipients match this criteria', true);
-    waQueue = list.map(s => {
-      const days = 1;
-      return { phone: s.phone, label: s.nameEn, text: text.replace('{name}', s.nameEn).replace('{class}', s.class).replace('{date}', today).replace('{days}', days) };
-    });
+    if (!list.length) return showToast('No recipients', true);
+    waQueue = list.map(s => ({ phone: s.phone, label: s.nameEn, text: text.replace('{name}', s.nameEn).replace('{class}', s.class).replace('{date}', today) }));
     waIdx = 0; 
     document.getElementById('wa-modal').classList.remove('hidden'); 
     showWaCurrent();
@@ -738,13 +819,13 @@ table.data tr:hover td{background:#f0fdf4}
 
   function showWaCurrent() {
     if (waIdx >= waQueue.length) {
-      document.getElementById('wa-progress').textContent = waQueue.length + ' / ' + waQueue.length + ' ✓ COMPLETED';
-      document.getElementById('wa-current').innerHTML = '<p class="font-extrabold text-emerald-700 text-center py-4">🎉 All messages prepared!</p>';
+      document.getElementById('wa-progress').textContent = waQueue.length + ' / ' + waQueue.length + ' ✓ DONE';
+      document.getElementById('wa-current').innerHTML = '<p class="font-extrabold text-emerald-700 text-center py-4">🎉 All done!</p>';
       document.getElementById('wa-send-btn').classList.add('hidden'); return;
     }
     document.getElementById('wa-send-btn').classList.remove('hidden'); 
     const it = waQueue[waIdx];
-    document.getElementById('wa-progress').textContent = 'Progress: ' + (waIdx + 1) + ' of ' + waQueue.length;
+    document.getElementById('wa-progress').textContent = (waIdx + 1) + ' of ' + waQueue.length;
     document.getElementById('wa-student').textContent = '👤 ' + it.label;
     document.getElementById('wa-parent').textContent = '📱 ' + it.phone;
     document.getElementById('wa-preview').textContent = it.text;
@@ -761,7 +842,7 @@ table.data tr:hover td{background:#f0fdf4}
   window.renderDailyReport = function() {
     const t = getPakistanDate();
     const att = window.appState.attendance[t] || {};
-    let html = `<div style="padding:20px;background:#fff"><div style="display:flex;gap:15px;align-items:center;border-bottom:3px solid #064e3b;padding-bottom:15px;margin-bottom:15px"><div style="width:80px;height:80px;border-radius:50%;border:3px solid #d4af37;display:flex;align-items:center;justify-content:center;font-size:40px;background:#fff">🏫</div><div style="flex:1"><h3 style="margin:0;font-size:18px;font-weight:800;color:#064e3b">Government Girls Primary School Jheran Wali</h3><p style="margin:4px 0 0;font-size:12px;font-weight:600" class="urdu">گورنمنٹ گرلز پرائمری سکول جھیورانوالی</p><p style="margin:4px 0 0;font-size:11px;color:#64748b">EMIS Code: 34210690 • Tehsil & District: Gujrat • Punjab, Pakistan</p><p style="margin:4px 0 0;font-size:11px;color:#64748b">Principal: Shamsa Kanwal (M.A, M.Ed.) • Date: ${t}</p></div></div><table class="data"><thead><tr><th>Sr</th><th>Class</th><th>Total</th><th>Present</th><th>Absent</th><th>Leave</th></tr></thead><tbody>`;
+    let html = `<div style="padding:20px;background:#fff"><div style="display:flex;gap:15px;align-items:center;border-bottom:3px solid #064e3b;padding-bottom:15px;margin-bottom:15px"><div style="width:80px;height:80px;border-radius:50%;border:3px solid #d4af37;display:flex;align-items:center;justify-content:center;font-size:40px;background:#fff">🏫</div><div style="flex:1"><h3 style="margin:0;font-size:18px;font-weight:800;color:#064e3b">Government Girls Primary School Jheran Wali</h3><p style="margin:4px 0 0;font-size:12px;font-weight:600" class="urdu">گورنمنٹ گرلز پرائمری سکول جھیورانوالی</p><p style="margin:4px 0 0;font-size:11px;color:#64748b">EMIS: 34210690 • Gujrat, Punjab • Principal: Shamsa Kanwal</p><p style="margin:4px 0 0;font-size:11px;color:#64748b">Date: ${t}</p></div></div><table class="data"><thead><tr><th>Sr</th><th>Class</th><th>Total</th><th>Present</th><th>Absent</th><th>Leave</th></tr></thead><tbody>`;
     let gTotal = 0, gPresent = 0, gAbsent = 0, gLeave = 0;
     CLASSES.forEach((c, i) => {
       const inCl = window.appState.students.filter(s => s.class === c && s.status === 'active');
@@ -782,9 +863,8 @@ table.data tr:hover td{background:#f0fdf4}
       const { jsPDF } = window.jspdf; const pdf = new jsPDF('p', 'mm', 'a4');
       const pw = 210, ph = 297, m = 10; let iw = pw - 2 * m, ih = (c.height * iw) / c.width;
       pdf.addImage(c.toDataURL('image/png'), 'PNG', m, m, iw, ih);
-      pdf.save(`GGPS_Daily_Register_${getPakistanDate()}.pdf`); 
+      pdf.save(`GGPS_Register_${getPakistanDate()}.pdf`); 
       showToast('✓ PDF downloaded');
-      await logActivity("Report Generated", "Daily PDF Register downloaded");
     } catch (e) { showToast('✗ PDF failed', true); }
   }
 
@@ -801,42 +881,25 @@ table.data tr:hover td{background:#f0fdf4}
       const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = url; a.download = `GGPS_Full_Backup_${getPakistanDate()}.json`; a.click();
-      await logActivity("Backup Created", "Full database backup downloaded");
+      a.href = url; a.download = `GGPS_Backup_${getPakistanDate()}.json`; a.click();
       showToast("✓ Backup downloaded!");
     } catch (e) { showToast('✗ Backup failed', true); }
   }
 
   window.handleRestore = async function() {
     const file = document.getElementById('restore-file').files[0];
-    if (!file) return showToast('Please select a backup file first', true);
-    if (!confirm("⚠️ WARNING: This will OVERWRITE current data. Continue?")) return;
-    showToast("Restoring data...");
+    if (!file) return showToast('Select a file first', true);
+    if (!confirm("⚠️ This will OVERWRITE current data. Continue?")) return;
+    showToast("Restoring...");
     try {
       const text = await file.text();
       const data = JSON.parse(text);
       for (const s of data.students || []) { const {id, ...rest} = s; await setDoc(doc(db, "students", id), rest); }
       for (const t of data.teachers || []) { const {id, ...rest} = t; await setDoc(doc(db, "teachers", id), rest); }
       for (const a of data.attendance || []) { const {id, ...rest} = a; await setDoc(doc(db, "attendance", id), rest); }
-      showToast("✓ Restore completed! Reloading...");
-      await logActivity("Backup Restored", `Restored from ${data.backupDate}`);
+      showToast("✓ Restored! Reloading...");
       setTimeout(() => location.reload(), 1500);
     } catch (e) { showToast('✗ Restore failed', true); }
-  }
-
-  // SETTINGS
-  window.saveSettings = async function() {
-    const data = {
-      schoolName: document.getElementById('set-school').value,
-      principal: document.getElementById('set-principal').value,
-      emis: document.getElementById('set-emis').value,
-      contact: document.getElementById('set-contact').value
-    };
-    try {
-      await setDoc(doc(db, "settings", "main"), data, { merge: true });
-      showToast('✓ Settings saved');
-      await logActivity("Settings Updated", "School settings updated");
-    } catch (e) { showToast('✗ Save failed', true); }
   }
 
   // DASHBOARD
@@ -856,7 +919,6 @@ table.data tr:hover td{background:#f0fdf4}
   }
 
   function renderCharts(active, p, l, a) {
-    // Class chart
     const classData = CLASSES.map(c => active.filter(s => s.class === c).length);
     if (classChart) classChart.destroy();
     const ctx1 = document.getElementById('chart-class');
@@ -867,7 +929,6 @@ table.data tr:hover td{background:#f0fdf4}
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
       });
     }
-    // Attendance pie chart
     if (attChart) attChart.destroy();
     const ctx2 = document.getElementById('chart-attendance');
     if (ctx2) {
@@ -878,6 +939,29 @@ table.data tr:hover td{background:#f0fdf4}
       });
     }
   }
+
+  // AI MODELS
+  const MODEL_URL = 'https://justadudewhohacks.github.io/face-api.js/models';
+  window.loadFaceModels = async function() {
+    if (typeof faceapi === 'undefined') return;
+    if (window.appState.modelsLoaded) return;
+    document.getElementById('model-status').textContent = '⏳ Loading AI...';
+    try {
+      await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+      await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+      await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+      window.appState.modelsLoaded = true;
+      document.getElementById('model-status').className = 'badge bg-emerald-100 text-emerald-800';
+      document.getElementById('model-status').textContent = '✓ AI Ready';
+      showToast('✓ AI Models Loaded!');
+    } catch (e) {
+      document.getElementById('model-status').textContent = '✗ AI Failed';
+      showToast('✗ AI Models failed to load', true);
+    }
+  }
+
+  // Auto-load models on start
+  setTimeout(() => window.loadFaceModels(), 2000);
 </script>
 </body>
 </html>
